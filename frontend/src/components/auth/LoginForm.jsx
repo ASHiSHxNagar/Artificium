@@ -13,7 +13,7 @@ const LoginForm = () => {
       <div className="grid grid-cols-[50%_50%] bg-bg-nobel-black-700 rounded-2xl w-full  min-h-[600px] h-[100vh]  overflow-hidden">
         {/* Left Column */}
         <div className="flex flex-col justify-center max-w-[700px] ">
-          <div className="absolute top-10 left-20 -translate-x-1/2 -translate-y-1/2 w-7 h-7">
+          <div className="absolute top-10 left-20 -translate-x-1/2 -translate-y-1/2 w-7 h-7 cursor-pointer">
             <img src={logo_gradient} alt="Logo" />
           </div>
           <div className=" max-w-[400px] max-h-[600px] ml-40 ">

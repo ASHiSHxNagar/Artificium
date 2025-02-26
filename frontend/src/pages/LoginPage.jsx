@@ -1,12 +1,12 @@
 // src/pages/LoginPage.jsx
-import LoginForm from '../components/auth/LoginForm'
+import LoginForm from "../components/auth/LoginForm";
 
 const LoginPage = () => {
-    return (
-        <div className="h-screen bg-nobel-black-700 flex items-center justify-center overflow-hidden">
-            <LoginForm />
-        </div>
-    )
-}
+  return (
+    <div className="h-screen bg-nobel-black-700 flex items-center justify-center overflow-hidden">
+      <LoginForm />
+    </div>
+  );
+};
 
-export default LoginPage
+export default LoginPage;
