@@ -11,7 +11,7 @@ import Adam_green from "../../assets/avatar/Adam_Green.png";
 
 const RequestWorkspace = () => {
   return (
-    <div className="grid grid-cols-[60%_40%] bg-bg-nobel-black-700 rounded-2xl w-full min-h-[600px] h-[100vh] overflow-hidden">
+    <div className="grid grid-cols-[60%_40%] bg-bg-noble-black-700 rounded-2xl w-full min-h-[600px] h-[100vh] overflow-hidden">
       {/* Left Column */}
       <div className="flex flex-col justify-center items-center max-w-full relative">
         {/* Logo */}
@@ -24,32 +24,32 @@ const RequestWorkspace = () => {
           <div className="flex -space-x-3 relative group">
             <img
               src={Marcus_Chen}
-              className="w-12 h-12 rounded-full border-2 border-nobel-black-700"
+              className="w-12 h-12 rounded-full border-2 border-noble-black-700"
               alt="avatar 1"
             />
             <img
               src={Lily_Patel}
-              className="w-12 h-12 rounded-full border-2 border-nobel-black-700"
+              className="w-12 h-12 rounded-full border-2 border-noble-black-700"
               alt="avatar 2"
             />
             <img
               src={Harper_Singh}
-              className="w-12 h-12 rounded-full border-2 border-nobel-black-700"
+              className="w-12 h-12 rounded-full border-2 border-noble-black-700"
               alt="avatar 3"
             />
             <img
               src={David_Singh}
-              className="w-12 h-12 rounded-full border-2 border-nobel-black-700"
+              className="w-12 h-12 rounded-full border-2 border-noble-black-700"
               alt="avatar 4"
             />
             <img
               src={Ava_Gupta}
-              className="w-12 h-12 rounded-full border-2 border-nobel-black-700"
+              className="w-12 h-12 rounded-full border-2 border-noble-black-700"
               alt="avatar 5"
             />
             <img
               src={Adam_green}
-              className="w-12 h-12 rounded-full border-2 border-nobel-black-700"
+              className="w-12 h-12 rounded-full border-2 border-noble-black-700"
               alt="avatar 6"
             />
           </div>
@@ -59,7 +59,7 @@ const RequestWorkspace = () => {
             </h1>
           </div>
           <div>
-            <p className="text-sm text-nobel-black-300 font-extralight mt-1 mb-4 text-center text-wrap">
+            <p className="text-sm text-noble-black-300 font-extralight mt-1 mb-4 text-center text-wrap">
               {/* eslint-disable-next-line */}
               But... it looks like you don't have access <br />
               to this workspace.
@@ -72,12 +72,12 @@ const RequestWorkspace = () => {
             >
               Access request
             </Button>
-            <span className="text-sm text-nobel-black-400 font-medium text-center">
+            <span className="text-sm text-noble-black-400 font-medium text-center">
               or
             </span>
             <Button
               variant="outline"
-              className="w-fit  text-xs font-bold bg-nobel-black-600 text-nobel-black-300 outline-none border-0 cursor-pointer"
+              className="w-fit  text-xs font-bold bg-noble-black-600 text-noble-black-300 outline-none border-0 cursor-pointer"
             >
               Back
             </Button>
@@ -86,12 +86,12 @@ const RequestWorkspace = () => {
 
         {/* Footer Links */}
         <div className="absolute bottom-10 left-25 -translate-x-1/2 -translate-y-1/2">
-          <span className="text-[12px] font-semibold text-nobel-black-300">
+          <span className="text-[12px] font-semibold text-noble-black-300">
             Artificium.app © 2023
           </span>
         </div>
         <div className="absolute bottom-10 right-0 -translate-x-1/2 -translate-y-1/2">
-          <span className="text-[12px] font-semibold text-nobel-black-300">
+          <span className="text-[12px] font-semibold text-noble-black-300">
             Privacy Policy
           </span>
         </div>

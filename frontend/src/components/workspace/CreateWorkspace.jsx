@@ -12,7 +12,7 @@ import Vertexia from "../../assets/avatar/Vertexia.png";
 
 const CreateWorkspace = () => {
   return (
-    <div className="grid grid-cols-[60%_40%] bg-bg-nobel-black-700 rounded-2xl w-full min-h-[600px] h-[100vh] overflow-hidden">
+    <div className="grid grid-cols-[60%_40%] bg-bg-noble-black-700 rounded-2xl w-full min-h-[600px] h-[100vh] overflow-hidden">
       {/* Left Column */}
       <div className="flex flex-col justify-center items-center max-w-full relative">
         {/* Logo */}
@@ -36,7 +36,7 @@ const CreateWorkspace = () => {
 
           {/* Workspace Input + Button */}
           <div className="flex items-center justify-center w-full space-x-4 mb-4">
-            <h1 className="text-base text-nobel-black-400 font-semibold cursor-pointer">
+            <h1 className="text-base text-noble-black-400 font-semibold cursor-pointer">
               Change workspace
             </h1>
             <Button
@@ -53,37 +53,37 @@ const CreateWorkspace = () => {
             <div className="flex -space-x-3">
               <img
                 src={Marcus_Chen}
-                className="w-10 h-10 rounded-full border-2 border-nobel-black-700"
+                className="w-10 h-10 rounded-full border-2 border-noble-black-700"
                 alt="avatar 1"
               />
               <img
                 src={Lily_Patel}
-                className="w-10 h-10 rounded-full border-2 border-nobel-black-700"
+                className="w-10 h-10 rounded-full border-2 border-noble-black-700"
                 alt="avatar 2"
               />
               <img
                 src={Harper_Singh}
-                className="w-10 h-10 rounded-full border-2 border-nobel-black-700"
+                className="w-10 h-10 rounded-full border-2 border-noble-black-700"
                 alt="avatar 3"
               />
               <img
                 src={David_Singh}
-                className="w-10 h-10 rounded-full border-2 border-nobel-black-700"
+                className="w-10 h-10 rounded-full border-2 border-noble-black-700"
                 alt="avatar 4"
               />
               <img
                 src={Ava_Gupta}
-                className="w-10 h-10 rounded-full border-2 border-nobel-black-700"
+                className="w-10 h-10 rounded-full border-2 border-noble-black-700"
                 alt="avatar 5"
               />
               <img
                 src={Adam_green}
-                className="w-10 h-10 rounded-full border-2 border-nobel-black-700"
+                className="w-10 h-10 rounded-full border-2 border-noble-black-700"
                 alt="avatar 6"
               />
             </div>
             {/* Text */}
-            <h2 className="ml-4 text-nobel-black-300 text-sm font-medium">
+            <h2 className="ml-4 text-noble-black-300 text-sm font-medium">
               and 873 others have already joined
             </h2>
           </div>
@@ -91,12 +91,12 @@ const CreateWorkspace = () => {
 
         {/* Footer Links */}
         <div className="absolute bottom-10 left-10">
-          <span className="text-xs font-semibold text-nobel-black-300">
+          <span className="text-xs font-semibold text-noble-black-300">
             Artificium.app © 2023
           </span>
         </div>
         <div className="absolute bottom-10 right-10">
-          <span className="text-xs font-semibold text-nobel-black-300">
+          <span className="text-xs font-semibold text-noble-black-300">
             Privacy Policy
           </span>
         </div>

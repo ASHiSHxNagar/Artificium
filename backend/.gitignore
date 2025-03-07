@@ -13,6 +13,7 @@ dist-ssr
 *.local
 
 .env
+artificium-fd812-firebase-adminsdk-fbsvc-1297311006.json
 
 # Editor directories and files
 .vscode/*

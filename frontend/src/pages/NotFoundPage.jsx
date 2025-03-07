@@ -1,9 +1,7 @@
 // import React from 'react'
 
 const NotfoundPage = () => {
-    return (
-        <div>NotfoundPage</div>
-    )
-}
+  return <div>NotfoundPage</div>;
+};
 
-export default NotfoundPage
+export default NotfoundPage;
