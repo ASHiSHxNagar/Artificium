@@ -801,19 +801,23 @@ body {
   height: 2px;
   background-color: transparent;
   transition: background-color 0.3s ease, transform 0.3s ease;
+  transform-origin: left;
   transform: scaleX(0);
 }
 
 .tab-item.active-tab::after {
+  transform-origin: left;
   background-color: #b6f09c; /* Border color */
   transform: scaleX(1);
 }
 
 .tab-item:hover {
+  transform-origin: left;
   color: #b6f09c; /* Hover color */
 }
 
 .tab-item:hover::after {
+  transform-origin: left;
   background-color: #b6f09c; /* Hover border color */
   transform: scaleX(1);
 }
