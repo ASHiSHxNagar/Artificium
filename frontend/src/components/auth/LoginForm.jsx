@@ -29,7 +29,7 @@ const LoginForm = () => {
       .then(async (user) => {
         try {
           const response = await axios.post(
-            "http://localhost:3000/google-auth",
+            `${import.meta.env.VITE_SERVER_DOMAIN}/google-auth`,
             {
               access_token: user.accessToken,
             }
@@ -62,10 +62,13 @@ const LoginForm = () => {
     e.preventDefault();
 
     try {
-      const response = await axios.post("http://localhost:3000/login", {
-        email: formData.email,
-        password: formData.password,
-      });
+      const response = await axios.post(
+        `${import.meta.env.VITE_SERVER_DOMAIN}/login`,
+        {
+          email: formData.email,
+          password: formData.password,
+        }
+      );
       toast.success(response.data.message);
       success = true;
       if (success) {

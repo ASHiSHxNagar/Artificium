@@ -43,11 +43,15 @@ export default function ChatInput() {
 
       // Example: sending to "/api/chat/sendMessage"
       // Adjust URL & method as needed for your backend
-      const response = await axios.post("/api/chat/sendMessage", formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
+      const response = await axios.post(
+        `${import.meta.env.VITE_SERVER_DOMAIN}/chat/sendMessage`,
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
 
       // Clear input & file after successful send
       setMessage("");

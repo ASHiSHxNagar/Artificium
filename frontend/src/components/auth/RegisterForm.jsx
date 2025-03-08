@@ -36,11 +36,14 @@ const RegisterForm = () => {
     // console.log("Form Data being sent to backend:", formData); // Log form data
 
     try {
-      const response = await axios.post("http://localhost:3000/register", {
-        fullname: formData.fullname,
-        email: formData.email,
-        password: formData.password,
-      });
+      const response = await axios.post(
+        `${import.meta.env.VITE_SERVER_DOMAIN}/register`,
+        {
+          fullname: formData.fullname,
+          email: formData.email,
+          password: formData.password,
+        }
+      );
       toast.success("Registration successful!");
       console.log(response.data.message);
       window.location.href = "/workspace"; // Redirect to /workspace after successful registration
