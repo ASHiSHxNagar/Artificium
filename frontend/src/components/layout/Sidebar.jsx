@@ -30,7 +30,7 @@ export default function Sidebar({ activeProject }) {
         <img
           src={arrow_down}
           alt="arrow_down"
-          className="w-2 h-2 text-noble-black-400"
+          className="w-2 h-2 text-noble-black-400 cursor-pointer"
         />
       </div>
 
