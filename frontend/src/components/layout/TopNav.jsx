@@ -93,7 +93,7 @@ export default function TopNav({ activeTab, onShareClick }) {
               <button
                 type="button"
                 onClick={onShareClick}
-                className="flex items-center gap-2 text-gray-300 hover:text-white"
+                className="flex items-center gap-2 text-gray-300 hover:text-white cursor-pointer"
               >
                 {/* Example: If you have a share icon, place it here */}
                 <img src={shareIcon} alt="Share" className="w-4 h-4" />
@@ -105,7 +105,7 @@ export default function TopNav({ activeTab, onShareClick }) {
               {/* Edit Button (dummy icon) */}
               <button
                 type="button"
-                className="flex items-center gap-2 text-gray-300 hover:text-white"
+                className="flex items-center gap-2 text-gray-300 hover:text-white cursor-pointer"
               >
                 <div className="w-9 h-9 bg-noble-black-600  rounded-xl flex items-center justify-center">
                   <img src={editIcon} alt="Edit" className="w-4 h-4" />
