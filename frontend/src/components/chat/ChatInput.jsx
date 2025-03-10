@@ -7,7 +7,7 @@ import attachIcon from "../../assets/icons/attatchment.svg";
 import sendIcon from "../../assets/icons/paper_plane.svg";
 import micIcon from "../../assets/icons/microphone.svg";
 
-export default function ChatInput() {
+export default function ChatInput(chat_tab_input) {
   const [message, setMessage] = useState("");
   const [imageFile, setImageFile] = useState(null);
 
@@ -66,7 +66,13 @@ export default function ChatInput() {
   return (
     <>
       <Toaster />
-      <div className="p-2  fixed bottom-1 w-full  max-w-[calc(100vw-320px)] overflow-x-hidden">
+      <div
+        className={`p-2 fixed bottom-1 w-full overflow-x-hidden ${
+          chat_tab_input
+            ? "max-w-[calc(100vw-630px)]"
+            : "max-w-[calc(100vw-320px)]"
+        }`}
+      >
         <div className="bg-noble-black-800 w-full flex items-center p-6 rounded-2xl">
           {/* Microphone Icon (does nothing) */}
           <button type="button" className="mr-5 cursor-pointer hover:scale-105">
