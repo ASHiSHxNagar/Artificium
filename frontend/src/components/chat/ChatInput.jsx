@@ -69,7 +69,7 @@ export default function ChatInput() {
       <div className="p-2  fixed bottom-1 w-full  max-w-[calc(100vw-320px)] overflow-x-hidden">
         <div className="bg-noble-black-800 w-full flex items-center p-6 rounded-2xl">
           {/* Microphone Icon (does nothing) */}
-          <button type="button" className="mr-5">
+          <button type="button" className="mr-5 cursor-pointer hover:scale-105">
             <img src={micIcon} alt="Mic" className="w-5 h-5" />
           </button>
 
@@ -77,7 +77,7 @@ export default function ChatInput() {
           <input
             type="text"
             placeholder="You can ask me anything! I am here to help."
-            className="flex-1 bg-noble-black-800 px-4 py-2 rounded-l focus:outline-none mr-2 text-base font-semibold text-noble-black-400"
+            className="flex-1 bg-noble-black-800 px-4 py-2 rounded-l focus:outline-none mr-2  text-white placeholder:text-noble-black-400 text-base font-semibold"
             value={message}
             onChange={(e) => setMessage(e.target.value)}
           />
@@ -85,7 +85,7 @@ export default function ChatInput() {
           {/* Attachment Icon */}
           <button
             type="button"
-            className="mr-3"
+            className="mr-3 cursor-pointer hover:scale-105"
             onClick={() => fileInputRef.current.click()}
           >
             <img src={attachIcon} alt="Attach" className="w-5 h-5" />
@@ -104,7 +104,7 @@ export default function ChatInput() {
           <button
             type="button"
             onClick={handleSend}
-            className="ml-3 bg-noble-black-700 p-3 rounded-xl hover:bg-noble-black-600"
+            className="ml-3 bg-noble-black-700 p-3 rounded-xl hover:bg-noble-black-600 cursor-pointer hover:scale-105"
           >
             <img src={sendIcon} alt="Send" className="w-5 h-5" />
           </button>
