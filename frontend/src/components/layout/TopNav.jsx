@@ -5,8 +5,11 @@ import { useState } from "react";
 import editIcon from "../../assets/icons/edit.svg";
 import shareIcon from "../../assets/icons/share.svg";
 import Artificium from "../../assets/icons/Artificium.svg";
+import Artificium_Inactive from "../../assets/icons/Artificium_Inactive.svg";
 import Chat from "../../assets/icons/comment-circle.svg";
-import Library from "../../assets/icons/folder.svg";
+import Chat_Active from "../../assets/icons/comment-circle_active.svg";
+import Folder from "../../assets/icons/folder.svg";
+import Folder_Active from "../../assets/icons/folder_active.svg";
 
 //avatars
 import Adam_Green from "../../assets/avatar/Adam_Green.png";
@@ -124,7 +127,12 @@ export default function TopNav({ activeTab, onShareClick }) {
               currentTab === "artificium" ? "active-tab" : ""
             } flex items-center justify-center gap-3 pb-2 text-sm font-semibold cursor-pointer`}
           >
-            <img src={Artificium} alt="" className="w-4 h-4" />
+            {currentTab === "artificium" ? (
+              <img src={Artificium} alt="" className="w-4 h-4" />
+            ) : (
+              <img src={Artificium_Inactive} alt="" className="w-4 h-4" />
+            )}
+
             <button>Artificium</button>
           </div>
 
@@ -135,7 +143,11 @@ export default function TopNav({ activeTab, onShareClick }) {
               currentTab === "chat" ? "active-tab" : ""
             } flex items-center justify-center gap-3 pb-2 text-sm font-semibold cursor-pointer`}
           >
-            <img src={Chat} alt="" className="w-4 h-4" />
+            {currentTab === "chat" ? (
+              <img src={Chat_Active} alt="" className="w-4 h-4" />
+            ) : (
+              <img src={Chat} alt="" className="w-4 h-4" />
+            )}
             <button>Chat</button>
           </div>
 
@@ -146,7 +158,12 @@ export default function TopNav({ activeTab, onShareClick }) {
               currentTab === "library" ? "active-tab" : ""
             } flex items-center justify-center gap-3 pb-2 text-sm font-semibold cursor-pointer`}
           >
-            <img src={Library} alt="" className="w-4 h-4" />
+            {currentTab === "library" ? (
+              <img src={Folder_Active } alt="" className="w-4 h-4" />
+            ) : (
+              <img src={Folder} alt="" className="w-4 h-4" />
+            )}
+
             <button>Library</button>
           </div>
         </div>

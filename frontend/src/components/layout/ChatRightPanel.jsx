@@ -4,8 +4,10 @@ import PropTypes from "prop-types";
 //icons
 import chevron_right_icon from "../../assets/icons/chevron-right.svg";
 import chevron_down_icon from "../../assets/icons/chevron-down.svg";
-import chat_bubble_icon from "../../assets/icons/chat_bubble_icon.svg";
-import users_icon from "../../assets/icons/users_icon.svg";
+import Chat_Icon from "../../assets/icons/chat_bubble_icon.svg";
+import Chat_Active_Icon from "../../assets/icons/chat_bubble_active_icon.svg";
+import Users_Icon from "../../assets/icons/users_icon.svg";
+import Users_Inactive_Icon from "../../assets/icons/users_Inactive_icon.svg";
 import globe_icon_2 from "../../assets/icons/globe_icon_2.svg";
 import padlock_icon from "../../assets/icons/padlock_icon.svg";
 //avatars
@@ -178,9 +180,9 @@ export default function ChatRightPanel({
                 {onlineUsers.map((user) => (
                   <div
                     key={user.id}
-                    className="flex items-center gap-2 p-2 rounded hover:bg-noble-black-700"
+                    className="flex items-center gap-2 p-2 rounded hover:bg-noble-black-700 "
                   >
-                    <div className="relative">
+                    <div className="relative cursor-pointer">
                       <img
                         src={user.avatar}
                         alt={user.name}
@@ -195,7 +197,7 @@ export default function ChatRightPanel({
                       />
                     </div>
                     <div className="flex flex-col">
-                      <span className="text-sm font-medium text-white">
+                      <span className="text-sm font-medium text-white cursor-pointer">
                         {user.name}
                       </span>
                       <span className="text-xs text-noble-black-300 font-semibold mt-1">
@@ -218,7 +220,7 @@ export default function ChatRightPanel({
                     key={user.id}
                     className="flex items-center gap-2 p-2 rounded hover:bg-noble-black-700 opacity-50"
                   >
-                    <div className="relative">
+                    <div className="relative cursor-pointer">
                       <img
                         src={user.avatar}
                         alt={user.name}
@@ -232,8 +234,8 @@ export default function ChatRightPanel({
                         "
                       />
                     </div>
-                    <div className="flex flex-col">
-                      <span className="text-sm font-medium text-white">
+                    <div className="flex flex-col ">
+                      <span className="text-sm font-medium text-white cursor-pointer">
                         {user.name}
                       </span>
                       <span className="text-xs text-noble-black-300 font-semibold mt-1">
@@ -566,28 +568,36 @@ export default function ChatRightPanel({
       </div>
 
       {/* Tabs at Bottom */}
-      <div className=" flex justify-around border-[1px] border-gray-800 rounded-2xl">
+      <div className="flex justify-around border-[1px] border-gray-800 rounded-2xl w-[90%] mx-auto mt-4">
         <button
           className={`flex items-center justify-center text-center py-2 rounded hover:bg-noble-black-700 ${
             activeTab === "chats"
-              ? "px-3 py-1 bg-noble-black-600 text-white"
-              : "text-gray-400"
+              ? "px-2 py-1 text-white bg-noble-black-600 rounded-xl"
+              : "text-gray-400 cursor-pointer"
           }`}
           onClick={() => setActiveTab("chats")}
         >
-          <img src={chat_bubble_icon} alt="" className="pr-5 " />
+          {activeTab === "chats" ? (
+            <img src={Chat_Active_Icon} alt="" className="w-6 h-6 pr-2" />
+          ) : (
+            <img src={Chat_Icon} alt="" className="w-6 h-6 pr-2" />
+          )}
           Chats
         </button>
         <button
           className={`flex items-center justify-center text-center py-2 rounded hover:bg-noble-black-700 ${
             activeTab === "members"
-              ? "px-3 py-1 bg-noble-black-600 text-white"
-              : "text-gray-400"
+              ? "px-2 py-1  text-white bg-noble-black-600 rounded-xl"
+              : "text-gray-400 cursor-pointer"
           }`}
           onClick={() => setActiveTab("members")}
         >
           Members
-          <img src={users_icon} alt="" className="pl-5" />
+          {activeTab === "members" ? (
+            <img src={Users_Icon} alt="" className="w-6 h-6 pl-2" />
+          ) : (
+            <img src={Users_Inactive_Icon} alt="" className="w-6 h-6 pl-2" />
+          )}
         </button>
       </div>
     </div>

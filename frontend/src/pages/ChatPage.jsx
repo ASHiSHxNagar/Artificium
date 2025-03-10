@@ -118,14 +118,16 @@ export default function ChatPage() {
                 ) : (
                   <div
                     key={msg.id}
-                    className={`rounded-lg p-4 bg-noble-black-800 ${
-                      msg.isMain ? "shadow-md" : "border border-gray-700"
+                    className={`rounded-lg p-4  ${
+                      msg.isMain
+                        ? "shadow-md bg-noble-black-800"
+                        : "border border-gray-700 bg-noble-black-700"
                     }`}
                   >
                     {/* Top row: user + date + copy icon */}
                     <div className="flex items-center justify-between mb-2">
                       <div className="flex items-center gap-3">
-                        <div className="relative">
+                        <div className="relative cursor-pointer">
                           <img
                             src={msg.avatar}
                             alt={msg.name}
@@ -140,7 +142,9 @@ export default function ChatPage() {
                           />
                         </div>
                         <div className="flex gap-4 justify-center items-center ml-2 mt-2">
-                          <p className="font-medium text-white">{msg.user}</p>
+                          <p className="font-medium text-white cursor-pointer">
+                            {msg.user}
+                          </p>
                           {/* Show date or timeAgo */}
                           {msg.isMain ? (
                             <p className="text-xs text-gray-400">{msg.date}</p>
