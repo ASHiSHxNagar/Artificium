@@ -1,86 +1,633 @@
 import Sidebar from "../components/layout/Sidebar";
 import TopNav from "../components/layout/TopNav";
 
+//icons
+import dots_icon from "../assets/icons/dots_icon.svg";
+import chat_bubble_active_icon from "../assets/icons/chat_bubble_active_icon.svg";
+
+//images
+import image_1 from "../assets/images/Image_1.png";
+import image_2 from "../assets/images/Image_2.png";
+import image_3 from "../assets/images/Image_3.png";
+import image_4 from "../assets/images/Image_4.png";
+import image_5 from "../assets/images/Image_5.png";
+import image_6 from "../assets/images/Image_6.png";
+
+import Adam_Green from "../assets/avatar/Adam_Green.png";
+import Emily_Liu from "../assets/avatar/Emily_Liu.png";
+import Lily_Patel from "../assets/avatar/Lily_Patel.png";
+import Lucas_Ortiz from "../assets/avatar/Lucas_Ortiz.png";
+
 export default function LibraryPage() {
+  const openModal = () => {
+    alert("Open modal here...");
+  };
+
   return (
-    <div className="flex h-screen bg-noble-black-700 text-gray-200">
+    <div className="flex h-screen bg-noble-black-700 text-gray-200 ">
       <Sidebar activeProject="Orbital Odyssey" />
 
       <div className="flex-1 flex flex-col">
         <TopNav activeTab="library" />
 
-        <div className="p-6 flex-1 overflow-y-auto">
-          <h1 className="text-2xl font-semibold mb-4">Library</h1>
-          <p className="text-gray-400 mb-8">
-            Here you can see images, documents, and ideas.
-          </p>
+        {/* Three columns + plus button */}
+        <div className="grid grid-cols-[31%_31%_31%_7%] gap-4  px-10 py-5 max-h-screen overflow-y-scroll">
+          {/* COLUMN 1: IMAGES */}
+          <div className="flex-1 border-r border-gray-800 pr-6 ">
+            {/* Column header */}
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-lg font-semibold text-white pl-2">Images</h2>
+              <button>
+                {/* Replace with your real menu/dots icon */}
+                <img
+                  src={dots_icon}
+                  alt="Menu"
+                  className="w-4 h-4 cursor-pointer"
+                />
+              </button>
+            </div>
 
-          {/* 3-column grid */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            {/* Column 1: Images */}
-            <div className="bg-gray-800 p-4 rounded-lg">
-              <h2 className="text-lg font-semibold mb-4">Images</h2>
-              <div className="bg-gray-700 p-3 rounded mb-4">
-                <h3 className="font-bold">Captain Drake</h3>
-                <p className="text-sm text-gray-400">
-                  Natural born leader with years of experience in space
-                  exploration.
-                </p>
-                {/* Thumbnails or dummy images here */}
+            {/* CARD 1 */}
+            <div className="bg-noble-black-800 p-4 rounded-xl mb-6">
+              <h3 className="text-white text-base font-semibold mb-1  cursor-pointer">
+                Captain Drake
+              </h3>
+              <p className="text-noble-black-400 text-sm mb-4 mt-2">
+                Natural born leader with years of experience in space
+                exploration.
+              </p>
+
+              {/* Big images row */}
+              <div className="flex space-x-2 mb-3">
+                <img
+                  src={image_1}
+                  alt="Captain Drake 1"
+                  className="w-18 h-18 object-cover rounded-md"
+                />
+                <img
+                  src={image_2}
+                  alt="Captain Drake 2"
+                  className="w-18 h-18 object-cover rounded-md"
+                />
+                <img
+                  src={image_3}
+                  alt="Captain Drake 3"
+                  className="w-18 h-18 object-cover rounded-md"
+                />
               </div>
-              <div className="bg-gray-700 p-3 rounded">
-                <h3 className="font-bold">Cosmic Voyager</h3>
-                <p className="text-sm text-gray-400">
-                  Main spacecraft used by the crew in the story.
-                </p>
+
+              <hr className="border-gray-700 mb-5 mt-5" />
+
+              {/* Avatars + number + chat */}
+              <div className="flex items-center justify-between">
+                {/* Avatar stack */}
+                <div className="flex items-center -space-x-2">
+                  <img
+                    src={Adam_Green}
+                    alt="user1"
+                    className="w-8 h-8 rounded-[1px] z-10 ml-1 border-r-4 border-b-2 border-[#0d0f10]"
+                  />
+                  <img
+                    src={Emily_Liu}
+                    alt="user2"
+                    className="w-8 h-8 rounded-[1px] z-10 ml-1 border-r-4 border-b-2 border-[#0d0f10]"
+                  />
+                  <img
+                    src={Lily_Patel}
+                    alt="user3"
+                    className="w-8 h-8 rounded-[1px] z-10 ml-1 border-r-4 border-b-2 border-[#0d0f10]"
+                  />
+                  <img
+                    src={Lucas_Ortiz}
+                    alt="user4"
+                    className="w-8 h-8 rounded-[1px] z-10 ml-1"
+                  />
+                  <div className="w-8 h-8 rounded-xl z-0 bg-noble-black-600 text-noble-black-400 font-semibold text-center text-xs flex items-center justify-center">
+                    +4
+                  </div>
+                </div>
+                {/* Right side: number + chat icon */}
+                <div className="flex items-center space-x-3">
+                  <span className="text-sm text-white">12</span>
+                  <button className="text-gray-400 hover:text-white">
+                    <img
+                      src={chat_bubble_active_icon}
+                      alt=""
+                      className="w-4 h-4 cursor-pointer"
+                    />
+                  </button>
+                </div>
               </div>
             </div>
 
-            {/* Column 2: Documents */}
-            <div className="bg-gray-800 p-4 rounded-lg">
-              <h2 className="text-lg font-semibold mb-4">Documents</h2>
-              <div className="bg-gray-700 p-3 rounded mb-4">
-                <h3 className="font-bold">Character bios</h3>
-                <p className="text-sm text-gray-400">
-                  3 documents, 43,832 words
-                </p>
+            {/* CARD 2 */}
+            <div className="bg-noble-black-800 p-4 rounded-xl mb-6">
+              <h3 className="text-white text-base font-semibold mb-1 cursor-pointer">
+                Cosmic Voyager
+              </h3>
+              <p className="text-noble-black-400 text-sm mb-4 mt-2 ">
+                Main spacecraft used by the crew in the story. It is a highly
+                advanced vessel designed to withstand harsh conditions...
+              </p>
+
+              {/* Big images row */}
+              <div className="flex space-x-2 mb-3">
+                <img
+                  src={image_4}
+                  alt="Cosmic Voyager 1"
+                  className="w-18 h-18 object-cover rounded-md"
+                />
+                <img
+                  src={image_5}
+                  alt="Cosmic Voyager 2"
+                  className="w-18 h-18 object-cover rounded-md"
+                />
+                <img
+                  src={image_6}
+                  alt="Cosmic Voyager 3"
+                  className="w-18 h-18 object-cover rounded-md"
+                />
               </div>
-              <div className="bg-gray-700 p-3 rounded mb-4">
-                <h3 className="font-bold">Plot outline</h3>
-                <p className="text-sm text-gray-400">
-                  1 document, 18,745 words
-                </p>
+
+              <hr className="border-gray-700 mb-5 mt-5" />
+
+              {/* Avatars + number + chat */}
+              <div className="flex items-center justify-between">
+                <div className="flex items-center -space-x-2">
+                  <img
+                    src={Adam_Green}
+                    alt="user1"
+                    className="w-8 h-8 rounded-[1px] z-10 ml-1 border-r-4 border-b-2 border-[#0d0f10]"
+                  />
+                  <img
+                    src={Emily_Liu}
+                    alt="user2"
+                    className="w-8 h-8 rounded-[1px] z-10 ml-1 border-r-4 border-b-2 border-[#0d0f10]"
+                  />
+                  <img
+                    src={Lily_Patel}
+                    alt="user3"
+                    className="w-8 h-8 rounded-[1px] z-10 ml-1 border-r-4 border-b-2 border-[#0d0f10]"
+                  />
+                  <img
+                    src={Lucas_Ortiz}
+                    alt="user4"
+                    className="w-8 h-8 rounded-[1px] z-10 ml-1"
+                  />
+                  <div className="w-8 h-8 rounded-xl z-0 bg-noble-black-600 text-noble-black-400 font-semibold text-center text-xs flex items-center justify-center">
+                    +4
+                  </div>
+                </div>
+
+                <div className="flex items-center space-x-3">
+                  <span className="text-sm text-white">27</span>
+                  <button className="text-gray-400 hover:text-white">
+                    <img
+                      src={chat_bubble_active_icon}
+                      alt=""
+                      className="w-4 h-4 cursor-pointer"
+                    />
+                  </button>
+                </div>
               </div>
-              <div className="bg-gray-700 p-3 rounded">
-                <h3 className="font-bold">Scene descriptions</h3>
-                <p className="text-sm text-gray-400">
-                  5 documents, 239,992 words
-                </p>
+            </div>
+          </div>
+
+          {/* COLUMN 2: DOCUMENTS */}
+          <div className="flex-1 border-r border-gray-800 pr-6">
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-lg font-semibold text-white pl-2">
+                Documents
+              </h2>
+              <button>
+                <img
+                  src={dots_icon}
+                  alt="Menu"
+                  className="w-4 h-4 cursor-pointer"
+                />
+              </button>
+            </div>
+
+            {/* Example Document Card */}
+            <div className="bg-noble-black-800 p-4 rounded-xl mb-6">
+              <h3 className="text-white text-base font-semibold mb-1 cursor-pointer">
+                Character Bios
+              </h3>
+              <p className="text-noble-black-400 text-sm mb-3">
+                3 documents, 43832 words
+              </p>
+
+              <hr className="border-gray-700 mb-5 mt-5" />
+
+              <div className="flex items-center justify-between">
+                {/* Avatar stack */}
+                <div className="flex items-center -space-x-2">
+                  <img
+                    src={Adam_Green}
+                    alt="user1"
+                    className="w-8 h-8 rounded-[1px] z-10 ml-1 border-r-4 border-b-2 border-[#0d0f10]"
+                  />
+                  <img
+                    src={Emily_Liu}
+                    alt="user2"
+                    className="w-8 h-8 rounded-[1px] z-10 ml-1 border-r-4 border-b-2 border-[#0d0f10]"
+                  />
+                  <img
+                    src={Lily_Patel}
+                    alt="user3"
+                    className="w-8 h-8 rounded-[1px] z-10 ml-1 border-r-4 border-b-2 border-[#0d0f10]"
+                  />
+                  <img
+                    src={Lucas_Ortiz}
+                    alt="user4"
+                    className="w-8 h-8 rounded-[1px] z-10 ml-1"
+                  />
+                  <div className="w-8 h-8 rounded-xl z-0 bg-noble-black-600 text-noble-black-400 font-semibold text-center text-xs flex items-center justify-center">
+                    +4
+                  </div>
+                </div>
+
+                <div className="flex items-center space-x-3">
+                  <span className="text-sm text-white">0</span>
+                  <button className="text-gray-400 hover:text-white">
+                    <img
+                      src={chat_bubble_active_icon}
+                      alt=""
+                      className="w-4 h-4 cursor-pointer"
+                    />
+                  </button>
+                </div>
               </div>
             </div>
 
-            {/* Column 3: Ideas */}
-            <div className="bg-gray-800 p-4 rounded-lg">
-              <h2 className="text-lg font-semibold mb-4">Ideas</h2>
-              <div className="bg-gray-700 p-3 rounded mb-4">
-                <h3 className="font-bold">Concept art</h3>
-                <p className="text-sm text-gray-400">
-                  Potential new characters or locations.
-                </p>
-              </div>
-              <div className="bg-gray-700 p-3 rounded mb-4">
-                <h3 className="font-bold">Potential plot points</h3>
-                <p className="text-sm text-gray-400">
-                  List of possible arcs for the story.
-                </p>
-              </div>
-              <div className="bg-gray-700 p-3 rounded">
-                <h3 className="font-bold">Spin-off ideas</h3>
-                <p className="text-sm text-gray-400">
-                  Potential collaborations or expansions.
-                </p>
+            {/* Another Document Card */}
+            <div className="bg-noble-black-800 p-4 rounded-xl mb-6">
+              <h3 className="text-white text-base font-semibold mb-1 cursor-pointer">
+                Plot Outline
+              </h3>
+              <p className="text-noble-black-400 text-sm mb-3">
+                1 document, 18745 words
+              </p>
+
+              <hr className="border-gray-700 mb-5 mt-5" />
+
+              <div className="flex items-center justify-between">
+                <div className="flex items-center -space-x-2">
+                  <img
+                    src={Adam_Green}
+                    alt="user1"
+                    className="w-8 h-8 rounded-[1px] z-10 ml-1 border-r-4 border-b-2 border-[#0d0f10]"
+                  />
+                  <img
+                    src={Emily_Liu}
+                    alt="user2"
+                    className="w-8 h-8 rounded-[1px] z-10 ml-1 border-r-4 border-b-2 border-[#0d0f10]"
+                  />
+                  <img
+                    src={Lily_Patel}
+                    alt="user3"
+                    className="w-8 h-8 rounded-[1px] z-10 ml-1 border-r-4 border-b-2 border-[#0d0f10]"
+                  />
+                  <img
+                    src={Lucas_Ortiz}
+                    alt="user4"
+                    className="w-8 h-8 rounded-[1px] z-10 ml-1"
+                  />
+                  <div className="w-8 h-8 rounded-xl z-0 bg-noble-black-600 text-noble-black-400 font-semibold text-center text-xs flex items-center justify-center">
+                    +4
+                  </div>
+                </div>
+
+                <div className="flex items-center space-x-3">
+                  <span className="text-sm text-white">0</span>
+                  <button className="text-gray-400 hover:text-white">
+                    <img
+                      src={chat_bubble_active_icon}
+                      alt=""
+                      className="w-4 h-4 cursor-pointer"
+                    />
+                  </button>
+                </div>
               </div>
             </div>
+            {/* ...Add more Document cards as needed... */}
+            {/* Example Document Card */}
+            <div className="bg-noble-black-800 p-4 rounded-xl mb-6">
+              <h3 className="text-white text-base font-semibold mb-1 cursor-pointer">
+                Character Bios
+              </h3>
+              <p className="text-noble-black-400 text-sm mb-3">
+                3 documents, 43832 words
+              </p>
+
+              <hr className="border-gray-700 mb-5 mt-5" />
+
+              <div className="flex items-center justify-between">
+                {/* Avatar stack */}
+                <div className="flex items-center -space-x-2">
+                  <img
+                    src={Adam_Green}
+                    alt="user1"
+                    className="w-8 h-8 rounded-[1px] z-10 ml-1 border-r-4 border-b-2 border-[#0d0f10]"
+                  />
+                  <img
+                    src={Emily_Liu}
+                    alt="user2"
+                    className="w-8 h-8 rounded-[1px] z-10 ml-1 border-r-4 border-b-2 border-[#0d0f10]"
+                  />
+                  <img
+                    src={Lily_Patel}
+                    alt="user3"
+                    className="w-8 h-8 rounded-[1px] z-10 ml-1 border-r-4 border-b-2 border-[#0d0f10]"
+                  />
+                  <img
+                    src={Lucas_Ortiz}
+                    alt="user4"
+                    className="w-8 h-8 rounded-[1px] z-10 ml-1"
+                  />
+                  <div className="w-8 h-8 rounded-xl z-0 bg-noble-black-600 text-noble-black-400 font-semibold text-center text-xs flex items-center justify-center">
+                    +4
+                  </div>
+                </div>
+
+                <div className="flex items-center space-x-3">
+                  <span className="text-sm text-white">0</span>
+                  <button className="text-gray-400 hover:text-white">
+                    <img
+                      src={chat_bubble_active_icon}
+                      alt=""
+                      className="w-4 h-4 cursor-pointer"
+                    />
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            {/* Another Document Card */}
+            <div className="bg-noble-black-800 p-4 rounded-xl mb-6">
+              <h3 className="text-white text-base font-semibold mb-1 cursor-pointer">
+                Plot Outline
+              </h3>
+              <p className="text-noble-black-400 text-sm mb-3">
+                1 document, 18745 words
+              </p>
+
+              <hr className="border-gray-700 mb-5 mt-5" />
+
+              <div className="flex items-center justify-between">
+                <div className="flex items-center -space-x-2">
+                  <img
+                    src={Adam_Green}
+                    alt="user1"
+                    className="w-8 h-8 rounded-[1px] z-10 ml-1 border-r-4 border-b-2 border-[#0d0f10]"
+                  />
+                  <img
+                    src={Emily_Liu}
+                    alt="user2"
+                    className="w-8 h-8 rounded-[1px] z-10 ml-1 border-r-4 border-b-2 border-[#0d0f10]"
+                  />
+                  <img
+                    src={Lily_Patel}
+                    alt="user3"
+                    className="w-8 h-8 rounded-[1px] z-10 ml-1 border-r-4 border-b-2 border-[#0d0f10]"
+                  />
+                  <img
+                    src={Lucas_Ortiz}
+                    alt="user4"
+                    className="w-8 h-8 rounded-[1px] z-10 ml-1"
+                  />
+                  <div className="w-8 h-8 rounded-xl z-0 bg-noble-black-600 text-noble-black-400 font-semibold text-center text-xs flex items-center justify-center">
+                    +4
+                  </div>
+                </div>
+
+                <div className="flex items-center space-x-3">
+                  <span className="text-sm text-white">0</span>
+                  <button className="text-gray-400 hover:text-white">
+                    <img
+                      src={chat_bubble_active_icon}
+                      alt=""
+                      className="w-4 h-4 cursor-pointer"
+                    />
+                  </button>
+                </div>
+              </div>
+            </div>
+            {/* ...Add more Document cards as needed... */}
+          </div>
+
+          {/* COLUMN 3: IDEAS (no right border) */}
+          <div className="flex-1 pr-6">
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-lg font-semibold text-white pl-2">Ideas</h2>
+              <button>
+                <img
+                  src={dots_icon}
+                  alt="Menu"
+                  className="w-4 h-4 cursor-pointer"
+                />
+              </button>
+            </div>
+
+            {/* Example Idea Card */}
+            <div className="bg-noble-black-800 p-4 rounded-xl mb-6">
+              <p className="text-white text-base font-semibold mb-1 cursor-pointer">
+                Concept art for potential new characters or locations.
+              </p>
+
+              <hr className="border-gray-700 mb-5 mt-5" />
+
+              <div className="flex items-center justify-between">
+                <div className="flex items-center -space-x-2">
+                  <img
+                    src={Adam_Green}
+                    alt="user1"
+                    className="w-8 h-8 rounded-[1px] z-10 ml-1 border-r-4 border-b-2 border-[#0d0f10]"
+                  />
+                  <img
+                    src={Emily_Liu}
+                    alt="user2"
+                    className="w-8 h-8 rounded-[1px] z-10 ml-1 border-r-4 border-b-2 border-[#0d0f10]"
+                  />
+                  <img
+                    src={Lily_Patel}
+                    alt="user3"
+                    className="w-8 h-8 rounded-[1px] z-10 ml-1 border-r-4 border-b-2 border-[#0d0f10]"
+                  />
+                  <img
+                    src={Lucas_Ortiz}
+                    alt="user4"
+                    className="w-8 h-8 rounded-[1px] z-10 ml-1"
+                  />
+                  <div className="w-8 h-8 rounded-xl z-0 bg-noble-black-600 text-noble-black-400 font-semibold text-center text-xs flex items-center justify-center">
+                    +4
+                  </div>
+                </div>
+
+                <div className="flex items-center space-x-3">
+                  <span className="text-sm text-white">0</span>
+                  <button className="text-gray-400 hover:text-white">
+                    <img
+                      src={chat_bubble_active_icon}
+                      alt=""
+                      className="w-4 h-4 cursor-pointer"
+                    />
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            {/* Another Idea Card */}
+            <div className="bg-noble-black-800 p-4 rounded-xl mb-6">
+              <p className="text-white text-base font-semibold mb-1 cursor-pointer">
+                A list of potential plot points or story arcs.
+              </p>
+
+              <hr className="border-gray-700 mb-5 mt-5" />
+
+              <div className="flex items-center justify-between">
+                <div className="flex items-center -space-x-2">
+                  <img
+                    src={Adam_Green}
+                    alt="user1"
+                    className="w-8 h-8 rounded-[1px] z-10 ml-1 border-r-4 border-b-2 border-[#0d0f10]"
+                  />
+                  <img
+                    src={Emily_Liu}
+                    alt="user2"
+                    className="w-8 h-8 rounded-[1px] z-10 ml-1 border-r-4 border-b-2 border-[#0d0f10]"
+                  />
+                  <img
+                    src={Lily_Patel}
+                    alt="user3"
+                    className="w-8 h-8 rounded-[1px] z-10 ml-1 border-r-4 border-b-2 border-[#0d0f10]"
+                  />
+                  <img
+                    src={Lucas_Ortiz}
+                    alt="user4"
+                    className="w-8 h-8 rounded-[1px] z-10 ml-1"
+                  />
+                  <div className="w-8 h-8 rounded-xl z-0 bg-noble-black-600 text-noble-black-400 font-semibold text-center text-xs flex items-center justify-center">
+                    +4
+                  </div>
+                </div>
+
+                <div className="flex items-center space-x-3">
+                  <span className="text-sm text-white">0</span>
+                  <button className="text-gray-400 hover:text-white">
+                    <img
+                      src={chat_bubble_active_icon}
+                      alt=""
+                      className="w-4 h-4 cursor-pointer"
+                    />
+                  </button>
+                </div>
+              </div>
+            </div>
+            {/* ...Add more Idea cards as needed... */}
+            <div className="bg-noble-black-800 p-4 rounded-xl mb-6">
+              <p className="text-white text-base font-semibold mb-1 cursor-pointer">
+                Concept art for potential new characters or locations.
+              </p>
+
+              <hr className="border-gray-700 mb-5 mt-5" />
+
+              <div className="flex items-center justify-between">
+                <div className="flex items-center -space-x-2">
+                  <img
+                    src={Adam_Green}
+                    alt="user1"
+                    className="w-8 h-8 rounded-[1px] z-10 ml-1 border-r-4 border-b-2 border-[#0d0f10]"
+                  />
+                  <img
+                    src={Emily_Liu}
+                    alt="user2"
+                    className="w-8 h-8 rounded-[1px] z-10 ml-1 border-r-4 border-b-2 border-[#0d0f10]"
+                  />
+                  <img
+                    src={Lily_Patel}
+                    alt="user3"
+                    className="w-8 h-8 rounded-[1px] z-10 ml-1 border-r-4 border-b-2 border-[#0d0f10]"
+                  />
+                  <img
+                    src={Lucas_Ortiz}
+                    alt="user4"
+                    className="w-8 h-8 rounded-[1px] z-10 ml-1"
+                  />
+                  <div className="w-8 h-8 rounded-xl z-0 bg-noble-black-600 text-noble-black-400 font-semibold text-center text-xs flex items-center justify-center">
+                    +4
+                  </div>
+                </div>
+
+                <div className="flex items-center space-x-3">
+                  <span className="text-sm text-white">0</span>
+                  <button className="text-gray-400 hover:text-white">
+                    <img
+                      src={chat_bubble_active_icon}
+                      alt=""
+                      className="w-4 h-4 cursor-pointer"
+                    />
+                  </button>
+                </div>
+              </div>
+            </div>
+            {/* ...Add more Idea cards as needed... */}
+            <div className="bg-noble-black-800 p-4 rounded-xl mb-6">
+              <p className="text-white text-base font-semibold mb-1 cursor-pointer">
+                A list of potential plot points or story arcs.
+              </p>
+
+              <hr className="border-gray-700 mb-5 mt-5" />
+
+              <div className="flex items-center justify-between">
+                <div className="flex items-center -space-x-2">
+                  <img
+                    src={Adam_Green}
+                    alt="user1"
+                    className="w-8 h-8 rounded-[1px] z-10 ml-1 border-r-4 border-b-2 border-[#0d0f10]"
+                  />
+                  <img
+                    src={Emily_Liu}
+                    alt="user2"
+                    className="w-8 h-8 rounded-[1px] z-10 ml-1 border-r-4 border-b-2 border-[#0d0f10]"
+                  />
+                  <img
+                    src={Lily_Patel}
+                    alt="user3"
+                    className="w-8 h-8 rounded-[1px] z-10 ml-1 border-r-4 border-b-2 border-[#0d0f10]"
+                  />
+                  <img
+                    src={Lucas_Ortiz}
+                    alt="user4"
+                    className="w-8 h-8 rounded-[1px] z-10 ml-1"
+                  />
+                  <div className="w-8 h-8 rounded-xl z-0 bg-noble-black-600 text-noble-black-400 font-semibold text-center text-xs flex items-center justify-center">
+                    +4
+                  </div>
+                </div>
+
+                <div className="flex items-center space-x-3">
+                  <span className="text-sm text-white">0</span>
+                  <button className="text-gray-400 hover:text-white">
+                    <img
+                      src={chat_bubble_active_icon}
+                      alt=""
+                      className="w-4 h-4 cursor-pointer"
+                    />
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* VERTICAL PLUS BUTTON */}
+          <div className="flex flex-col items-center w-10 min-h-screen ">
+            <button
+              onClick={openModal}
+              className=" cursor-pointer bg-noble-black-600 hover:bg-noble-black-600 text-white w-10 min-h-screen flex items-center justify-center rounded-md"
+            >
+              +
+            </button>
           </div>
         </div>
       </div>

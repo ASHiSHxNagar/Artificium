@@ -48,7 +48,7 @@ export default function TopNav({ activeTab, onShareClick }) {
   };
 
   return (
-    <div className="bg-noble-black-700 p-2 w-full">
+    <div className="bg-noble-black-700 p-2 pr-3 w-full">
       <div className="bg-noble-black-700  ">
         {/* Row 1: Title, subtitle, avatars, share/edit */}
         <div className="bg-noble-black-800 px-6 py-4 w-full rounded-t-2xl">
@@ -159,7 +159,7 @@ export default function TopNav({ activeTab, onShareClick }) {
             } flex items-center justify-center gap-3 pb-2 text-sm font-semibold cursor-pointer`}
           >
             {currentTab === "library" ? (
-              <img src={Folder_Active } alt="" className="w-4 h-4" />
+              <img src={Folder_Active} alt="" className="w-4 h-4" />
             ) : (
               <img src={Folder} alt="" className="w-4 h-4" />
             )}

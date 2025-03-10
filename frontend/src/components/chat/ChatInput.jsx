@@ -1,13 +1,14 @@
 import { useState, useRef } from "react";
 import axios from "axios";
 import { toast, Toaster } from "react-hot-toast";
+import PropTypes from "prop-types";
 
 // icons
 import attachIcon from "../../assets/icons/attatchment.svg";
 import sendIcon from "../../assets/icons/paper_plane.svg";
 import micIcon from "../../assets/icons/microphone.svg";
 
-export default function ChatInput(chat_tab_input) {
+export default function ChatInput({ width }) {
   const [message, setMessage] = useState("");
   const [imageFile, setImageFile] = useState(null);
 
@@ -41,7 +42,7 @@ export default function ChatInput(chat_tab_input) {
         formData.append("image", imageFile);
       }
 
-      // Example: sending to "/api/chat/sendMessage"
+      // Example: sending to "/chat/sendMessage"
       // Adjust URL & method as needed for your backend
       const response = await axios.post(
         `${import.meta.env.VITE_SERVER_DOMAIN}/chat/sendMessage`,
@@ -56,7 +57,6 @@ export default function ChatInput(chat_tab_input) {
       // Clear input & file after successful send
       setMessage("");
       setImageFile(null);
-      // Possibly handle the server’s response (e.g., new message ID)
       console.log("Message sent:", response.data);
     } catch (error) {
       console.error("Error sending message:", error);
@@ -66,12 +66,9 @@ export default function ChatInput(chat_tab_input) {
   return (
     <>
       <Toaster />
+      {/* Apply the `width` prop here instead of a fixed max-w */}
       <div
-        className={`p-2 fixed bottom-1 w-full overflow-x-hidden ${
-          chat_tab_input
-            ? "max-w-[calc(100vw-660px)] pb-5"
-            : "max-w-[calc(100vw-320px)]"
-        }`}
+        className={`p-2 fixed bottom-1 w-full overflow-x-hidden pb-5 ${width}`}
       >
         <div className="bg-noble-black-800 w-full flex items-center p-6 rounded-2xl">
           {/* Microphone Icon (does nothing) */}
@@ -119,3 +116,11 @@ export default function ChatInput(chat_tab_input) {
     </>
   );
 }
+ChatInput.propTypes = {
+  /** Optional click handler for "Share" button */
+  width: PropTypes.string,
+};
+
+ChatInput.defaultProps = {
+  width: "max-w-[calc(100vw-320px)]",
+};

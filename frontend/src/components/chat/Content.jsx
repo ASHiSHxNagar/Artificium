@@ -7,7 +7,7 @@ import arrowIcon from "../../assets/icons/arrow_right.svg";
 
 export default function InnovationStarterPack() {
   return (
-    <div className="w-full px-8 py-4 text-white max-h-[calc(100vh-350px)] overflow-y-scroll">
+    <div className="w-full px-8 py-4 pr-10 text-white max-h-[calc(100vh-350px)] overflow-y-scroll">
       {/* Heading */}
       <h2 className="text-[28px] font-medium mb-2 text-center">
         Innovation Starter Pack

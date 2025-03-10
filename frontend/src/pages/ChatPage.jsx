@@ -2,6 +2,7 @@ import { useState } from "react";
 import Sidebar from "../components/layout/Sidebar"; // or wherever your Sidebar is
 import TopNav from "../components/layout/TopNav";
 import ChatRightPanel from "../components/layout/ChatRightPanel";
+import PropTypes from "prop-types";
 
 //icons
 import star_icon from "../assets/icons/star_icon.svg";
@@ -14,7 +15,7 @@ import Adam_Green from "../assets/avatar/Adam_Green.png";
 import Emily_Liu from "../assets/avatar/Emily_Liu.png";
 import Lily_Patel from "../assets/avatar/Lily_Patel.png";
 
-export default function ChatPage() {
+export default function ChatPage({ onShareClick }) {
   // Active channel name & dummy number
   const [channelName, setChannelName] = useState("Spaceship Crew");
   const [channelCount, setChannelCount] = useState(4);
@@ -51,16 +52,6 @@ export default function ChatPage() {
     },
   ];
 
-  // For sending new messages
-  // const [newMessage, setNewMessage] = useState("");
-
-  // const handleSend = () => {
-  //   // In reality, you'd call your backend here
-  //   if (!newMessage.trim()) return;
-  //   console.log("Sending message:", newMessage);
-  //   setNewMessage("");
-  // };
-
   return (
     <div className="flex h-screen bg-noble-black-700 text-gray-200">
       {/* Left Sidebar (same as Artificium) */}
@@ -69,7 +60,7 @@ export default function ChatPage() {
       {/* Main content area */}
       <div className="flex-1 flex flex-col">
         {/* Top Navbar */}
-        <TopNav activeTab="chat" />
+        <TopNav activeTab="chat" onShareClick={onShareClick} />
 
         {/* Middle + Right Panel */}
         <div className="flex flex-1 overflow-hidden">
@@ -156,7 +147,7 @@ export default function ChatPage() {
                         </div>
                       </div>
                       {/* Copy icon */}
-                      <button className="text-gray-400 hover:text-white">
+                      <button className="text-gray-400 hover:text-white cursor-pointer">
                         <img src={copy_icon} alt="" />
                       </button>
                     </div>
@@ -186,7 +177,7 @@ export default function ChatPage() {
 
             {/* Bottom Chat Input */}
 
-            <ChatInput chat_tab_input="true" />
+            <ChatInput width="max-w-[calc(100vw-660px)]" />
           </div>
 
           {/* Right Panel */}
@@ -201,3 +192,12 @@ export default function ChatPage() {
     </div>
   );
 }
+
+ChatPage.propTypes = {
+  /** Optional click handler for "Share" button */
+  onShareClick: PropTypes.func,
+};
+
+ChatPage.defaultProps = {
+  onShareClick: null,
+};
