@@ -74,7 +74,7 @@ export default function ChatPage() {
         {/* Middle + Right Panel */}
         <div className="flex flex-1 overflow-hidden">
           {/* Middle Chat Section */}
-          <div className=" pb-[150px] flex-1 flex flex-col bg-noble-black-700 p-4 overflow-y-auto mr-6  ">
+          <div className=" pb-[150px] flex-1 flex flex-col bg-noble-black-700 p-4 overflow-y-auto  ">
             {/* Channel Header */}
             <div className="flex items-center gap-3 justify-between w-full mb-8 ">
               <h2 className=" flex  items-center justify-center gap-5 text-xl font-semibold text-white">

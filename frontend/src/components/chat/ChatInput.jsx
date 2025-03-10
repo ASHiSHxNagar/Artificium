@@ -69,7 +69,7 @@ export default function ChatInput(chat_tab_input) {
       <div
         className={`p-2 fixed bottom-1 w-full overflow-x-hidden ${
           chat_tab_input
-            ? "max-w-[calc(100vw-630px)]"
+            ? "max-w-[calc(100vw-660px)] pb-5"
             : "max-w-[calc(100vw-320px)]"
         }`}
       >
