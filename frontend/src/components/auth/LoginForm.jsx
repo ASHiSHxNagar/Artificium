@@ -11,6 +11,8 @@ import { useState } from "react";
 import { toast, Toaster } from "react-hot-toast";
 import { authWithGoogle } from "../shared/Firebase";
 import { useNavigate } from "react-router-dom";
+import { storeInSession } from "../shared/Session";
+
 
 const LoginForm = () => {
   const [formData, setFormData] = useState({
@@ -29,11 +31,12 @@ const LoginForm = () => {
       .then(async (user) => {
         try {
           const response = await axios.post(
-            `${import.meta.env.VITE_SERVER_DOMAIN}/google-auth`,
+            `${import.meta.env.VITE_SERVER_DOMAIN}/users/google-auth`,
             {
               access_token: user.accessToken,
             }
           );
+          storeInSession("token", response.data.token);
           toast.success(response.data.message);
           success = true; // Replace with actual login success condition
 
@@ -63,12 +66,15 @@ const LoginForm = () => {
 
     try {
       const response = await axios.post(
-        `${import.meta.env.VITE_SERVER_DOMAIN}/login`,
+        `${import.meta.env.VITE_SERVER_DOMAIN}/users/login`,
         {
           email: formData.email,
           password: formData.password,
         }
       );
+      console.log(response.data.token);
+      storeInSession("token", response.data.token);
+      console.log(sessionStorage.getItem("token"));
       toast.success(response.data.message);
       success = true;
       if (success) {

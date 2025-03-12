@@ -6,6 +6,7 @@ import axios from "axios";
 import { useState } from "react";
 import { toast, Toaster } from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
+import { storeInSession } from "../shared/Session";
 
 const RegisterForm = () => {
   const [formData, setFormData] = useState({
@@ -33,19 +34,15 @@ const RegisterForm = () => {
       return;
     }
 
-    // console.log("Form Data being sent to backend:", formData); // Log form data
-
     try {
-      const response = await axios.post(
-        `${import.meta.env.VITE_SERVER_DOMAIN}/register`,
-        {
-          fullname: formData.fullname,
-          email: formData.email,
-          password: formData.password,
-        }
-      );
+      const response = await axios.post(`${import.meta.env.VITE_SERVER_DOMAIN}/users/register`, {
+        fullname: formData.fullname,
+        email: formData.email,
+        password: formData.password,
+    });
+    storeInSession("token", response.data.token);
+    
       toast.success("Registration successful!");
-      console.log(response.data.message);
       window.location.href = "/workspace"; // Redirect to /workspace after successful registration
     } catch (error) {
       toast.error(error.response.data.error);
