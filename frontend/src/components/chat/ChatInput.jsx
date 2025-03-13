@@ -9,7 +9,12 @@ import sendIcon from "../../assets/icons/paper_plane.svg";
 import micIcon from "../../assets/icons/microphone.svg";
 import loadingIcon from "../../assets/icons/bouncing-circles.svg";
 
-export default function ChatInput({ width, chatId, onMessageSent }) {
+export default function ChatInput({
+  width,
+  chatId,
+  onMessageSent,
+  replyingTo,
+}) {
   const [message, setMessage] = useState("");
   const [imageFile, setImageFile] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -39,25 +44,39 @@ export default function ChatInput({ width, chatId, onMessageSent }) {
     if (imageFile) {
       formData.append("image", imageFile);
     }
+    if (replyingTo) {
+      formData.append("messageId", replyingTo); // Include messageId if replying
+    }
 
+    // Log form data entries
+    for (let [key, value] of formData.entries()) {
+      console.log(`${key}: ${value}`);
+    }
     try {
-      const response = await axios.post(
-        `${import.meta.env.VITE_SERVER_DOMAIN}/artificium/send`,
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      );
-
+      const endpoint = replyingTo
+        ? `${import.meta.env.VITE_SERVER_DOMAIN}/messages/reply`
+        : `${import.meta.env.VITE_SERVER_DOMAIN}/messages/send`;
+      const response = await axios.post(endpoint, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
       toast.success("Message sent!");
       setMessage("");
       setImageFile(null);
-      if (onMessageSent) onMessageSent(); // Notify parent to refresh messages
+      if (onMessageSent) onMessageSent();
     } catch (error) {
       console.error("Error sending message:", error);
-      toast.error("Failed to send message");
+      if (error.response) {
+        // Server responded with a status other than 200 range
+        toast.error(`Failed to send message: ${error.response.data.message}`);
+      } else if (error.request) {
+        // Request was made but no response received
+        toast.error("Failed to send message: No response from server");
+      } else {
+        // Something else happened while setting up the request
+        toast.error(`Failed to send message: ${error.message}`);
+      }
     } finally {
       setIsLoading(false);
     }
@@ -80,7 +99,11 @@ export default function ChatInput({ width, chatId, onMessageSent }) {
 
           <input
             type="text"
-            placeholder="You can ask me anything! I am here to help."
+            placeholder={
+              replyingTo
+                ? "Type your reply..."
+                : "You can ask me anything! I am here to help."
+            }
             className="flex-1 bg-noble-black-800 px-4 py-2 rounded-l focus:outline-none mr-2 text-white placeholder:text-noble-black-400 text-base font-semibold"
             value={message}
             onChange={(e) => setMessage(e.target.value)}
@@ -131,9 +154,11 @@ ChatInput.propTypes = {
   width: PropTypes.string,
   chatId: PropTypes.string.isRequired,
   onMessageSent: PropTypes.func,
+  replyingTo: PropTypes.string,
 };
 
 ChatInput.defaultProps = {
   width: "max-w-[calc(100vw-320px)]",
   onMessageSent: null,
+  replyingTo: null,
 };

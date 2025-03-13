@@ -8,6 +8,8 @@ import cors from 'cors';
 import userRoutes from "./routes/userRoutes.js";
 import workspaceRoutes from "./routes/workspaceRoutes.js";
 import artificiumRoutes from "./routes/artificiumRoutes.js";
+import chatRoutes from "./routes/chatRoutes.js";
+import messageRoutes from "./routes/messageRoutes.js"
 
 const app = express();
 const PORT = 3000;
@@ -19,6 +21,8 @@ app.use(express.json());
 app.use("/users", userRoutes);
 app.use("/workspaces", workspaceRoutes);
 app.use("/artificium", artificiumRoutes);
+app.use("/artificiumconversation", chatRoutes);
+app.use("/messages", messageRoutes);
 
 
 // Set COOP header

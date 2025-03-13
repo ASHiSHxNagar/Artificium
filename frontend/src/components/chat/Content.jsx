@@ -3,7 +3,6 @@ import axios from "axios";
 import ArtificiumMessageBox from "./ArtificiumMessageBox";
 import PropTypes from "prop-types";
 
-
 // Concept art images (replace with your actual paths)
 import conceptArt1 from "../../assets/images/concept-art1.png";
 import conceptArt2 from "../../assets/images/concept-art2.png";
@@ -35,10 +34,10 @@ export default function Content({ chatId, onMessageSent }) {
   const handleRegenerate = async (messageId) => {
     setIsRegenerating((prev) => ({ ...prev, [messageId]: true }));
     try {
-      const { data } = await axios.post(
-        `${API_BASE}/artificium/regenerate`,
-        { chatId, messageId }
-      );
+      const { data } = await axios.post(`${API_BASE}/artificium/regenerate`, {
+        chatId,
+        messageId,
+      });
       if (data.success) {
         fetchConversation(); // Refresh conversation
       }
@@ -50,7 +49,11 @@ export default function Content({ chatId, onMessageSent }) {
   };
 
   // Default content if no conversation exists
-  if (!conversation || !conversation.messages || conversation.messages.length === 0) {
+  if (
+    !conversation ||
+    !conversation.messages ||
+    conversation.messages.length === 0
+  ) {
     return (
       <div className="space-y-4 max-h-[calc(100vh-200px)] overflow-y-auto">
         <div className="bg-noble-black-800 p-4 rounded-lg shadow-md">
@@ -76,12 +79,25 @@ export default function Content({ chatId, onMessageSent }) {
             </button>
           </div>
           <p className="text-white mt-4">
-            Here are a few concept arts that also might inspire you. Take a look!
+            Here are a few concept arts that also might inspire you. Take a
+            look!
           </p>
           <div className="flex gap-4 mt-4">
-            <img src={conceptArt1} alt="Concept Art 1" className="w-40 h-40 rounded" />
-            <img src={conceptArt2} alt="Concept Art 2" className="w-40 h-40 rounded" />
-            <img src={conceptArt3} alt="Concept Art 3" className="w-40 h-40 rounded" />
+            <img
+              src={conceptArt1}
+              alt="Concept Art 1"
+              className="w-40 h-40 rounded"
+            />
+            <img
+              src={conceptArt2}
+              alt="Concept Art 2"
+              className="w-40 h-40 rounded"
+            />
+            <img
+              src={conceptArt3}
+              alt="Concept Art 3"
+              className="w-40 h-40 rounded"
+            />
           </div>
           <div className="mt-4 flex gap-2">
             <button className="bg-noble-black-700 px-3 py-1 rounded hover:bg-noble-black-600">
@@ -115,7 +131,7 @@ export default function Content({ chatId, onMessageSent }) {
 
   // Display conversation if it exists
   return (
-    <div className="space-y-4 max-h-[calc(100vh-200px)] overflow-y-auto">
+    <div className="space-y-4 max-h-[calc(100vh-200px)] overflow-y-auto pb-[150px]">
       {conversation.messages.map((msg) => (
         <ArtificiumMessageBox
           key={msg._id}

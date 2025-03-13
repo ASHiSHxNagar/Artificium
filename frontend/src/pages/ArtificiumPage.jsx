@@ -61,6 +61,14 @@ export default function ArtificiumPage({ onShareClick }) {
     setRefreshTrigger((prev) => prev + 1); // Trigger refresh of conversation
   };
 
+  // Add this to re-fetch chats when a new chat is added
+  const handleChatAdded = () => {
+    const workspaceId = sessionStorage.getItem("workspaceId");
+    if (workspaceId) {
+      fetchChats(workspaceId);
+    }
+  };
+
   return (
     <div className="flex h-screen w-full bg-noble-black-700 text-gray-200">
       <Sidebar
@@ -68,6 +76,7 @@ export default function ArtificiumPage({ onShareClick }) {
         chats={chats}
         selectedChat={selectedChat}
         onSelectChat={handleSelectChat}
+        onChatAdded={handleChatAdded} // Pass callback to Sidebar
       />
 
       <div className="flex-1 flex flex-col">

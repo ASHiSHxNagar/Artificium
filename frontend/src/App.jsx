@@ -52,7 +52,7 @@ function App() {
           />
           <Route
             path="/artificium/:workspaceSlug/library"
-            element={<ArtificiumPage onShareClick={handleOpenShare} />}
+            element={<LibraryPage onShareClick={handleOpenShare} />}
           />
           <Route
             path="/chat"

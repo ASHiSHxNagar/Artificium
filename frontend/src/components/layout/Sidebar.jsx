@@ -15,14 +15,22 @@ import plus_circle from "../../assets/icons/plus_circle.svg";
 import setting from "../../assets/icons/setting.svg";
 // Components
 import ChatChannel from "../shared/ChatChannel";
+import AddChatModal from "./AddChatModal"; // Import the new modal
 
 const API_BASE = import.meta.env.VITE_SERVER_DOMAIN;
 
-export default function Sidebar({ activeProject, chats, selectedChat, onSelectChat }) {
+export default function Sidebar({
+  activeProject,
+  chats,
+  selectedChat,
+  onSelectChat,
+  onChatAdded,
+}) {
   const navigate = useNavigate();
   const workspaceSlug = lookInSession("workspaceSlug");
   const [workspace, setWorkspace] = useState(null);
   const [localChats, setLocalChats] = useState(chats || []);
+  const [isModalOpen, setIsModalOpen] = useState(false); // State for modal visibility
 
   useEffect(() => {
     if (workspaceSlug) {
@@ -51,7 +59,9 @@ export default function Sidebar({ activeProject, chats, selectedChat, onSelectCh
 
   const fetchChats = async (workspaceId) => {
     try {
-      const { data } = await axios.get(`${API_BASE}/workspaces/${workspaceId}/allchats`);
+      const { data } = await axios.get(
+        `${API_BASE}/workspaces/${workspaceId}/allchats`
+      );
       if (data.success) {
         setLocalChats(data.chats);
       }
@@ -62,11 +72,42 @@ export default function Sidebar({ activeProject, chats, selectedChat, onSelectCh
 
   const handleChatClick = (chat) => {
     onSelectChat(chat);
-    const workspaceId = sessionStorage.getItem("workspaceId");
+    const workspaceId = lookInSession("workspaceId");
     if (workspaceId) {
       navigate(`/artificium/workspace/${workspaceId}/allchats/${chat._id}`);
     } else {
       console.error("Workspace ID not found for navigation");
+    }
+  };
+
+  const handleAddChat = async (chatName) => {
+    try {
+      const workspaceId = lookInSession("workspaceId");
+      if (!workspaceId) {
+        console.error("Workspace ID not found");
+        return;
+      }
+
+      const response = await axios.post(
+        `${API_BASE}/artificiumconversation/${workspaceId}/chats`,
+        {
+          title: chatName,
+          workspace: workspaceId,
+          participants: [],
+        }
+      );
+
+      if (response.data.success) {
+        const newChat = response.data.chat;
+        setLocalChats((prev) => [...prev, newChat]);
+        onSelectChat(newChat);
+        navigate(
+          `/artificium/workspace/${workspaceId}/allchats/${newChat._id}`
+        );
+        if (onChatAdded) onChatAdded(); // Notify parent to re-fetch chats
+      }
+    } catch (error) {
+      console.error("Error adding new chat:", error);
     }
   };
 
@@ -120,7 +161,10 @@ export default function Sidebar({ activeProject, chats, selectedChat, onSelectCh
             onSelectChat={handleChatClick}
           />
         ))}
-        <div className="flex items-center gap-2 mt-4 cursor-pointer text-gray-400 hover:text-white onHover py-2 px-2 -ml-[2px]">
+        <div
+          className="flex items-center gap-2 mt-4 cursor-pointer text-gray-400 hover:text-white onHover py-2 px-2 -ml-[2px]"
+          onClick={() => setIsModalOpen(true)} // Open modal on click
+        >
           <img src={plus_circle} alt="Add Icon" className="w-5 h-5" />
           <span className="text-sm font-semibold ml-2">Add new project</span>
         </div>
@@ -128,31 +172,41 @@ export default function Sidebar({ activeProject, chats, selectedChat, onSelectCh
 
       {/* ========== Footer (User Profile) ========== */}
       <div className="bg-noble-black-800 rounded-b-2xl p-2">
-        <div
-          className="flex items-center gap-3 bg-[linear-gradient(117.58deg,rgba(215,237,237,0.16)_-47.79%,rgba(204,235,235,0)_100%)] backdrop-blur-sm px-8 py-4 rounded-md"
-        >
+        <div className="flex items-center gap-3 bg-[linear-gradient(117.58deg,rgba(215,237,237,0.16)_-47.79%,rgba(204,235,235,0)_100%)] backdrop-blur-sm px-8 py-4 rounded-md">
           <div className="relative w-10 h-10">
             <img src={Ryan_Lee} alt="Ryan Lee" className="w-full h-full" />
-            <div
-              className="absolute top-1 right-2 w-2 h-2 bg-[#4ac97e] rounded-full transform translate-x-1/2 -translate-y-1/2 z-10 shadow-[0_0_12px_#4AC97E7A]"
-            ></div>
+            <div className="absolute top-1 right-2 w-2 h-2 bg-[#4ac97e] rounded-full transform translate-x-1/2 -translate-y-1/2 z-10 shadow-[0_0_12px_#4AC97E7A]"></div>
           </div>
           <div className="flex-1">
             <p className="font-semibold text-white text-base">Ryan Lee</p>
-            <p className="text-stem-green-500 text-xs font-medium mt-1">Premium</p>
+            <p className="text-stem-green-500 text-xs font-medium mt-1">
+              Premium
+            </p>
           </div>
-          <img src={setting} alt="Settings" className="w-5 h-5 cursor-pointer" />
+          <img
+            src={setting}
+            alt="Settings"
+            className="w-5 h-5 cursor-pointer"
+          />
         </div>
       </div>
+
+      {/* Modal for adding new chat */}
+      {isModalOpen && (
+        <AddChatModal
+          onClose={() => setIsModalOpen(false)}
+          onAddChat={handleAddChat}
+        />
+      )}
     </div>
   );
 }
-
 Sidebar.propTypes = {
   activeProject: PropTypes.string,
   chats: PropTypes.array,
   selectedChat: PropTypes.object,
   onSelectChat: PropTypes.func,
+  onChatAdded: PropTypes.func, // Add new prop
 };
 
 Sidebar.defaultProps = {
@@ -160,4 +214,5 @@ Sidebar.defaultProps = {
   chats: [],
   selectedChat: null,
   onSelectChat: () => {},
+  onChatAdded: null, // Default to null
 };

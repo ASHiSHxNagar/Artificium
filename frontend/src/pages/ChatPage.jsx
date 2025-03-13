@@ -1,16 +1,11 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
+import PropTypes from "prop-types";
 import Sidebar from "../components/layout/Sidebar";
 import TopNav from "../components/layout/TopNav";
-import ChatRightPanel from "../components/layout/ChatRightPanel";
-import ChatInput from "../components/chat/ChatInput";
+import ChatInput from "../components/chat/ChatInput"; // Import ChatInput
 import MessageBox from "../components/chat/MessageBox";
-import PropTypes from "prop-types";
-
-// Icons
-import star_icon from "../assets/icons/star_icon.svg";
-import dots_icon from "../assets/icons/dots_icon.svg";
 import artificium from "../assets/avatar/Artificium.png";
 
 const API_BASE = import.meta.env.VITE_SERVER_DOMAIN;
@@ -24,48 +19,47 @@ export default function ChatPage({ onShareClick }) {
   const [workspace, setWorkspace] = useState(null);
   const [chats, setChats] = useState([]);
   const [selectedChat, setSelectedChat] = useState(null);
+  const [replyingTo, setReplyingTo] = useState(null); // Track which message is being replied to
+  const [refreshTrigger, setRefreshTrigger] = useState(0);
 
   useEffect(() => {
     if (workspaceId) {
-      fetchWorkspace();
-      fetchChats();
+      fetchWorkspace(workspaceId);
     }
   }, [workspaceId]);
 
   useEffect(() => {
     if (chatId) {
       fetchMessages(chatId);
-      const selected = chats.find((chat) => chat._id === chatId);
-      if (selected) {
-        setSelectedChat(selected);
-        setChannelName(selected.title);
-        setChannelCount(selected.participants?.length || 4);
-      }
+      const chat = chats.find((c) => c._id === chatId);
+      setSelectedChat(chat || null);
+      setChannelName(chat?.title || "Spaceship Crew");
+      setChannelCount(chat?.participants?.length || 4);
     }
-  }, [chatId, chats]);
+  }, [chatId, chats, refreshTrigger]);
 
-  const fetchWorkspace = async () => {
+  const fetchWorkspace = async (id) => {
     try {
-      const { data } = await axios.get(`${API_BASE}/workspaces/${workspaceId}`);
-      if (data.success && data.workspace) {
+      const { data } = await axios.get(`${API_BASE}/workspaces/${id}`);
+      if (data.success) {
         setWorkspace(data.workspace);
-        sessionStorage.setItem("workspaceId", data.workspace._id);
-      } else {
-        console.log("Workspace not found or error");
+        fetchChats(id);
       }
     } catch (err) {
       console.error("Error fetching workspace:", err);
     }
   };
 
-  const fetchChats = async () => {
+  const fetchChats = async (id) => {
     try {
-      const { data } = await axios.get(
-        `${API_BASE}/workspaces/${workspaceId}/allchats`
-      );
+      const { data } = await axios.get(`${API_BASE}/workspaces/${id}/allchats`);
       if (data.success) {
         setChats(data.chats);
-        if (!chatId && data.chats.length > 0) {
+        if (chatId) {
+          const chat = data.chats.find((c) => c._id === chatId);
+          setSelectedChat(chat || null);
+        } else if (data.chats.length > 0) {
+          setSelectedChat(data.chats[0]);
           navigate(
             `/artificium/workspace/${workspaceId}/allchats/${data.chats[0]._id}`
           );
@@ -84,33 +78,26 @@ export default function ChatPage({ onShareClick }) {
       if (data.success) {
         const formattedMessages = [];
         data.messages.forEach((msg) => {
-          // Main message
           formattedMessages.push({
             id: msg._id,
-            avatar: msg.sender?.personal_info?.profile_img || "", // Use User schema profile_img
+            avatar: msg.sender?.personal_info?.profile_img || "",
             user: msg.sender?.personal_info?.username || "Unknown User",
             date: new Date(msg.createdAt).toLocaleString(),
             text: msg.text,
             isMain: true,
-            createdAt: msg.createdAt, // Add createdAt for divider logic
-          });
-
-          // Replies (subdocuments)
-          if (msg.replies && msg.replies.length > 0) {
-            msg.replies.forEach((reply, index) => {
-              formattedMessages.push({
+            createdAt: msg.createdAt,
+            replies:
+              msg.replies?.map((reply, index) => ({
                 id: `${msg._id}-reply-${index}`,
                 avatar: reply.sender?.personal_info?.profile_img || "",
                 user: reply.sender?.personal_info?.username || "Unknown User",
                 timeAgo: calculateTimeAgo(new Date(reply.createdAt)),
                 text: reply.text,
                 isMain: false,
-                createdAt: reply.createdAt, // Add createdAt for divider logic
-              });
-            });
-          }
+                createdAt: reply.createdAt,
+              })) || [],
+          });
         });
-
         const messagesWithDividers = addDateDividers(formattedMessages);
         setMessages(messagesWithDividers);
       }
@@ -134,7 +121,6 @@ export default function ChatPage({ onShareClick }) {
   const addDateDividers = (msgs) => {
     const result = [];
     let lastDate = null;
-
     msgs.forEach((msg, index) => {
       const msgDate = msg.createdAt
         ? new Date(msg.createdAt).toDateString()
@@ -150,13 +136,27 @@ export default function ChatPage({ onShareClick }) {
       }
       result.push(msg);
     });
-
     return result;
   };
 
   const handleSelectChat = (chat) => {
     setSelectedChat(chat);
     navigate(`/artificium/workspace/${workspaceId}/allchats/${chat._id}`);
+  };
+
+  const handleChatAdded = () => {
+    if (workspaceId) {
+      fetchChats(workspaceId);
+    }
+  };
+
+  const handleReplyClick = (messageId) => {
+    setReplyingTo(messageId);
+  };
+
+  const handleMessageSent = () => {
+    setReplyingTo(null); // Clear reply state after sending
+    setRefreshTrigger((prev) => prev + 1); // Trigger message refresh
   };
 
   return (
@@ -166,89 +166,65 @@ export default function ChatPage({ onShareClick }) {
         chats={chats}
         selectedChat={selectedChat}
         onSelectChat={handleSelectChat}
+        onChatAdded={handleChatAdded}
       />
-
       <div className="flex-1 flex flex-col">
         <TopNav
           activeTab="chat"
           onShareClick={onShareClick}
-          activeProject={workspace?.name || "Orbital Odyssey"}
+          activeProject={channelName}
+          channelCount={channelCount}
+          chats={chats}
+          selectedChat={selectedChat}
+          onSelectChat={handleSelectChat}
         />
-
-        <div className="flex flex-1 overflow-hidden">
-          <div className="pb-[150px] flex-1 flex flex-col bg-noble-black-700 p-4 overflow-y-auto">
-            <div className="flex items-center gap-3 justify-between w-full mb-8">
-              <h2 className="flex items-center justify-center gap-5 text-xl font-semibold text-white">
-                {channelName}
-                <div
-                  className="
-                    w-8 h-8 rounded-xl text-stem-green-600
-                    flex items-center justify-center
-                    bg-[linear-gradient(117.58deg,rgba(215,237,237,0.16)_-47.79%,rgba(204,235,235,0)_100%)]
-                    backdrop-blur-sm
-                  "
-                >
-                  {channelCount}
-                </div>
-              </h2>
-              <div className="flex gap-2 ml-auto">
-                <button className="text-gray-400 hover:text-white mr-12">
-                  <img src={star_icon} alt="Star" />
-                </button>
-                <button className="text-gray-400 hover:text-white mr-6">
-                  <img src={dots_icon} alt="More" />
-                </button>
-              </div>
-            </div>
-
-            <div className="space-y-6">
-              {messages.length === 0 ? (
+        <div className="p-6 flex-1 overflow-y-auto">
+          {messages.length === 0 ? (
+            <MessageBox
+              key="no-messages"
+              message={{
+                id: "no-messages",
+                avatar: artificium,
+                user: "Artificium",
+                date: new Date().toLocaleString(),
+                text: "No messages here",
+                isMain: true,
+              }}
+              nextMessage={null}
+              onReplyClick={handleReplyClick}
+            />
+          ) : (
+            messages.map((msg, index) => {
+              if (msg.divider) {
+                return (
+                  <div
+                    key={msg.id}
+                    className="text-center text-sm text-gray-500"
+                  >
+                    {msg.divider}
+                  </div>
+                );
+              }
+              const nextMessage = messages[index + 1];
+              return (
                 <MessageBox
-                  key="no-messages"
-                  message={{
-                    id: "no-messages",
-                    avatar: artificium, // Replace with your local Artificium avatar path
-                    user: "Artificium",
-                    date: new Date().toLocaleString(),
-                    text: "No messages here",
-                    isMain: true,
-                  }}
-                  nextMessage={null}
+                  key={msg.id}
+                  message={msg}
+                  nextMessage={nextMessage}
+                  onReplyClick={handleReplyClick}
                 />
-              ) : (
-                messages.map((msg, index) => {
-                  if (msg.divider) {
-                    return (
-                      <div
-                        key={msg.id}
-                        className="text-center text-sm text-gray-500"
-                      >
-                        {msg.divider}
-                      </div>
-                    );
-                  }
-                  const nextMessage = messages[index + 1];
-                  return (
-                    <MessageBox
-                      key={msg.id}
-                      message={msg}
-                      nextMessage={nextMessage}
-                    />
-                  );
-                })
-              )}
-            </div>
-
-            <ChatInput width="max-w-[calc(100vw-660px)]" />
-          </div>
-
-          <ChatRightPanel
-            channelName={channelName}
-            setChannelName={setChannelName}
-            channelCount={channelCount}
-            setChannelCount={setChannelCount}
-          />
+              );
+            })
+          )}
         </div>
+        {selectedChat && (
+          <ChatInput
+            width="max-w-[calc(100vw-320px)]"
+            chatId={selectedChat._id}
+            onMessageSent={handleMessageSent}
+            replyingTo={replyingTo} // Pass replyingTo state
+          />
+        )}
       </div>
     </div>
   );

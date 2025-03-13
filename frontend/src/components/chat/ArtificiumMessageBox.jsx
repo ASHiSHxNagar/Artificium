@@ -4,7 +4,11 @@ import loadingIcon from "../../assets/icons/bouncing-circles.svg";
 import Artificium from "../../assets/avatar/Artificium.png"; // Bot avatar
 import Ryan_Lee from "../../assets/avatar/Ryan_Lee.png"; // User avatar
 
-export default function ArtificiumMessageBox({ message, isRegenerating, onRegenerate }) {
+export default function ArtificiumMessageBox({
+  message,
+  isRegenerating,
+  onRegenerate,
+}) {
   const isBot = message.sender === "bot";
 
   const modifyOptions = [
@@ -15,9 +19,9 @@ export default function ArtificiumMessageBox({ message, isRegenerating, onRegene
   ];
 
   return (
-    <div className="relative min-w-[700px] max-w-[710px]">
+    <div className="relative w-full pr-10  ">
       {/* Message Container */}
-      <div className="rounded-lg p-4 relative bg-noble-black-700 shadow-md">
+      <div className="rounded-lg p-4 relative bg-noble-black-700 shadow-md border-1 border-gray-500">
         {/* Top row: user + date + copy icon */}
         <div className="flex items-center justify-between mb-2">
           <div className="flex items-center gap-3">
@@ -96,7 +100,11 @@ export default function ArtificiumMessageBox({ message, isRegenerating, onRegene
                     key={index}
                     className="flex items-center gap-2 p-2 hover:bg-noble-black-700 cursor-pointer"
                   >
-                    <img src={option.icon} alt={option.text} className="w-4 h-4" />
+                    <img
+                      src={option.icon}
+                      alt={option.text}
+                      className="w-4 h-4"
+                    />
                     <span className="text-sm text-white">{option.text}</span>
                   </div>
                 ))}
