@@ -28,8 +28,8 @@ const JoinWorkspace = () => {
     // 1) Retrieve workspaceId from sessionStorage
     const wsId = sessionStorage.getItem("workspaceId");
     const wsSlug = sessionStorage.getItem("workspaceSlug");
-    if (!wsId) {
-      toast.error("No workspace selected. Please choose a workspace.");
+    if (!wsId || !wsSlug) {
+      toast.error("No workspace found in session. Please pick a workspace again.");
       navigate("/workspace");
       return;
     }
@@ -57,8 +57,13 @@ const JoinWorkspace = () => {
   };
 
   const handleJoinNow = () => {
-   
-    navigate("/artificium");
+    // If we have a slug, navigate to /artificium/:slug
+    if (!workspaceSlug) {
+      toast.error("Workspace slug not found. Try again.");
+      navigate("/workspace");
+      return;
+    }
+    navigate(`/artificium/${workspaceSlug}`);
   };
 
   const handleChangeWorkspace = () => {
