@@ -3,7 +3,6 @@ import TopNav from "../components/layout/TopNav";
 import ChatInput from "../components/chat/ChatInput";
 import Content from "../components/chat/Content";
 import PropTypes from "prop-types";
-// import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { lookInSession } from "../components/shared/Session";
@@ -11,10 +10,11 @@ import { lookInSession } from "../components/shared/Session";
 const API_BASE = import.meta.env.VITE_SERVER_DOMAIN;
 
 export default function ArtificiumPage({ onShareClick }) {
-  const workspaceSlug = lookInSession("workspaceSlug"); // e.g. "vertexia"
-  const [workspace, setWorkspace] = useState(null); // store the workspace doc
-  const [chats, setChats] = useState([]); // store array of chats
-  const [selectedChat, setSelectedChat] = useState(null); // which chat is active?
+  const workspaceSlug = lookInSession("workspaceSlug");
+  const [workspace, setWorkspace] = useState(null);
+  const [chats, setChats] = useState([]);
+  const [selectedChat, setSelectedChat] = useState(null);
+  const [refreshTrigger, setRefreshTrigger] = useState(0);
 
   useEffect(() => {
     if (workspaceSlug) {
@@ -27,7 +27,7 @@ export default function ArtificiumPage({ onShareClick }) {
       const { data } = await axios.get(`${API_BASE}/workspaces/slug/${slug}`);
       if (data.success && data.workspace) {
         setWorkspace(data.workspace);
-        sessionStorage.setItem("workspaceId", data.workspace._id); // Store workspaceId
+        sessionStorage.setItem("workspaceId", data.workspace._id);
         fetchChats(data.workspace._id);
       } else {
         console.log("Workspace not found or error");
@@ -39,27 +39,30 @@ export default function ArtificiumPage({ onShareClick }) {
 
   const fetchChats = async (workspaceId) => {
     try {
-      // e.g. GET /api/workspaces/:workspaceId/allchats
-      // returns { success: true, chats: [...] }
       const { data } = await axios.get(
         `${API_BASE}/workspaces/${workspaceId}/allchats`
       );
       if (data.success) {
         setChats(data.chats);
+        if (data.chats.length > 0 && !selectedChat) {
+          setSelectedChat(data.chats[0]);
+        }
       }
     } catch (err) {
       console.error("Error fetching chats:", err);
     }
   };
 
-  // Called when user clicks on a chat in the sidebar
   const handleSelectChat = (chat) => {
     setSelectedChat(chat);
   };
 
+  const handleMessageSent = () => {
+    setRefreshTrigger((prev) => prev + 1); // Trigger refresh of conversation
+  };
+
   return (
     <div className="flex h-screen w-full bg-noble-black-700 text-gray-200">
-      {/* Left Sidebar */}
       <Sidebar
         activeProject={workspace?.name || "No Workspace"}
         chats={chats}
@@ -67,9 +70,7 @@ export default function ArtificiumPage({ onShareClick }) {
         onSelectChat={handleSelectChat}
       />
 
-      {/* Main Content Area */}
       <div className="flex-1 flex flex-col">
-        {/* Top Navbar */}
         <TopNav
           activeTab="artificium"
           onShareClick={onShareClick}
@@ -79,22 +80,30 @@ export default function ArtificiumPage({ onShareClick }) {
           onSelectChat={handleSelectChat}
         />
 
-        {/* Page Content */}
         <div className="p-6 flex-1">
-          {/* Example 4-column layout */}
-          <Content />
+          {selectedChat ? (
+            <Content
+              chatId={selectedChat._id}
+              onMessageSent={refreshTrigger}
+            />
+          ) : (
+            <div className="text-white">Select a chat to start</div>
+          )}
         </div>
 
-        {/* Bottom Input Bar (like a prompt area) */}
-        {/* Pass a different width here */}
-        <ChatInput width="max-w-[calc(100vw-320px)]" />
+        {selectedChat && (
+          <ChatInput
+            width="max-w-[calc(100vw-320px)]"
+            chatId={selectedChat._id}
+            onMessageSent={handleMessageSent}
+          />
+        )}
       </div>
     </div>
   );
 }
 
 ArtificiumPage.propTypes = {
-  /** Optional click handler for "Share" button */
   onShareClick: PropTypes.func,
 };
 

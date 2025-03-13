@@ -174,6 +174,11 @@ userRouter.post('/google-auth', async (req, res) => {
                     return res.status(500).json({ "error": err.message });
                 });
             }
+            // Ensure profile_img is updated if changed
+            if (user.personal_info.profile_img !== picture) {
+                user.personal_info.profile_img = picture;
+                await user.save();
+            }
             return res.status(200).json(formatDataToSend(user));
         }).catch(err => {
             console.log(err)

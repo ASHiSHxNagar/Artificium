@@ -187,61 +187,60 @@ router.post("/:workspaceId/chats/:chatId/messages", requireAuth, async (req, res
 // backend/routes/workspaceRoutes.js to get workspace from its id 
 router.get("/:workspaceId", async (req, res) => {
     try {
-      const { workspaceId } = req.params;
-      const workspace = await Workspace.findById(workspaceId);
-      if (!workspace) {
-        return res.json({ success: false, msg: "Workspace not found" });
-      }
-      // Return workspace
-      return res.json({ success: true, workspace });
+        const { workspaceId } = req.params;
+        const workspace = await Workspace.findById(workspaceId);
+        if (!workspace) {
+            return res.json({ success: false, msg: "Workspace not found" });
+        }
+        // Return workspace
+        return res.json({ success: true, workspace });
     } catch (err) {
-      console.error("Error getting workspace:", err);
-      return res.status(500).json({ success: false, error: err.message });
+        console.error("Error getting workspace:", err);
+        return res.status(500).json({ success: false, error: err.message });
     }
-  });
+});
 
 // GET /api/workspaces/slug/:slug
 router.get("/slug/:slug", async (req, res) => {
     try {
-      const { slug } = req.params;
-      const workspace = await Workspace.findOne({ slug });
-      if (!workspace) {
-        return res.json({ success: false, msg: "Workspace not found" });
-      }
-      return res.json({ success: true, workspace });
+        const { slug } = req.params;
+        const workspace = await Workspace.findOne({ slug });
+        if (!workspace) {
+            return res.json({ success: false, msg: "Workspace not found" });
+        }
+        return res.json({ success: true, workspace });
     } catch (err) {
-      return res.status(500).json({ success: false, error: err.message });
+        return res.status(500).json({ success: false, error: err.message });
     }
-  });
-  
-  // GET /api/workspaces/:workspaceId/allchats
-  router.get("/:workspaceId/allchats", async (req, res) => {
-    try {
-      const { workspaceId } = req.params;
-      // find all Chat docs with workspace = workspaceId
-      const chats = await Chat.find({ workspace: workspaceId });
-      return res.json({ success: true, chats });
-    } catch (err) {
-      return res.status(500).json({ success: false, error: err.message });
-    }
-  });
+});
 
-// GET /api/workspaces/chats/:chatId/messages
+// GET /api/workspaces/:workspaceId/allchats
+router.get("/:workspaceId/allchats", async (req, res) => {
+    try {
+        const { workspaceId } = req.params;
+        // find all Chat docs with workspace = workspaceId
+        const chats = await Chat.find({ workspace: workspaceId });
+        return res.json({ success: true, chats });
+    } catch (err) {
+        return res.status(500).json({ success: false, error: err.message });
+    }
+});
+
 // GET /api/workspaces/chats/:chatId/messages
 router.get("/chats/:chatId/messages", async (req, res) => {
     try {
-      const { chatId } = req.params;
-      const messages = await Message.find({ chat: chatId })
-        .populate("sender", "personal_info.profile_img personal_info.username personal_info.fullname")
-        .populate({
-          path: "replies.sender",
-          select: "personal_info.profile_img personal_info.username personal_info.fullname",
-        });
-      return res.json({ success: true, messages });
+        const { chatId } = req.params;
+        const messages = await Message.find({ chat: chatId })
+            .populate("sender", "name avatar")
+            .populate({
+                path: "replies.sender",
+                select: "name avatar",
+            });
+        return res.json({ success: true, messages });
     } catch (err) {
-      return res.status(500).json({ success: false, error: err.message });
+        return res.status(500).json({ success: false, error: err.message });
     }
-  });
-  
+});
+
 
 export default router;

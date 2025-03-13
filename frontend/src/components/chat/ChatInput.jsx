@@ -3,16 +3,16 @@ import axios from "axios";
 import { toast, Toaster } from "react-hot-toast";
 import PropTypes from "prop-types";
 
-// icons
+// Icons
 import attachIcon from "../../assets/icons/attatchment.svg";
 import sendIcon from "../../assets/icons/paper_plane.svg";
 import micIcon from "../../assets/icons/microphone.svg";
+import loadingIcon from "../../assets/icons/bouncing-circles.svg";
 
-export default function ChatInput({ width }) {
+export default function ChatInput({ width, chatId, onMessageSent }) {
   const [message, setMessage] = useState("");
   const [imageFile, setImageFile] = useState(null);
-
-  // We'll keep a ref to the file input so we can click it programmatically
+  const [isLoading, setIsLoading] = useState(false);
   const fileInputRef = useRef(null);
 
   // Only allow PNG/JPG/JPEG
@@ -28,24 +28,21 @@ export default function ChatInput({ width }) {
     }
   };
 
-  // Called when user clicks the paper plane icon
   const handleSend = async () => {
-    if (!message && !imageFile) {
-      return; // nothing to send
+    if (!message && !imageFile) return;
+
+    setIsLoading(true);
+
+    const formData = new FormData();
+    formData.append("chatId", chatId);
+    formData.append("text", message);
+    if (imageFile) {
+      formData.append("image", imageFile);
     }
 
     try {
-      // We’ll send as FormData so we can include both text and file
-      const formData = new FormData();
-      formData.append("text", message);
-      if (imageFile) {
-        formData.append("image", imageFile);
-      }
-
-      // Example: sending to "/chat/sendMessage"
-      // Adjust URL & method as needed for your backend
       const response = await axios.post(
-        `${import.meta.env.VITE_SERVER_DOMAIN}/chat/sendMessage`,
+        `${import.meta.env.VITE_SERVER_DOMAIN}/artificium/send`,
         formData,
         {
           headers: {
@@ -54,73 +51,89 @@ export default function ChatInput({ width }) {
         }
       );
 
-      // Clear input & file after successful send
+      toast.success("Message sent!");
       setMessage("");
       setImageFile(null);
-      console.log("Message sent:", response.data);
+      if (onMessageSent) onMessageSent(); // Notify parent to refresh messages
     } catch (error) {
       console.error("Error sending message:", error);
+      toast.error("Failed to send message");
+    } finally {
+      setIsLoading(false);
     }
   };
 
   return (
     <>
       <Toaster />
-      {/* Apply the `width` prop here instead of a fixed max-w */}
       <div
         className={`p-2 fixed bottom-1 w-full overflow-x-hidden pb-5 ${width}`}
       >
         <div className="bg-noble-black-800 w-full flex items-center p-6 rounded-2xl">
-          {/* Microphone Icon (does nothing) */}
-          <button type="button" className="mr-5 cursor-pointer hover:scale-105">
+          <button
+            type="button"
+            className="mr-5 cursor-pointer hover:scale-105"
+            disabled={isLoading}
+          >
             <img src={micIcon} alt="Mic" className="w-5 h-5" />
           </button>
 
-          {/* Text Input */}
           <input
             type="text"
             placeholder="You can ask me anything! I am here to help."
-            className="flex-1 bg-noble-black-800 px-4 py-2 rounded-l focus:outline-none mr-2  text-white placeholder:text-noble-black-400 text-base font-semibold"
+            className="flex-1 bg-noble-black-800 px-4 py-2 rounded-l focus:outline-none mr-2 text-white placeholder:text-noble-black-400 text-base font-semibold"
             value={message}
             onChange={(e) => setMessage(e.target.value)}
+            disabled={isLoading}
           />
 
-          {/* Attachment Icon */}
           <button
             type="button"
             className="mr-3 cursor-pointer hover:scale-105"
             onClick={() => fileInputRef.current.click()}
+            disabled={isLoading}
           >
             <img src={attachIcon} alt="Attach" className="w-5 h-5" />
           </button>
 
-          {/* Hidden File Input */}
           <input
             ref={fileInputRef}
             type="file"
             accept="image/png, image/jpeg, image/jpg"
             onChange={handleFileChange}
             className="hidden"
+            disabled={isLoading}
           />
 
-          {/* Send (paper plane) Icon */}
           <button
             type="button"
             onClick={handleSend}
             className="ml-3 bg-noble-black-700 p-3 rounded-xl hover:bg-noble-black-600 cursor-pointer hover:scale-105"
+            disabled={isLoading}
           >
-            <img src={sendIcon} alt="Send" className="w-5 h-5" />
+            {isLoading ? (
+              <img
+                src={loadingIcon}
+                alt="Loading"
+                className="w-5 h-5 animate-spin"
+              />
+            ) : (
+              <img src={sendIcon} alt="Send" className="w-5 h-5" />
+            )}
           </button>
         </div>
       </div>
     </>
   );
 }
+
 ChatInput.propTypes = {
-  /** Optional click handler for "Share" button */
   width: PropTypes.string,
+  chatId: PropTypes.string.isRequired,
+  onMessageSent: PropTypes.func,
 };
 
 ChatInput.defaultProps = {
   width: "max-w-[calc(100vw-320px)]",
+  onMessageSent: null,
 };
