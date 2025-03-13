@@ -9,7 +9,11 @@ import David_Singh from "../../assets/avatar/David_Singh.png";
 import Ava_Gupta from "../../assets/avatar/Ava_Gupta.png";
 import Adam_green from "../../assets/avatar/Adam_Green.png";
 
+import { useNavigate } from "react-router-dom";
+
 const RequestWorkspace = () => {
+  const navigate = useNavigate();
+
   return (
     <div className="grid grid-cols-[60%_40%] bg-bg-noble-black-700 rounded-2xl w-full min-h-[600px] h-[100vh] overflow-hidden">
       {/* Left Column */}
@@ -69,6 +73,7 @@ const RequestWorkspace = () => {
             <Button
               variant="primary"
               className="w-fit bg-[#B6F09C] cursor-pointer font-bold "
+              onClick={() => navigate("/workspace/joinworkspace")}
             >
               Access request
             </Button>
