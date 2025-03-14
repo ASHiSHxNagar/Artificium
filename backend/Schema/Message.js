@@ -6,6 +6,10 @@ const MessageSchema = new mongoose.Schema({
     ref: "Chat",
     required: true,
   },
+  temporaryId: {
+    type: String,
+    default: null
+  },
   text: {
     type: String,
     required: true,
@@ -25,6 +29,11 @@ const MessageSchema = new mongoose.Schema({
         type: String,
         required: true,
       },
+      temporaryId: {
+        type: String,
+        default: null
+      },
+
       images: [
         {
           type: String, // Path to the image

@@ -2,6 +2,8 @@ import { useState, useRef } from "react";
 import axios from "axios";
 import { toast, Toaster } from "react-hot-toast";
 import PropTypes from "prop-types";
+import { uploadImage } from "../shared/Aws";
+import { nanoid } from "nanoid";
 
 // Icons
 import attachIcon from "../../assets/icons/attatchment.svg";
@@ -21,66 +23,87 @@ export default function ChatInput({
   const [isLoading, setIsLoading] = useState(false);
   const fileInputRef = useRef(null);
 
-  const handleFileChange = (e) => {
+  const handleImageUpload = (e) => {
     const file = e.target.files?.[0];
-    if (file) {
-      const allowedTypes = ["image/png", "image/jpeg", "image/jpg"];
-      if (allowedTypes.includes(file.type)) {
-        setImageFile(file);
-      } else {
-        toast.error("Only PNG, JPG, or JPEG files are allowed.");
-      }
+    if (!file) return;
+
+    const allowedTypes = ["image/png", "image/jpeg", "image/jpg"];
+    if (!allowedTypes.includes(file.type)) {
+      toast.error("Only PNG, JPG, or JPEG files are allowed.");
+      return;
     }
+
+    setImageFile(file); // Store the file for later upload
+    toast.success("Image selected! Send your message to upload it.");
   };
 
   const handleSend = async () => {
     if (!message && !imageFile) return;
 
     setIsLoading(true);
-
-    const formData = new FormData();
-    formData.append("chatId", chatId);
-    formData.append("text", message);
-    if (imageFile) {
-      formData.append("image", imageFile);
-    }
-    if (replyingTo && !isArtificiumTab) {
-      formData.append("messageId", replyingTo);
-    }
-
-    for (let [key, value] of formData.entries()) {
-      console.log(`${key}: ${value}`);
-    }
+    const tempId = nanoid(10); // Generate tempId here
 
     try {
-      let endpoint;
-      if (isArtificiumTab) {
-        endpoint = `${import.meta.env.VITE_SERVER_DOMAIN}/artificium/send`;
-      } else {
-        endpoint = replyingTo
-          ? `${import.meta.env.VITE_SERVER_DOMAIN}/messages/reply`
-          : `${import.meta.env.VITE_SERVER_DOMAIN}/messages/send`;
+      // Step 1: Send the message with tempId as JSON
+      const messageData = {
+        chatId,
+        text: message,
+        temporaryId: tempId,
+      };
+      if (replyingTo && !isArtificiumTab) {
+        messageData.messageId = replyingTo;
       }
 
-      const response = await axios.post(endpoint, formData, {
+      const endpoint = isArtificiumTab
+        ? `${import.meta.env.VITE_SERVER_DOMAIN}/artificium/send`
+        : replyingTo
+        ? `${import.meta.env.VITE_SERVER_DOMAIN}/messages/reply`
+        : `${import.meta.env.VITE_SERVER_DOMAIN}/messages/send`;
+
+      const response = await axios.post(endpoint, messageData, {
         headers: {
-          "Content-Type": "multipart/form-data",
+          "Content-Type": "application/json", // Explicitly set JSON content type
         },
       });
+
+      console.log("Send response:", response.data); // Debug the response
+
+      // Step 2: If there's an image, upload it and update the message
+      if (imageFile) {
+        const imageUrl = await uploadImage(imageFile);
+        const findEndpoint = isArtificiumTab
+          ? `${import.meta.env.VITE_SERVER_DOMAIN}/artificium/findmessage/${tempId}`
+          : `${import.meta.env.VITE_SERVER_DOMAIN}/messages/findmessage/${tempId}`;
+
+        const findResponse = await axios.get(findEndpoint);
+        let messageId;
+
+        if (isArtificiumTab) {
+          messageId = findResponse.data.message._id; // Artificium message ID
+        } else {
+          messageId = findResponse.data.message._id; // Message ID
+        }
+
+        if (!messageId) {
+          throw new Error("Message ID not found");
+        }
+
+        const updateEndpoint = isArtificiumTab
+          ? `${import.meta.env.VITE_SERVER_DOMAIN}/artificium/addimage/${messageId}`
+          : `${import.meta.env.VITE_SERVER_DOMAIN}/messages/addimage/${messageId}`;
+
+        await axios.put(updateEndpoint, { imageUrl }, {
+          headers: { "Content-Type": "application/json" },
+        });
+      }
 
       toast.success("Message sent!");
       setMessage("");
       setImageFile(null);
-      if (onMessageSent) onMessageSent();
+      if (onMessageSent) onMessageSent(); // Trigger refetch
     } catch (error) {
-      console.error("Error sending message:", error);
-      if (error.response) {
-        toast.error(`Failed to send message: ${error.response.data.message}`);
-      } else if (error.request) {
-        toast.error("Failed to send message: No response from server");
-      } else {
-        toast.error(`Failed to send message: ${error.message}`);
-      }
+      console.error("Error sending message:", error.response?.data || error.message);
+      toast.error(`Failed to send message: ${error.response?.data?.error || error.message}`);
     } finally {
       setIsLoading(false);
     }
@@ -126,8 +149,8 @@ export default function ChatInput({
           <input
             ref={fileInputRef}
             type="file"
-            accept="image/png, image/jpeg, image/jpg"
-            onChange={handleFileChange}
+            accept=".png, .jpeg, .jpg"
+            onChange={handleImageUpload}
             className="hidden"
             disabled={isLoading}
           />

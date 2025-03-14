@@ -2,7 +2,8 @@ import express from 'express';
 import mongoose from 'mongoose';
 import 'dotenv/config';
 import cors from 'cors';
-// import aws from 'aws-sdk';
+import aws from 'aws-sdk';
+import { nanoid } from 'nanoid';
 
 //routes
 import userRoutes from "./routes/userRoutes.js";
@@ -25,6 +26,14 @@ app.use("/artificiumconversation", chatRoutes);
 app.use("/messages", messageRoutes);
 
 
+// upload image url route
+app.get('/get-upload-url', async (req, res) => {
+    generateUploadURL().then((url) => {
+        return res.status(200).json({ uploadURL: url });
+    }).catch(err => {
+        return res.status(500).json({ "error": err.message });
+    });
+});
 // Set COOP header
 app.use((req, res, next) => {
     res.setHeader('Cross-Origin-Opener-Policy', 'same-origin');
@@ -38,7 +47,24 @@ mongoose.connect(process.env.MONGO_URI, {
     autoIndex: true,
 });
 
+/// setting up s3 bucket
+const s3 = new aws.S3({
+    region: 'eu-north-1',
+    accessKeyId: process.env.AWS_ACCESS_KEY,
+    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY
+});
 
+const generateUploadURL = async () => {
+    const date = new Date();
+    const imageName = `${nanoid()}-${date.getTime()}.jpeg`;
+
+    return await s3.getSignedUrlPromise('putObject', {
+        Bucket: 'mernblogwebsiteyt-mordernwebdev',
+        Key: imageName,
+        Expires: 3000,
+        ContentType: 'image/jpeg'
+    });
+};
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
 });

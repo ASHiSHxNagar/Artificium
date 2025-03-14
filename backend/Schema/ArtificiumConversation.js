@@ -8,6 +8,10 @@ const artificiumMessageSchema = new mongoose.Schema({
   image: {
     type: String, // URL or path to the uploaded image
   },
+  temporaryId: {
+    type: String,
+    default: null
+  },
   sender: {
     type: String,
     enum: ["user", "bot"],
