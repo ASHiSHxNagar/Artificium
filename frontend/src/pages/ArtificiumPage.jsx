@@ -42,7 +42,9 @@ export default function ArtificiumPage({ onShareClick }) {
   // Fetch chats for the workspace
   const fetchChats = async (workspaceId) => {
     try {
-      const { data } = await axios.get(`${API_BASE}/workspaces/${workspaceId}/allchats`);
+      const { data } = await axios.get(
+        `${API_BASE}/workspaces/${workspaceId}/allchats`
+      );
       if (data.success) {
         setChats(data.chats);
       }
@@ -109,12 +111,9 @@ export default function ArtificiumPage({ onShareClick }) {
 
         <div className="p-6 flex-1">
           {selectedChat ? (
-            <Content
-              chatId={selectedChat._id}
-              onMessageSent={refreshTrigger}
-            />
+            <Content chatId={selectedChat._id} onMessageSent={refreshTrigger} />
           ) : (
-            <div className="text-white">Select a chat to start</div>
+            ""
           )}
         </div>
 

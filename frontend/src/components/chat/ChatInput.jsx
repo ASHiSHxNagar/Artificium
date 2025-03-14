@@ -81,9 +81,6 @@ export default function ChatInput({
       } else {
         toast.error(`Failed to send message: ${error.message}`);
       }
-   Thiết
-
-      setIsLoading(false);
     } finally {
       setIsLoading(false);
     }

@@ -84,4 +84,25 @@ router.post("/reply", upload.single("image"), async (req, res) => {
   }
 });
 
+// Fetch messages for a chat
+router.get("/chats/:chatId/messages", async (req, res) => {
+  try {
+    const { chatId } = req.params;
+
+    if (!mongoose.Types.ObjectId.isValid(chatId)) {
+      return res.status(400).json({ error: "Invalid chat ID" });
+    }
+
+    const messages = await Message.find({ chatId }).sort({ createdAt: 1 });
+
+    res.status(200).json({
+      success: true,
+      messages,
+    });
+  } catch (error) {
+    console.error("Error fetching messages:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
 export default router;

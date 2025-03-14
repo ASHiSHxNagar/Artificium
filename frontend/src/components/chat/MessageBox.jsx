@@ -24,7 +24,7 @@ export default function MessageBox({ message, nextMessage, onReplyClick }) {
           isMainMessage ? "bg-noble-black-800" : "bg-noble-black-600 ml-12"
         } shadow-md`}
       >
-        <div className="flex items-center justify-between mb-2 flex-wrap p-4">
+        <div className="flex items-center justify-between mb-2 flex-wrap">
           <div className="flex items-center gap-3">
             <div className="relative cursor-pointer">
               <img
@@ -59,7 +59,7 @@ export default function MessageBox({ message, nextMessage, onReplyClick }) {
 
         <p
           className={`${
-            isMainMessage ? "mb-3 mt-3 pl-20" : "mt-1 pl-15"
+            isMainMessage ? " pl-20" : " pl-15"
           } break-words font-medium text-noble-black-300 text-wrap`}
         >
           {message.text}
@@ -70,7 +70,9 @@ export default function MessageBox({ message, nextMessage, onReplyClick }) {
             {[...Array(3)].map((_, index) => (
               <img
                 key={index}
-                src={`${import.meta.env.VITE_SERVER_DOMAIN}${message.images[0]}`}
+                src={`${import.meta.env.VITE_SERVER_DOMAIN}${
+                  message.images[0]
+                }`}
                 alt="Attached"
                 className="max-w-xs rounded"
               />
@@ -113,7 +115,7 @@ export default function MessageBox({ message, nextMessage, onReplyClick }) {
                 <div
                   className={`rounded-lg p-4 relative bg-noble-black-600 ml-12 shadow-md`}
                 >
-                  <div className="flex items-center justify-between mb-2 flex-wrap p-4">
+                  <div className="flex items-center justify-between mb-2 flex-wrap ">
                     <div className="flex items-center gap-3">
                       <div className="relative cursor-pointer">
                         <img
@@ -147,7 +149,9 @@ export default function MessageBox({ message, nextMessage, onReplyClick }) {
                       {[...Array(3)].map((_, index) => (
                         <img
                           key={index}
-                          src={`${import.meta.env.VITE_SERVER_DOMAIN}${reply.images[0]}`}
+                          src={`${import.meta.env.VITE_SERVER_DOMAIN}${
+                            reply.images[0]
+                          }`}
                           alt="Attached"
                           className="max-w-xs rounded"
                         />

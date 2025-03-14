@@ -74,7 +74,7 @@ export default function ChatPage({ onShareClick }) {
   const fetchMessages = async (chatId) => {
     try {
       const { data } = await axios.get(
-        `${API_BASE}/workspaces/chats/${chatId}/messages`
+        `${API_BASE}/messages/chats/${chatId}/messages`
       );
       if (data.success) {
         const formattedMessages = [];
