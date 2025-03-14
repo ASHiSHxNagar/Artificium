@@ -74,7 +74,8 @@ export default function Sidebar({
     onSelectChat(chat);
     const workspaceId = lookInSession("workspaceId");
     if (workspaceId) {
-      navigate(`/artificium/workspace/${workspaceId}/allchats/${chat._id}`);
+      // navigate(`/artificium/workspace/${workspaceId}/allchats/${chat._id}`);
+      navigate(`/artificium/${workspaceId}/${chat._id}`);
     } else {
       console.error("Workspace ID not found for navigation");
     }

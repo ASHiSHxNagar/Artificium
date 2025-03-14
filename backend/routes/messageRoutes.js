@@ -3,42 +3,46 @@ import mongoose from "mongoose";
 import Message from "../Schema/Message.js";
 import multer from "multer";
 
-// Configure multer for file uploads
 const storage = multer.diskStorage({
   destination: (req, file, cb) => cb(null, "uploads/"),
   filename: (req, file, cb) => cb(null, `${Date.now()}-${file.originalname}`),
 });
-const upload = multer({ storage });
+
+const fileFilter = (req, file, cb) => {
+  const allowedTypes = ["image/png", "image/jpeg", "image/jpg"];
+  if (allowedTypes.includes(file.mimetype)) {
+    cb(null, true);
+  } else {
+    cb(new Error("Only PNG, JPG, and JPEG files are allowed!"), false);
+  }
+};
+
+const upload = multer({ storage, fileFilter });
 
 const router = express.Router();
 
-// POST /api/messages/send - Send a main message
+// Send a new message with optional image
 router.post("/send", upload.single("image"), async (req, res) => {
   try {
     const { chatId, text } = req.body;
     const image = req.file ? `/uploads/${req.file.filename}` : null;
 
-    // Validate input
     if (!chatId || !text) {
       return res.status(400).json({ error: "Chat ID and text are required" });
     }
 
-    // For now, use a hardcoded user ID (replace with authenticated user)
-    const senderId = "60d0fe4f5311236168a109ca"; // Replace with req.user._id in production
-
-    const newMessage = new Message({
-      chat: chatId,
-      sender: senderId,
+    const message = new Message({
+      chatId,
       text,
-      image,
-      replies: [],
+      images: image ? [image] : [], // Store image path if uploaded
+      sender: "user", // Assuming sender is user for simplicity
     });
 
-    await newMessage.save();
+    await message.save();
 
-    res.status(201).json({
+    res.status(200).json({
       success: true,
-      message: newMessage,
+      message,
     });
   } catch (error) {
     console.error("Error sending message:", error);
@@ -46,45 +50,36 @@ router.post("/send", upload.single("image"), async (req, res) => {
   }
 });
 
-// POST /api/messages/reply - Send a reply to a message
+// Reply to a message with optional image
 router.post("/reply", upload.single("image"), async (req, res) => {
   try {
-    const { chatId, messageId, text } = req.body;
+    const { messageId, text } = req.body;
     const image = req.file ? `/uploads/${req.file.filename}` : null;
 
-    // Validate input
-    if (!chatId || !messageId || !text) {
-      return res
-        .status(400)
-        .json({ error: "Chat ID, message ID, and text are required" });
+    if (!messageId || !text) {
+      return res.status(400).json({ error: "Message ID and text are required" });
     }
 
-    // Find the message
-    const message = await Message.findOne({ _id: messageId, chat: chatId });
+    const message = await Message.findById(messageId);
     if (!message) {
       return res.status(404).json({ error: "Message not found" });
     }
 
-    // For now, use a hardcoded user ID (replace with authenticated user)
-    const senderId = "60d0fe4f5311236168a109ca"; // Replace with req.user._id in production
-
-    // Add the reply to the message's replies array
     const reply = {
       text,
-      sender: senderId,
-      image,
-      createdAt: new Date(),
+      images: image ? [image] : [], // Store image path if uploaded
+      sender: "user", // Assuming sender is user for simplicity
     };
-    message.replies.push(reply);
 
+    message.replies.push(reply);
     await message.save();
 
-    res.status(201).json({
+    res.status(200).json({
       success: true,
       message,
     });
   } catch (error) {
-    console.error("Error sending reply:", error);
+    console.error("Error replying to message:", error);
     res.status(500).json({ error: "Internal server error" });
   }
 });

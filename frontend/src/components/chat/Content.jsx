@@ -3,10 +3,12 @@ import axios from "axios";
 import ArtificiumMessageBox from "./ArtificiumMessageBox";
 import PropTypes from "prop-types";
 
-// Concept art images (replace with your actual paths)
-import conceptArt1 from "../../assets/images/concept-art1.png";
-import conceptArt2 from "../../assets/images/concept-art2.png";
-import conceptArt3 from "../../assets/images/concept-art3.png";
+// Icons
+import Creative_Assets from "../../assets/icons/creative_assets.svg";
+import Developer_Tools from "../../assets/icons/developer_tools.svg";
+import Content_Creation from "../../assets/icons/content_creation.svg";
+import Idea_Generation from "../../assets/icons/idea_generation.svg";
+import arrowIcon from "../../assets/icons/arrow_right.svg";
 
 const API_BASE = import.meta.env.VITE_SERVER_DOMAIN;
 
@@ -15,7 +17,9 @@ export default function Content({ chatId, onMessageSent }) {
   const [isRegenerating, setIsRegenerating] = useState({});
 
   useEffect(() => {
-    fetchConversation();
+    if (chatId) {
+      fetchConversation();
+    }
   }, [chatId, onMessageSent]);
 
   const fetchConversation = async () => {
@@ -39,7 +43,7 @@ export default function Content({ chatId, onMessageSent }) {
         messageId,
       });
       if (data.success) {
-        fetchConversation(); // Refresh conversation
+        fetchConversation();
       }
     } catch (error) {
       console.error("Error regenerating message:", error);
@@ -48,80 +52,323 @@ export default function Content({ chatId, onMessageSent }) {
     }
   };
 
-  // Default content if no conversation exists
   if (
     !conversation ||
     !conversation.messages ||
     conversation.messages.length === 0
   ) {
     return (
-      <div className="space-y-4 max-h-[calc(100vh-200px)] overflow-y-auto">
-        <div className="bg-noble-black-800 p-4 rounded-lg shadow-md">
-          <div className="flex items-center gap-2">
-            <span className="font-semibold text-white">Artificium</span>
-            <span className="text-xs text-gray-400">Just now</span>
+      <div className="w-full px-8 py-4 text-white max-h-[calc(100vh-350px)] overflow-y-scroll">
+        <h2 className="text-[28px] font-medium mb-2 text-center">
+          Innovation Starter Pack
+        </h2>
+        <p className="text-sm text-noble-black-300 mb-8 text-center py-1">
+          Kickstart your innovation process with our comprehensive selection of
+          predefined prompts.
+        </p>
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+          <div className="flex flex-col items-center">
+            <div
+              className="
+                w-15 h-15 rounded-full mb-4
+                flex items-center justify-center
+                bg-[linear-gradient(117.58deg,rgba(215,237,237,0.16)_-47.79%,rgba(204,235,235,0)_100%)]
+                backdrop-blur-sm
+                shadow-[0_0_64px_0_#B6F09C29]
+              "
+            >
+              <img src={Creative_Assets} alt="Icon" className="w-5 h-5" />
+            </div>
+            <h3 className="text-base font-medium mb-5 mt-2">Creative Assets</h3>
+            <div className="flex flex-col w-full space-y-2">
+              <div
+                className="
+                  bg-[linear-gradient(117.58deg,rgba(215,237,237,0.16)_-47.79%,rgba(204,235,235,0)_100%)]
+                  backdrop-blur-sm
+                  border-t border-[#FFFFFF14]
+                  p-3 rounded-xl
+                  flex items-center justify-between
+                  cursor-pointer
+                "
+              >
+                <span className="text-[14px] text-noble-black-200">
+                  UI wireframe
+                </span>
+                <img src={arrowIcon} alt="Arrow" className="w-4 h-4" />
+              </div>
+              <div
+                className="
+                  bg-[linear-gradient(117.58deg,rgba(215,237,237,0.16)_-47.79%,rgba(204,235,235,0)_100%)]
+                  backdrop-blur-sm
+                  border-t border-[#FFFFFF14]
+                  p-3 rounded-xl
+                  flex items-center justify-between
+                  cursor-pointer
+                "
+              >
+                <span className="text-[14px] text-noble-black-200">
+                  Brochure design
+                </span>
+                <img src={arrowIcon} alt="Arrow" className="w-4 h-4" />
+              </div>
+              <div
+                className="
+                  bg-[linear-gradient(117.58deg,rgba(215,237,237,0.16)_-47.79%,rgba(204,235,235,0)_100%)]
+                  backdrop-blur-sm
+                  border-t border-[#FFFFFF14]
+                  p-3 rounded-xl
+                  flex items-center justify-between
+                  cursor-pointer
+                "
+              >
+                <span className="text-[14px] text-noble-black-200">
+                  Social media
+                </span>
+                <img src={arrowIcon} alt="Arrow" className="w-4 h-4" />
+              </div>
+              <div
+                className="
+                  bg-[linear-gradient(117.58deg,rgba(215,237,237,0.16)_-47.79%,rgba(204,235,235,0)_100%)]
+                  backdrop-blur-sm
+                  border-t border-[#FFFFFF14]
+                  p-3 rounded-xl
+                  flex items-center justify-between
+                  cursor-pointer
+                "
+              >
+                <span className="text-[14px] text-noble-black-200">
+                  Brand guidelines
+                </span>
+                <img src={arrowIcon} alt="Arrow" className="w-4 h-4" />
+              </div>
+            </div>
           </div>
-          <p className="text-white mt-2">
-            Sure thing! How about these spaceship names:
-          </p>
-          <div className="flex gap-2 mt-4">
-            <button className="bg-noble-black-700 px-3 py-1 rounded hover:bg-noble-black-600">
-              Starfire
-            </button>
-            <button className="bg-noble-black-700 px-3 py-1 rounded hover:bg-noble-black-600">
-              Celestia
-            </button>
-            <button className="bg-noble-black-700 px-3 py-1 rounded hover:bg-noble-black-600">
-              Cosmic Voyager
-            </button>
-            <button className="bg-noble-black-700 px-3 py-1 rounded hover:bg-noble-black-600">
-              ...
-            </button>
+          <div className="flex flex-col items-center">
+            <div
+              className="
+                w-15 h-15 rounded-full mb-4
+                flex items-center justify-center
+                bg-[linear-gradient(117.58deg,rgba(215,237,237,0.16)_-47.79%,rgba(204,235,235,0)_100%)]
+                backdrop-blur-sm
+                shadow-[0_0_64px_0_#82DBF729]
+              "
+            >
+              <img src={Developer_Tools} alt="Icon" className="w-5 h-5" />
+            </div>
+            <h3 className="text-base font-medium mb-5 mt-2">Developer Tools</h3>
+            <div className="flex flex-col w-full space-y-2">
+              <div
+                className="
+                  bg-[linear-gradient(117.58deg,rgba(215,237,237,0.16)_-47.79%,rgba(204,235,235,0)_100%)]
+                  backdrop-blur-sm
+                  border-t border-[#FFFFFF14]
+                  p-3 rounded-xl
+                  flex items-center justify-between
+                  cursor-pointer
+                "
+              >
+                <span className="text-[14px] text-noble-black-200">
+                  API Integration
+                </span>
+                <img src={arrowIcon} alt="Arrow" className="w-4 h-4" />
+              </div>
+              <div
+                className="
+                  bg-[linear-gradient(117.58deg,rgba(215,237,237,0.16)_-47.79%,rgba(204,235,235,0)_100%)]
+                  backdrop-blur-sm
+                  border-t border-[#FFFFFF14]
+                  p-3 rounded-xl
+                  flex items-center justify-between
+                  cursor-pointer
+                "
+              >
+                <span className="text-[14px] text-noble-black-200">
+                  Test automation
+                </span>
+                <img src={arrowIcon} alt="Arrow" className="w-4 h-4" />
+              </div>
+              <div
+                className="
+                  bg-[linear-gradient(117.58deg,rgba(215,237,237,0.16)_-47.79%,rgba(204,235,235,0)_100%)]
+                  backdrop-blur-sm
+                  border-t border-[#FFFFFF14]
+                  p-3 rounded-xl
+                  flex items-center justify-between
+                  cursor-pointer
+                "
+              >
+                <span className="text-[14px] text-noble-black-200">
+                  DB optimization
+                </span>
+                <img src={arrowIcon} alt="Arrow" className="w-4 h-4" />
+              </div>
+              <div
+                className="
+                  bg-[linear-gradient(117.58deg,rgba(215,237,237,0.16)_-47.79%,rgba(204,235,235,0)_100%)]
+                  backdrop-blur-sm
+                  border-t border-[#FFFFFF14]
+                  p-3 rounded-xl
+                  flex items-center justify-between
+                  cursor-pointer
+                "
+              >
+                <span className="text-[14px] text-noble-black-200">
+                  Code review
+                </span>
+                <img src={arrowIcon} alt="Arrow" className="w-4 h-4" />
+              </div>
+            </div>
           </div>
-          <p className="text-white mt-4">
-            Here are a few concept arts that also might inspire you. Take a
-            look!
-          </p>
-          <div className="flex gap-4 mt-4">
-            <img
-              src={conceptArt1}
-              alt="Concept Art 1"
-              className="w-40 h-40 rounded"
-            />
-            <img
-              src={conceptArt2}
-              alt="Concept Art 2"
-              className="w-40 h-40 rounded"
-            />
-            <img
-              src={conceptArt3}
-              alt="Concept Art 3"
-              className="w-40 h-40 rounded"
-            />
+          <div className="flex flex-col items-center">
+            <div
+              className="
+                w-15 h-15 rounded-full mb-4
+                flex items-center justify-center
+                bg-[linear-gradient(117.58deg,rgba(215,237,237,0.16)_-47.79%,rgba(204,235,235,0)_100%)]
+                backdrop-blur-sm
+                shadow-[0_0_64px_0_#BD9AF829]
+              "
+            >
+              <img src={Content_Creation} alt="Icon" className="w-5 h-5" />
+            </div>
+            <h3 className="text-base font-medium mb-5 mt-2">Content Creation</h3>
+            <div className="flex flex-col w-full space-y-2">
+              <div
+                className="
+                  bg-[linear-gradient(117.58deg,rgba(215,237,237,0.16)_-47.79%,rgba(204,235,235,0)_100%)]
+                  backdrop-blur-sm
+                  border-t border-[#FFFFFF14]
+                  p-3 rounded-xl
+                  flex items-center justify-between
+                  cursor-pointer
+                "
+              >
+                <span className="text-[14px] text-noble-black-200">
+                  Product description
+                </span>
+                <img src={arrowIcon} alt="Arrow" className="w-4 h-4" />
+              </div>
+              <div
+                className="
+                  bg-[linear-gradient(117.58deg,rgba(215,237,237,0.16)_-47.79%,rgba(204,235,235,0)_100%)]
+                  backdrop-blur-sm
+                  border-t border-[#FFFFFF14]
+                  p-3 rounded-xl
+                  flex items-center justify-between
+                  cursor-pointer
+                "
+              >
+                <span className="text-[14px] text-noble-black-200">
+                  E-mail copy
+                </span>
+                <img src={arrowIcon} alt="Arrow" className="w-4 h-4" />
+              </div>
+              <div
+                className="
+                  bg-[linear-gradient(117.58deg,rgba(215,237,237,0.16)_-47.79%,rgba(204,235,235,0)_100%)]
+                  backdrop-blur-sm
+                  border-t border-[#FFFFFF14]
+                  p-3 rounded-xl
+                  flex items-center justify-between
+                  cursor-pointer
+                "
+              >
+                <span className="text-[14px] text-noble-black-200">
+                  Whitepaper
+                </span>
+                <img src={arrowIcon} alt="Arrow" className="w-4 h-4" />
+              </div>
+              <div
+                className="
+                  bg-[linear-gradient(117.58deg,rgba(215,237,237,0.16)_-47.79%,rgba(204,235,235,0)_100%)]
+                  backdrop-blur-sm
+                  border-t border-[#FFFFFF14]
+                  p-3 rounded-xl
+                  flex items-center justify-between
+                  cursor-pointer
+                "
+              >
+                <span className="text-[14px] text-noble-black-200">
+                  Press release
+                </span>
+                <img src={arrowIcon} alt="Arrow" className="w-4 h-4" />
+              </div>
+            </div>
           </div>
-          <div className="mt-4 flex gap-2">
-            <button className="bg-noble-black-700 px-3 py-1 rounded hover:bg-noble-black-600">
-              Regenerate response
-            </button>
-            <div className="relative group">
-              <button className="bg-noble-black-700 px-3 py-1 rounded hover:bg-noble-black-600 flex items-center gap-2">
-                Modify
-                <svg
-                  className="w-4 h-4"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M19 9l-7 7-7-7"
-                  />
-                </svg>
-              </button>
-              {/* Dropdown placeholder */}
+          <div className="flex flex-col items-center">
+            <div
+              className="
+                w-15 h-15 rounded-full mb-4
+                flex items-center justify-center
+                bg-[linear-gradient(117.58deg,rgba(215,237,237,0.16)_-47.79%,rgba(204,235,235,0)_100%)]
+                backdrop-blur-sm
+                shadow-[0_0_64px_0_#FFD14729]
+              "
+            >
+              <img src={Idea_Generation} alt="Icon" className="w-5 h-5" />
+            </div>
+            <h3 className="text-base font-medium mb-5 mt-2">Idea Generation</h3>
+            <div className="flex flex-col w-full space-y-2">
+              <div
+                className="
+                  bg-[linear-gradient(117.58deg,rgba(215,237,237,0.16)_-47.79%,rgba(204,235,235,0)_100%)]
+                  backdrop-blur-sm
+                  border-t border-[#FFFFFF14]
+                  p-3 rounded-xl
+                  flex items-center justify-between
+                  cursor-pointer
+                "
+              >
+                <span className="text-[14px] text-noble-black-200">
+                  Hashtag ideas
+                </span>
+                <img src={arrowIcon} alt="Arrow" className="w-4 h-4" />
+              </div>
+              <div
+                className="
+                  bg-[linear-gradient(117.58deg,rgba(215,237,237,0.16)_-47.79%,rgba(204,235,235,0)_100%)]
+                  backdrop-blur-sm
+                  border-t border-[#FFFFFF14]
+                  p-3 rounded-xl
+                  flex items-center justify-between
+                  cursor-pointer
+                "
+              >
+                <span className="text-[14px] text-noble-black-200">
+                  Brainstorming
+                </span>
+                <img src={arrowIcon} alt="Arrow" className="w-4 h-4" />
+              </div>
+              <div
+                className="
+                  bg-[linear-gradient(117.58deg,rgba(215,237,237,0.16)_-47.79%,rgba(204,235,235,0)_100%)]
+                  backdrop-blur-sm
+                  border-t border-[#FFFFFF14]
+                  p-3 rounded-xl
+                  flex items-center justify-between
+                  cursor-pointer
+                "
+              >
+                <span className="text-[14px] text-noble-black-200">
+                  Trend analysis
+                </span>
+                <img src={arrowIcon} alt="Arrow" className="w-4 h-4" />
+              </div>
+              <div
+                className="
+                  bg-[linear-gradient(117.58deg,rgba(215,237,237,0.16)_-47.79%,rgba(204,235,235,0)_100%)]
+                  backdrop-blur-sm
+                  border-t border-[#FFFFFF14]
+                  p-3 rounded-xl
+                  flex items-center justify-between
+                  cursor-pointer
+                "
+              >
+                <span className="text-[14px] text-noble-black-200">
+                  Social media posts
+                </span>
+                <img src={arrowIcon} alt="Arrow" className="w-4 h-4" />
+              </div>
             </div>
           </div>
         </div>
@@ -129,7 +376,6 @@ export default function Content({ chatId, onMessageSent }) {
     );
   }
 
-  // Display conversation if it exists
   return (
     <div className="space-y-4 max-h-[calc(100vh-200px)] overflow-y-auto pb-[150px]">
       {conversation.messages.map((msg) => (

@@ -1,8 +1,14 @@
 import PropTypes from "prop-types";
 import copy_icon from "../../assets/icons/copy_icon.svg";
 import loadingIcon from "../../assets/icons/bouncing-circles.svg";
-import Artificium from "../../assets/avatar/Artificium.png"; // Bot avatar
-import Ryan_Lee from "../../assets/avatar/Ryan_Lee.png"; // User avatar
+import Artificium from "../../assets/avatar/Artificium.png";
+import Ryan_Lee from "../../assets/avatar/Ryan_Lee.png";
+
+import magic_wand from "../../assets/icons/magic_wand.svg";
+import sliders from "../../assets/icons/sliders.svg";
+import link from "../../assets/icons/link.svg";
+import download from "../../assets/icons/download.svg";
+import { useState } from "react";
 
 export default function ArtificiumMessageBox({
   message,
@@ -11,18 +17,22 @@ export default function ArtificiumMessageBox({
 }) {
   const isBot = message.sender === "bot";
 
+  const [modifyVisable, setModifyVisable] = useState(false);
+
+  function handleModifyClick() {
+    setModifyVisable(!modifyVisable);
+  }
+
   const modifyOptions = [
-    { icon: "../../assets/icons/sparkle.svg", text: "Create variation" },
-    { icon: "../../assets/icons/adjust.svg", text: "Adjust" },
-    { icon: "../../assets/icons/share.svg", text: "Share" },
-    { icon: "../../assets/icons/export.svg", text: "Export" },
+    { icon: magic_wand, text: "Create variation" },
+    { icon: sliders, text: "Adjust" },
+    { icon: link, text: "Share" },
+    { icon: download, text: "Export" },
   ];
 
   return (
-    <div className="relative w-full pr-10  ">
-      {/* Message Container */}
+    <div className="relative w-full pr-10">
       <div className="rounded-lg p-4 relative bg-noble-black-700 shadow-md border-1 border-gray-500">
-        {/* Top row: user + date + copy icon */}
         <div className="flex items-center justify-between mb-2">
           <div className="flex items-center gap-3">
             <div className="relative cursor-pointer">
@@ -31,7 +41,6 @@ export default function ArtificiumMessageBox({
                 alt={isBot ? "Artificium" : "You"}
                 className="w-10 h-10 rounded-sm"
               />
-              {/* Online dot */}
               <span
                 className="
                   absolute top-0 right-0 w-2 h-2 bg-green-500
@@ -53,21 +62,23 @@ export default function ArtificiumMessageBox({
           </button>
         </div>
 
-        {/* Message text */}
         <p className="text-noble-black-300 mb-3 mt-3 pl-15 break-words font-medium">
           {message.text}
         </p>
 
-        {/* Image if present */}
         {message.image && (
-          <img
-            src={`${import.meta.env.VITE_SERVER_DOMAIN}${message.image}`}
-            alt="Attached"
-            className="mt-2 max-w-xs rounded"
-          />
+          <div className="mt-2 flex gap-2">
+            {[...Array(3)].map((_, index) => (
+              <img
+                key={index}
+                src={`${import.meta.env.VITE_SERVER_DOMAIN}${message.image}`}
+                alt="Attached"
+                className="max-w-xs rounded"
+              />
+            ))}
+          </div>
         )}
 
-        {/* Bot buttons (Regenerate Response and Modify) */}
         {isBot && !isRegenerating && (
           <div className="flex items-center gap-4 mb-3 mt-5 pl-15">
             <button
@@ -76,8 +87,11 @@ export default function ArtificiumMessageBox({
             >
               Regenerate response
             </button>
-            <div className="relative group">
-              <button className="text-noble-black-300 cursor-pointer text-sm font-semibold bg-noble-black-600 px-3 py-2 rounded-lg hover:bg-noble-black-500 flex items-center gap-2">
+            <div className="relative">
+              <button
+                className="text-noble-black-300 cursor-pointer text-sm font-semibold bg-noble-black-600 px-3 py-2 rounded-lg hover:bg-noble-black-500 flex items-center gap-2"
+                onClick={handleModifyClick}
+              >
                 Modify
                 <svg
                   className="w-4 h-4"
@@ -94,7 +108,11 @@ export default function ArtificiumMessageBox({
                   />
                 </svg>
               </button>
-              <div className="absolute bottom-full left-0 mb-2 w-40 bg-noble-black-800 rounded shadow-lg hidden group-hover:block z-10">
+              <div
+                className={`absolute bottom-full p-4 left-0 mb-2 w-50 bg-noble-black-800 rounded shadow-lg z-10 ${
+                  modifyVisable ? "bloack" : "hidden"
+                }`}
+              >
                 {modifyOptions.map((option, index) => (
                   <div
                     key={index}
@@ -103,7 +121,7 @@ export default function ArtificiumMessageBox({
                     <img
                       src={option.icon}
                       alt={option.text}
-                      className="w-4 h-4"
+                      className="w-4 h-4 mr-4"
                     />
                     <span className="text-sm text-white">{option.text}</span>
                   </div>
@@ -113,7 +131,6 @@ export default function ArtificiumMessageBox({
           </div>
         )}
 
-        {/* Loading animation during regeneration */}
         {isRegenerating && (
           <div className="rounded-lg p-4 relative bg-noble-black-700 shadow-md mt-4">
             <div className="flex items-center gap-2">

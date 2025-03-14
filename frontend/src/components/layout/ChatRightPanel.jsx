@@ -166,7 +166,10 @@ export default function ChatRightPanel({
   };
 
   return (
-    <div className="w-75 bg-noble-black-700 flex flex-col pb-5 pr-5 " style={{ minWidth: "300px" }}>
+    <div
+      className="w-75 bg-noble-black-700 flex flex-col pb-5 pr-5 "
+      style={{ minWidth: "300px", maxWidth: "320px" }}
+    >
       {/* Scrollable content */}
       <div className="flex-1 overflow-y-auto p-4">
         {activeTab === "members" ? (

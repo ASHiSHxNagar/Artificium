@@ -4,8 +4,9 @@ import axios from "axios";
 import PropTypes from "prop-types";
 import Sidebar from "../components/layout/Sidebar";
 import TopNav from "../components/layout/TopNav";
-import ChatInput from "../components/chat/ChatInput"; // Import ChatInput
+import ChatInput from "../components/chat/ChatInput";
 import MessageBox from "../components/chat/MessageBox";
+import ChatRightPanel from "../components/layout/ChatRightPanel";
 import artificium from "../assets/avatar/Artificium.png";
 
 const API_BASE = import.meta.env.VITE_SERVER_DOMAIN;
@@ -19,7 +20,7 @@ export default function ChatPage({ onShareClick }) {
   const [workspace, setWorkspace] = useState(null);
   const [chats, setChats] = useState([]);
   const [selectedChat, setSelectedChat] = useState(null);
-  const [replyingTo, setReplyingTo] = useState(null); // Track which message is being replied to
+  const [replyingTo, setReplyingTo] = useState(null);
   const [refreshTrigger, setRefreshTrigger] = useState(0);
 
   useEffect(() => {
@@ -84,6 +85,7 @@ export default function ChatPage({ onShareClick }) {
             user: msg.sender?.personal_info?.username || "Unknown User",
             date: new Date(msg.createdAt).toLocaleString(),
             text: msg.text,
+            images: msg.images || [], // Include images
             isMain: true,
             createdAt: msg.createdAt,
             replies:
@@ -93,6 +95,7 @@ export default function ChatPage({ onShareClick }) {
                 user: reply.sender?.personal_info?.username || "Unknown User",
                 timeAgo: calculateTimeAgo(new Date(reply.createdAt)),
                 text: reply.text,
+                images: reply.images || [], // Include images in replies
                 isMain: false,
                 createdAt: reply.createdAt,
               })) || [],
@@ -155,8 +158,8 @@ export default function ChatPage({ onShareClick }) {
   };
 
   const handleMessageSent = () => {
-    setReplyingTo(null); // Clear reply state after sending
-    setRefreshTrigger((prev) => prev + 1); // Trigger message refresh
+    setReplyingTo(null);
+    setRefreshTrigger((prev) => prev + 1);
   };
 
   return (
@@ -168,7 +171,7 @@ export default function ChatPage({ onShareClick }) {
         onSelectChat={handleSelectChat}
         onChatAdded={handleChatAdded}
       />
-      <div className="flex-1 flex flex-col">
+      <div className="flex-1 flex flex-col min-w-[calc(100vw-620px)]">
         <TopNav
           activeTab="chat"
           onShareClick={onShareClick}
@@ -178,7 +181,7 @@ export default function ChatPage({ onShareClick }) {
           selectedChat={selectedChat}
           onSelectChat={handleSelectChat}
         />
-        <div className="p-6 flex-1 overflow-y-auto">
+        <div className="p-6 flex-1 max-h-[calc(100vh-300px)] overflow-y-scroll">
           {messages.length === 0 ? (
             <MessageBox
               key="no-messages"
@@ -219,12 +222,22 @@ export default function ChatPage({ onShareClick }) {
         </div>
         {selectedChat && (
           <ChatInput
-            width="max-w-[calc(100vw-320px)]"
+            width="max-w-[calc(100vw-620px)]"
             chatId={selectedChat._id}
             onMessageSent={handleMessageSent}
-            replyingTo={replyingTo} // Pass replyingTo state
+            replyingTo={replyingTo}
+            isArtificiumTab={false} // Pass prop to indicate this is Chat tab
           />
         )}
+
+        <div className="max-w-[300px] absolute right-0 top-0 max-h-screen overflow-y-scroll">
+          <ChatRightPanel
+            channelName={channelName}
+            setChannelName={setChannelName}
+            channelCount={channelCount}
+            setChannelCount={setChannelCount}
+          />
+        </div>
       </div>
     </div>
   );

@@ -14,13 +14,13 @@ export default function ChatInput({
   chatId,
   onMessageSent,
   replyingTo,
+  isArtificiumTab,
 }) {
   const [message, setMessage] = useState("");
   const [imageFile, setImageFile] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const fileInputRef = useRef(null);
 
-  // Only allow PNG/JPG/JPEG
   const handleFileChange = (e) => {
     const file = e.target.files?.[0];
     if (file) {
@@ -44,23 +44,30 @@ export default function ChatInput({
     if (imageFile) {
       formData.append("image", imageFile);
     }
-    if (replyingTo) {
-      formData.append("messageId", replyingTo); // Include messageId if replying
+    if (replyingTo && !isArtificiumTab) {
+      formData.append("messageId", replyingTo);
     }
 
-    // Log form data entries
     for (let [key, value] of formData.entries()) {
       console.log(`${key}: ${value}`);
     }
+
     try {
-      const endpoint = replyingTo
-        ? `${import.meta.env.VITE_SERVER_DOMAIN}/messages/reply`
-        : `${import.meta.env.VITE_SERVER_DOMAIN}/messages/send`;
+      let endpoint;
+      if (isArtificiumTab) {
+        endpoint = `${import.meta.env.VITE_SERVER_DOMAIN}/artificium/send`;
+      } else {
+        endpoint = replyingTo
+          ? `${import.meta.env.VITE_SERVER_DOMAIN}/messages/reply`
+          : `${import.meta.env.VITE_SERVER_DOMAIN}/messages/send`;
+      }
+
       const response = await axios.post(endpoint, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
       });
+
       toast.success("Message sent!");
       setMessage("");
       setImageFile(null);
@@ -68,15 +75,15 @@ export default function ChatInput({
     } catch (error) {
       console.error("Error sending message:", error);
       if (error.response) {
-        // Server responded with a status other than 200 range
         toast.error(`Failed to send message: ${error.response.data.message}`);
       } else if (error.request) {
-        // Request was made but no response received
         toast.error("Failed to send message: No response from server");
       } else {
-        // Something else happened while setting up the request
         toast.error(`Failed to send message: ${error.message}`);
       }
+   Thiết
+
+      setIsLoading(false);
     } finally {
       setIsLoading(false);
     }
@@ -155,10 +162,12 @@ ChatInput.propTypes = {
   chatId: PropTypes.string.isRequired,
   onMessageSent: PropTypes.func,
   replyingTo: PropTypes.string,
+  isArtificiumTab: PropTypes.bool.isRequired,
 };
 
 ChatInput.defaultProps = {
   width: "max-w-[calc(100vw-320px)]",
   onMessageSent: null,
   replyingTo: null,
+  isArtificiumTab: false,
 };

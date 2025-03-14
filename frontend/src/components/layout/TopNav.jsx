@@ -2,7 +2,7 @@ import PropTypes from "prop-types";
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 
-// Icons
+// Icons (replace with your actual imports)
 import editIcon from "../../assets/icons/edit.svg";
 import shareIcon from "../../assets/icons/share.svg";
 import Artificium from "../../assets/icons/Artificium.svg";
@@ -12,19 +12,25 @@ import Chat_Active from "../../assets/icons/comment-circle_active.svg";
 import Folder from "../../assets/icons/folder.svg";
 import Folder_Active from "../../assets/icons/folder_active.svg";
 
-// Avatars
+// Avatars (replace with your actual imports)
 import Adam_Green from "../../assets/avatar/Adam_Green.png";
 import Benjamin_Kim from "../../assets/avatar/Benjamin_Kim.png";
 import Isabella_Chen from "../../assets/avatar/Isabella_Chen.png";
 import Olivia_Sharma from "../../assets/avatar/Olivia_Sharma.png";
-import { lookInSession } from "../shared/Session";
 
-export default function TopNav({ activeTab, onShareClick, activeProject }) {
+export default function TopNav({
+  activeTab,
+  onShareClick,
+  activeProject,
+  chats,
+  selectedChat,
+  onSelectChat,
+}) {
   const navigate = useNavigate();
-  const workspaceSlug = lookInSession("workspaceSlug"); // Get workspaceSlug from URL
   const [currentTab, setCurrentTab] = useState(activeTab);
+  const workspaceSlug =
+    sessionStorage.getItem("workspaceSlug") || "defaultSlug"; // Fallback if not set
 
-  // Update active tab based on URL
   useEffect(() => {
     const path = window.location.pathname;
     if (path.includes("allchats")) {
@@ -34,43 +40,52 @@ export default function TopNav({ activeTab, onShareClick, activeProject }) {
     } else {
       setCurrentTab("artificium");
     }
-  }, [window.location.pathname]);
+  }, []);
 
   const handleTabClick = (tab) => {
     if (tab !== currentTab) {
-      // Handle tab transition animation
       document
         .querySelector(`.tab-item.${currentTab}`)
-        .classList.add("transition-out");
+        ?.classList.add("transition-out");
       setTimeout(() => {
         document
           .querySelector(`.tab-item.${currentTab}`)
-          .classList.remove("active-tab", "transition-out");
+          ?.classList.remove("active-tab", "transition-out");
         setCurrentTab(tab);
         document
           .querySelector(`.tab-item.${tab}`)
-          .classList.add("transition-in");
+          ?.classList.add("transition-in");
         setTimeout(() => {
           document
             .querySelector(`.tab-item.${tab}`)
-            .classList.remove("transition-in");
+            ?.classList.remove("transition-in");
           document
             .querySelector(`.tab-item.${tab}`)
-            .classList.add("active-tab");
+            ?.classList.add("active-tab");
         }, 300);
       }, 300);
     }
 
-    // Navigation logic based on tab
     if (tab === "artificium") {
-      navigate(`/artificium/${workspaceSlug}`);
-    } else if (tab === "chat") {
-      // Assuming workspace._id is passed or stored in session
-      const workspaceId = sessionStorage.getItem("workspaceId"); // Adjust based on how you store workspaceId
-      if (workspaceId) {
-        navigate(`/artificium/workspace/${workspaceId}/allchats`);
+      if (selectedChat) {
+        navigate(`/artificium/${workspaceSlug}/${selectedChat._id}`);
+      } else if (chats.length > 0) {
+        navigate(`/artificium/${workspaceSlug}/${chats[0]._id}`);
       } else {
-        console.error("Workspace ID not found for chat navigation");
+        navigate(`/artificium/${workspaceSlug}`);
+      }
+    } else if (tab === "chat") {
+      const workspaceId = sessionStorage.getItem("workspaceId");
+      if (selectedChat) {
+        navigate(
+          `/artificium/workspace/${workspaceId}/allchats/${selectedChat._id}`
+        );
+      } else if (chats.length > 0) {
+        navigate(
+          `/artificium/workspace/${workspaceId}/allchats/${chats[0]._id}`
+        );
+      } else {
+        navigate(`/artificium/workspace/${workspaceId}/allchats`);
       }
     } else if (tab === "library") {
       navigate(`/artificium/${workspaceSlug}/library`);
@@ -80,10 +95,8 @@ export default function TopNav({ activeTab, onShareClick, activeProject }) {
   return (
     <div className="bg-noble-black-700 p-2 pr-3 w-full">
       <div className="bg-noble-black-700">
-        {/* Row 1: Title, subtitle, avatars, share/edit */}
         <div className="bg-noble-black-800 px-6 py-4 w-full rounded-t-2xl">
           <div className="flex items-center justify-between">
-            {/* Left: Project Info */}
             <div>
               <h2 className="text-xl font-medium text-white">
                 {activeProject || "Orbital Odyssey"}
@@ -92,10 +105,7 @@ export default function TopNav({ activeTab, onShareClick, activeProject }) {
                 Marketing Campaign for a new TV series Launch
               </p>
             </div>
-
-            {/* Right: Avatars + Share + Edit */}
             <div className="flex items-center gap-6">
-              {/* Avatars */}
               <div className="flex -space-x-2">
                 <img
                   src={Adam_Green}
@@ -121,8 +131,6 @@ export default function TopNav({ activeTab, onShareClick, activeProject }) {
                   +4
                 </div>
               </div>
-
-              {/* Share Button */}
               <button
                 type="button"
                 onClick={onShareClick}
@@ -133,8 +141,6 @@ export default function TopNav({ activeTab, onShareClick, activeProject }) {
                   Share
                 </span>
               </button>
-
-              {/* Edit Button */}
               <button
                 type="button"
                 className="flex items-center gap-2 text-gray-300 hover:text-white cursor-pointer"
@@ -146,10 +152,7 @@ export default function TopNav({ activeTab, onShareClick, activeProject }) {
             </div>
           </div>
         </div>
-
-        {/* Row 2: Tabs */}
         <div className="mt-[2px] flex items-center gap-8 bg-noble-black-800 px-6 py-6 rounded-b-2xl">
-          {/* Artificium Tab */}
           <div
             onClick={() => handleTabClick("artificium")}
             className={`tab-item artificium ${
@@ -167,8 +170,6 @@ export default function TopNav({ activeTab, onShareClick, activeProject }) {
             )}
             <button>Artificium</button>
           </div>
-
-          {/* Chat Tab */}
           <div
             onClick={() => handleTabClick("chat")}
             className={`tab-item chat ${
@@ -186,8 +187,6 @@ export default function TopNav({ activeTab, onShareClick, activeProject }) {
             )}
             <button>Chat</button>
           </div>
-
-          {/* Library Tab */}
           <div
             onClick={() => handleTabClick("library")}
             className={`tab-item library ${
@@ -212,16 +211,19 @@ export default function TopNav({ activeTab, onShareClick, activeProject }) {
 }
 
 TopNav.propTypes = {
-  /** Which tab is currently active: "artificium", "chat", or "library" */
   activeTab: PropTypes.string,
-  /** Optional click handler for "Share" button */
   onShareClick: PropTypes.func,
-  /** The name of the active project/workspace */
   activeProject: PropTypes.string,
+  chats: PropTypes.array,
+  selectedChat: PropTypes.object,
+  onSelectChat: PropTypes.func,
 };
 
 TopNav.defaultProps = {
   activeTab: "artificium",
   onShareClick: null,
   activeProject: "Orbital Odyssey",
+  chats: [],
+  selectedChat: null,
+  onSelectChat: () => {},
 };

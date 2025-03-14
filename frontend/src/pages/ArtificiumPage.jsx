@@ -1,21 +1,23 @@
+import { useState, useEffect } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import axios from "axios";
 import Sidebar from "../components/layout/Sidebar";
 import TopNav from "../components/layout/TopNav";
 import ChatInput from "../components/chat/ChatInput";
 import Content from "../components/chat/Content";
 import PropTypes from "prop-types";
-import { useEffect, useState } from "react";
-import axios from "axios";
-import { lookInSession } from "../components/shared/Session";
 
 const API_BASE = import.meta.env.VITE_SERVER_DOMAIN;
 
 export default function ArtificiumPage({ onShareClick }) {
-  const workspaceSlug = lookInSession("workspaceSlug");
+  const { workspaceSlug, chatId } = useParams(); // Grab workspaceSlug and chatId from URL
+  const navigate = useNavigate();
   const [workspace, setWorkspace] = useState(null);
   const [chats, setChats] = useState([]);
   const [selectedChat, setSelectedChat] = useState(null);
   const [refreshTrigger, setRefreshTrigger] = useState(0);
 
+  // Fetch workspace by slug
   useEffect(() => {
     if (workspaceSlug) {
       fetchWorkspaceBySlug(workspaceSlug);
@@ -37,31 +39,47 @@ export default function ArtificiumPage({ onShareClick }) {
     }
   };
 
+  // Fetch chats for the workspace
   const fetchChats = async (workspaceId) => {
     try {
-      const { data } = await axios.get(
-        `${API_BASE}/workspaces/${workspaceId}/allchats`
-      );
+      const { data } = await axios.get(`${API_BASE}/workspaces/${workspaceId}/allchats`);
       if (data.success) {
         setChats(data.chats);
-        if (data.chats.length > 0 && !selectedChat) {
-          setSelectedChat(data.chats[0]);
-        }
       }
     } catch (err) {
       console.error("Error fetching chats:", err);
     }
   };
 
+  // Set selectedChat based on chatId from URL or default to first chat
+  useEffect(() => {
+    if (chats.length > 0) {
+      if (chatId) {
+        const chat = chats.find((c) => c._id === chatId);
+        if (chat) {
+          setSelectedChat(chat);
+        } else {
+          // If chatId is invalid, default to first chat and update URL
+          setSelectedChat(chats[0]);
+          navigate(`/artificium/${workspaceSlug}/${chats[0]._id}`);
+        }
+      } else {
+        // If no chatId, select first chat and update URL
+        setSelectedChat(chats[0]);
+        navigate(`/artificium/${workspaceSlug}/${chats[0]._id}`);
+      }
+    }
+  }, [chats, chatId, navigate, workspaceSlug]);
+
   const handleSelectChat = (chat) => {
     setSelectedChat(chat);
+    navigate(`/artificium/${workspaceSlug}/${chat._id}`);
   };
 
   const handleMessageSent = () => {
     setRefreshTrigger((prev) => prev + 1); // Trigger refresh of conversation
   };
 
-  // Add this to re-fetch chats when a new chat is added
   const handleChatAdded = () => {
     const workspaceId = sessionStorage.getItem("workspaceId");
     if (workspaceId) {
@@ -76,7 +94,7 @@ export default function ArtificiumPage({ onShareClick }) {
         chats={chats}
         selectedChat={selectedChat}
         onSelectChat={handleSelectChat}
-        onChatAdded={handleChatAdded} // Pass callback to Sidebar
+        onChatAdded={handleChatAdded}
       />
 
       <div className="flex-1 flex flex-col">
@@ -105,6 +123,7 @@ export default function ArtificiumPage({ onShareClick }) {
             width="max-w-[calc(100vw-320px)]"
             chatId={selectedChat._id}
             onMessageSent={handleMessageSent}
+            isArtificiumTab={true}
           />
         )}
       </div>
@@ -114,8 +133,4 @@ export default function ArtificiumPage({ onShareClick }) {
 
 ArtificiumPage.propTypes = {
   onShareClick: PropTypes.func,
-};
-
-ArtificiumPage.defaultProps = {
-  onShareClick: null,
 };
