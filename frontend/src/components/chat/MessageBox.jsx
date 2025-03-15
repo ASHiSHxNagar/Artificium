@@ -16,7 +16,7 @@ export default function MessageBox({ message, nextMessage, onReplyClick }) {
 
   return (
     <div
-      className={`relative mb-5 overflow-x-hidden max-w-[700px] ${
+      className={`relative mb-5 overflow-x-hidden w-full ${
         isMainMessage ? "" : " "
       }`}
     >
@@ -163,7 +163,11 @@ export default function MessageBox({ message, nextMessage, onReplyClick }) {
                             onClick={() => alert("More clicked")}
                             className="absolute top-2 right-2 bg-noble-black-600 hover:bg-noble-black-500 text-gray-300 rounded-sm p-2 cursor-pointer"
                           >
-                            <img src={moreIcon} alt="More" className="w-2 h-2" />
+                            <img
+                              src={moreIcon}
+                              alt="More"
+                              className="w-2 h-2"
+                            />
                           </button>
                         </div>
                       ))}

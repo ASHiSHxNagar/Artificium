@@ -163,7 +163,7 @@ export default function ChatPage({ onShareClick }) {
   };
 
   return (
-    <div className="flex h-screen bg-noble-black-700 text-gray-200">
+    <div className="flex h-screen bg-noble-black-700 text-gray-200 ">
       <Sidebar
         activeProject={workspace?.name || "Orbital Odyssey"}
         chats={chats}
@@ -230,7 +230,7 @@ export default function ChatPage({ onShareClick }) {
           />
         )}
 
-        <div className="max-w-[300px] absolute right-0 top-0 max-h-screen overflow-y-scroll">
+        <div className="absolute right-0 top-0 max-h-screen overflow-y-scroll">
           <ChatRightPanel
             channelName={channelName}
             setChannelName={setChannelName}

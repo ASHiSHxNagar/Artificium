@@ -571,11 +571,11 @@ export default function ChatRightPanel({
       </div>
 
       {/* Tabs at Bottom */}
-      <div className="flex justify-around border-[1px] border-gray-800 rounded-2xl w-[90%] mx-auto mt-4">
+      <div className=" fixed bottom-4 bg-noble-black-800 px-5 py-2 ml-4  flex justify-around border-[1px] border-gray-800 rounded-2xl  ">
         <button
-          className={`flex items-center justify-center text-center py-2 rounded hover:bg-noble-black-700 ${
+          className={`flex items-center justify-center text-center py-2 rounded mr-4 hover:bg-noble-black-700 ${
             activeTab === "chats"
-              ? "px-2 py-1 text-white bg-noble-black-600 rounded-xl"
+              ? "px-6 py-1 text-white bg-noble-black-600 rounded-xl"
               : "text-gray-400 cursor-pointer"
           }`}
           onClick={() => setActiveTab("chats")}
@@ -588,9 +588,9 @@ export default function ChatRightPanel({
           Chats
         </button>
         <button
-          className={`flex items-center justify-center text-center py-2 rounded hover:bg-noble-black-700 ${
+          className={`flex items-center justify-center text-center py-2 rounded ml-4 hover:bg-noble-black-700 ${
             activeTab === "members"
-              ? "px-2 py-1  text-white bg-noble-black-600 rounded-xl"
+              ? "px-4 py-1  text-white bg-noble-black-600 rounded-xl"
               : "text-gray-400 cursor-pointer"
           }`}
           onClick={() => setActiveTab("members")}
