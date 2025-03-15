@@ -12,7 +12,6 @@ const MessageSchema = new mongoose.Schema({
   },
   text: {
     type: String,
-    required: true,
   },
   images: [
     {
@@ -27,7 +26,6 @@ const MessageSchema = new mongoose.Schema({
     {
       text: {
         type: String,
-        required: true,
       },
       temporaryId: {
         type: String,

@@ -9,6 +9,7 @@ import sliders from "../../assets/icons/sliders.svg";
 import link from "../../assets/icons/link.svg";
 import download from "../../assets/icons/download.svg";
 import { useState } from "react";
+import moreIcon from "../../assets/icons/dots_icon.svg";
 
 export default function ArtificiumMessageBox({
   message,
@@ -67,14 +68,21 @@ export default function ArtificiumMessageBox({
         </p>
 
         {message.image && (
-          <div className="mt-2 flex gap-2">
+          <div className="mt-3 flex gap-2 pl-15">
             {[...Array(3)].map((_, index) => (
-              <img
-                key={index}
-                src={`${import.meta.env.VITE_SERVER_DOMAIN}${message.image}`}
-                alt="Attached"
-                className="max-w-xs rounded"
-              />
+              <div key={index} className="relative">
+                <img
+                  src={message.image}
+                  alt="Attached"
+                  className="w-36 h-36 object-cover rounded"
+                />
+                <button
+                  onClick={() => alert("More clicked")}
+                  className="absolute top-2 right-2 bg-noble-black-600 hover:bg-noble-black-500 text-gray-300 rounded-sm p-2 cursor-pointer"
+                >
+                  <img src={moreIcon} alt="More" className="w-2 h-2" />
+                </button>
+              </div>
             ))}
           </div>
         )}

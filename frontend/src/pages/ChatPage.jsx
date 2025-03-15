@@ -85,7 +85,7 @@ export default function ChatPage({ onShareClick }) {
             user: msg.sender?.personal_info?.username || "Unknown User",
             date: new Date(msg.createdAt).toLocaleString(),
             text: msg.text,
-            images: msg.images || [], // Include images
+            images: msg.images || [],
             isMain: true,
             createdAt: msg.createdAt,
             replies:

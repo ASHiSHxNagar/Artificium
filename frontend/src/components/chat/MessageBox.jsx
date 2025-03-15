@@ -2,6 +2,7 @@ import PropTypes from "prop-types";
 import { useState } from "react";
 import copy_icon from "../../assets/icons/copy_icon.svg";
 import Adam_Green from "../../assets/avatar/Adam_Green.png";
+import moreIcon from "../../assets/icons/dots_icon.svg";
 
 export default function MessageBox({ message, nextMessage, onReplyClick }) {
   const [showReplies, setShowReplies] = useState(false);
@@ -66,16 +67,21 @@ export default function MessageBox({ message, nextMessage, onReplyClick }) {
         </p>
 
         {message.images && message.images.length > 0 && (
-          <div className="mt-2 flex gap-2">
-            {[...Array(3)].map((_, index) => (
-              <img
-                key={index}
-                src={`${import.meta.env.VITE_SERVER_DOMAIN}${
-                  message.images[0]
-                }`}
-                alt="Attached"
-                className="max-w-xs rounded"
-              />
+          <div className="mt-3 flex gap-2 pl-15">
+            {message.images.slice(0, 3).map((imageUrl, index) => (
+              <div key={`main-image-${index}`} className="relative">
+                <img
+                  src={imageUrl}
+                  alt="Attached"
+                  className="w-36 h-36 object-cover rounded"
+                />
+                <button
+                  onClick={() => alert("More clicked")}
+                  className="absolute top-2 right-2 bg-noble-black-600 hover:bg-noble-black-500 text-gray-300 rounded-sm p-2 cursor-pointer"
+                >
+                  <img src={moreIcon} alt="More" className="w-2 h-2" />
+                </button>
+              </div>
             ))}
           </div>
         )}
@@ -111,11 +117,11 @@ export default function MessageBox({ message, nextMessage, onReplyClick }) {
           </button>
           {showReplies &&
             message.replies.map((reply, index) => (
-              <div key={`${message.id}-reply-${index}`}>
+              <div key={`${message.id}-reply-${index}`} className="mt-4">
                 <div
                   className={`rounded-lg p-4 relative bg-noble-black-600 ml-12 shadow-md`}
                 >
-                  <div className="flex items-center justify-between mb-2 flex-wrap ">
+                  <div className="flex items-center justify-between mb-2 flex-wrap">
                     <div className="flex items-center gap-3">
                       <div className="relative cursor-pointer">
                         <img
@@ -145,16 +151,21 @@ export default function MessageBox({ message, nextMessage, onReplyClick }) {
                     {reply.text}
                   </p>
                   {reply.images && reply.images.length > 0 && (
-                    <div className="mt-2 flex gap-2">
-                      {[...Array(3)].map((_, index) => (
-                        <img
-                          key={index}
-                          src={`${import.meta.env.VITE_SERVER_DOMAIN}${
-                            reply.images[0]
-                          }`}
-                          alt="Attached"
-                          className="max-w-xs rounded"
-                        />
+                    <div className="mt-3 flex gap-2 pl-15">
+                      {reply.images.slice(0, 3).map((imageUrl, index) => (
+                        <div key={`reply-image-${index}`} className="relative">
+                          <img
+                            src={imageUrl}
+                            alt="Attached"
+                            className="w-36 h-36 object-cover rounded"
+                          />
+                          <button
+                            onClick={() => alert("More clicked")}
+                            className="absolute top-2 right-2 bg-noble-black-600 hover:bg-noble-black-500 text-gray-300 rounded-sm p-2 cursor-pointer"
+                          >
+                            <img src={moreIcon} alt="More" className="w-2 h-2" />
+                          </button>
+                        </div>
                       ))}
                     </div>
                   )}

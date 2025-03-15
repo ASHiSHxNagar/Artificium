@@ -38,7 +38,11 @@ export default function ChatInput({
   };
 
   const handleSend = async () => {
-    if (!message && !imageFile) return;
+    // Allow sending if there's either a message or an image
+    if (!message && !imageFile) {
+      toast.error("Please enter a message or select an image to send.");
+      return;
+    }
 
     setIsLoading(true);
     const tempId = nanoid(10); // Generate tempId here
@@ -47,7 +51,7 @@ export default function ChatInput({
       // Step 1: Send the message with tempId as JSON
       const messageData = {
         chatId,
-        text: message,
+        text: message || "", // Send empty string if no text, backend will handle
         temporaryId: tempId,
       };
       if (replyingTo && !isArtificiumTab) {
@@ -72,8 +76,16 @@ export default function ChatInput({
       if (imageFile) {
         const imageUrl = await uploadImage(imageFile);
         const findEndpoint = isArtificiumTab
-          ? `${import.meta.env.VITE_SERVER_DOMAIN}/artificium/findmessage/${tempId}`
-          : `${import.meta.env.VITE_SERVER_DOMAIN}/messages/findmessage/${tempId}`;
+          ? `${
+              import.meta.env.VITE_SERVER_DOMAIN
+            }/artificium/findmessage/${tempId}`
+          : replyingTo
+          ? `${
+              import.meta.env.VITE_SERVER_DOMAIN
+            }/messages/findmessage/reply/${tempId}`
+          : `${
+              import.meta.env.VITE_SERVER_DOMAIN
+            }/messages/findmessage/send/${tempId}`;
 
         const findResponse = await axios.get(findEndpoint);
         let messageId;
@@ -83,18 +95,29 @@ export default function ChatInput({
         } else {
           messageId = findResponse.data.message._id; // Message ID
         }
-
         if (!messageId) {
           throw new Error("Message ID not found");
         }
 
         const updateEndpoint = isArtificiumTab
-          ? `${import.meta.env.VITE_SERVER_DOMAIN}/artificium/addimage/${messageId}`
-          : `${import.meta.env.VITE_SERVER_DOMAIN}/messages/addimage/${messageId}`;
+          ? `${
+              import.meta.env.VITE_SERVER_DOMAIN
+            }/artificium/addimage/${messageId}`
+          : replyingTo
+          ? `${
+              import.meta.env.VITE_SERVER_DOMAIN
+            }/messages/addimage/reply/${messageId}`
+          : `${
+              import.meta.env.VITE_SERVER_DOMAIN
+            }/messages/addimage/send/${messageId}`;
 
-        await axios.put(updateEndpoint, { imageUrl }, {
-          headers: { "Content-Type": "application/json" },
-        });
+        await axios.put(
+          updateEndpoint,
+          { imageUrl },
+          {
+            headers: { "Content-Type": "application/json" },
+          }
+        );
       }
 
       toast.success("Message sent!");
@@ -102,8 +125,15 @@ export default function ChatInput({
       setImageFile(null);
       if (onMessageSent) onMessageSent(); // Trigger refetch
     } catch (error) {
-      console.error("Error sending message:", error.response?.data || error.message);
-      toast.error(`Failed to send message: ${error.response?.data?.error || error.message}`);
+      console.error(
+        "Error sending message:",
+        error.response?.data || error.message
+      );
+      toast.error(
+        `Failed to send message: ${
+          error.response?.data?.error || error.message
+        }`
+      );
     } finally {
       setIsLoading(false);
     }

@@ -9,7 +9,7 @@ router.post("/send", async (req, res) => {
   try {
     const { chatId, text, temporaryId } = req.body;
 
-    if (!chatId || !text) {
+    if (!chatId) {
       return res.status(400).json({ error: "Chat ID and text are required" });
     }
 
@@ -19,7 +19,7 @@ router.post("/send", async (req, res) => {
     }
 
     const userMessage = {
-      text,
+      text: text || "",
       temporaryId,
       image: null, // Start with null; update later with S3 URL
       sender: "user",
