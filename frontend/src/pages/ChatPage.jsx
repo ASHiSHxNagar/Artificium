@@ -7,7 +7,9 @@ import TopNav from "../components/layout/TopNav";
 import ChatInput from "../components/chat/ChatInput";
 import MessageBox from "../components/chat/MessageBox";
 import ChatRightPanel from "../components/layout/ChatRightPanel";
+import RightPanelModal from "../components/shared/RightPanelModal";
 import artificium from "../assets/avatar/Artificium.png";
+import users_icon from "../assets/icons/users_icon.svg";
 
 const API_BASE = import.meta.env.VITE_SERVER_DOMAIN;
 
@@ -22,6 +24,8 @@ export default function ChatPage({ onShareClick }) {
   const [selectedChat, setSelectedChat] = useState(null);
   const [replyingTo, setReplyingTo] = useState(null);
   const [refreshTrigger, setRefreshTrigger] = useState(0);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [isRightPanelOpen, setIsRightPanelOpen] = useState(false);
 
   useEffect(() => {
     if (workspaceId) {
@@ -95,7 +99,7 @@ export default function ChatPage({ onShareClick }) {
                 user: reply.sender?.personal_info?.username || "Unknown User",
                 timeAgo: calculateTimeAgo(new Date(reply.createdAt)),
                 text: reply.text,
-                images: reply.images || [], // Include images in replies
+                images: reply.images || [],
                 isMain: false,
                 createdAt: reply.createdAt,
               })) || [],
@@ -145,6 +149,7 @@ export default function ChatPage({ onShareClick }) {
   const handleSelectChat = (chat) => {
     setSelectedChat(chat);
     navigate(`/artificium/workspace/${workspaceId}/allchats/${chat._id}`);
+    setIsSidebarOpen(false);
   };
 
   const handleChatAdded = () => {
@@ -163,15 +168,44 @@ export default function ChatPage({ onShareClick }) {
   };
 
   return (
-    <div className="flex h-screen bg-noble-black-700 text-gray-200 ">
-      <Sidebar
-        activeProject={workspace?.name || "Orbital Odyssey"}
-        chats={chats}
-        selectedChat={selectedChat}
-        onSelectChat={handleSelectChat}
-        onChatAdded={handleChatAdded}
-      />
-      <div className="flex-1 flex flex-col min-w-[calc(100vw-620px)]">
+    <div className="flex h-screen w-full bg-noble-black-700 text-gray-200">
+      {/* Left Sidebar */}
+      <div
+        className={`fixed inset-y-0 left-0 transform ${
+          isSidebarOpen ? "translate-x-0" : "-translate-x-full"
+        } md:translate-x-0 md:static md:w-64 bg-noble-black-800 transition-transform duration-300 ease-in-out z-50`}
+      >
+        <Sidebar
+          activeProject={workspace?.name || "Orbital Odyssey"}
+          chats={chats}
+          selectedChat={selectedChat}
+          onSelectChat={handleSelectChat}
+          onChatAdded={handleChatAdded}
+        />
+      </div>
+
+      {/* Hamburger Menu for Mobile */}
+      <button
+        className="md:hidden fixed top-4 left-4 z-50 p-2 bg-noble-black-600 rounded-md"
+        onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+      >
+        <svg
+          className="w-6 h-6 text-white"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth="2"
+            d="M4 6h16M4 12h16m-7 6h7"
+          />
+        </svg>
+      </button>
+
+      {/* Main Content */}
+      <div className="flex-1 flex flex-col mt-16 md:mt-0 lg:pl-15">
         <TopNav
           activeTab="chat"
           onShareClick={onShareClick}
@@ -181,64 +215,89 @@ export default function ChatPage({ onShareClick }) {
           selectedChat={selectedChat}
           onSelectChat={handleSelectChat}
         />
-        <div className="p-6 flex-1 max-h-[calc(100vh-300px)] overflow-y-scroll">
-          {messages.length === 0 ? (
-            <MessageBox
-              key="no-messages"
-              message={{
-                id: "no-messages",
-                avatar: artificium,
-                user: "Artificium",
-                date: new Date().toLocaleString(),
-                text: "No messages here",
-                isMain: true,
-              }}
-              nextMessage={null}
-              onReplyClick={handleReplyClick}
-            />
-          ) : (
-            messages.map((msg, index) => {
-              if (msg.divider) {
-                return (
-                  <div
-                    key={msg.id}
-                    className="text-center text-sm text-gray-500"
-                  >
-                    {msg.divider}
-                  </div>
-                );
-              }
-              const nextMessage = messages[index + 1];
-              return (
+
+        <div className="flex flex-1 overflow-hidden px-1 sm:px-2 md:px-3 lg:px-5">
+          {/* Chat Area */}
+          <div className="flex-1 flex flex-col">
+            <div className="flex-1 p-4 md:p-6 overflow-y-auto">
+              {messages.length === 0 ? (
                 <MessageBox
-                  key={msg.id}
-                  message={msg}
-                  nextMessage={nextMessage}
+                  key="no-messages"
+                  message={{
+                    id: "no-messages",
+                    avatar: artificium,
+                    user: "Artificium",
+                    date: new Date().toLocaleString(),
+                    text: "No messages here",
+                    isMain: true,
+                  }}
+                  nextMessage={null}
                   onReplyClick={handleReplyClick}
                 />
-              );
-            })
-          )}
-        </div>
-        {selectedChat && (
-          <ChatInput
-            width="max-w-[calc(100vw-620px)]"
-            chatId={selectedChat._id}
-            onMessageSent={handleMessageSent}
-            replyingTo={replyingTo}
-            isArtificiumTab={false} // Pass prop to indicate this is Chat tab
-          />
-        )}
+              ) : (
+                messages.map((msg, index) => {
+                  if (msg.divider) {
+                    return (
+                      <div
+                        key={msg.id}
+                        className="text-center text-sm text-gray-500"
+                      >
+                        {msg.divider}
+                      </div>
+                    );
+                  }
+                  const nextMessage = messages[index + 1];
+                  return (
+                    <MessageBox
+                      key={msg.id}
+                      message={msg}
+                      nextMessage={nextMessage}
+                      onReplyClick={handleReplyClick}
+                    />
+                  );
+                })
+              )}
+            </div>
+            {selectedChat && (
+              <ChatInput
+                className="p-2"
+                chatId={selectedChat._id}
+                onMessageSent={handleMessageSent}
+                replyingTo={replyingTo}
+                isArtificiumTab={false}
+              />
+            )}
+          </div>
 
-        <div className="absolute right-0 top-0 max-h-screen overflow-y-scroll">
-          <ChatRightPanel
-            channelName={channelName}
-            setChannelName={setChannelName}
-            channelCount={channelCount}
-            setChannelCount={setChannelCount}
-          />
+          {/* Right Panel (Visible from lg and up) */}
+          <div className="hidden xl:block w-[300px] overflow-y-scroll">
+            <ChatRightPanel
+              channelName={channelName}
+              setChannelName={setChannelName}
+              channelCount={channelCount}
+              setChannelCount={setChannelCount}
+            />
+          </div>
         </div>
       </div>
+
+      {/* Toggle Button for Right Panel Modal (Visible below lg) */}
+      <button
+        className="lg:hidden fixed top-4 right-4 z-50 p-2 bg-noble-black-600 rounded-md"
+        onClick={() => setIsRightPanelOpen(true)}
+      >
+        <img src={users_icon} alt="Toggle Right Panel" className="w-6 h-6" />
+      </button>
+
+      {/* Right Panel Modal (Visible below lg) */}
+      <RightPanelModal
+        isOpen={isRightPanelOpen}
+        onClose={() => setIsRightPanelOpen(false)}
+        channelName={channelName}
+        setChannelName={setChannelName}
+        channelCount={channelCount}
+        setChannelCount={setChannelCount}
+      />
     </div>
   );
 }

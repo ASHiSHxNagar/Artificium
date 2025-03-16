@@ -231,7 +231,9 @@ export default function Content({ chatId, onMessageSent }) {
             >
               <img src={Content_Creation} alt="Icon" className="w-5 h-5" />
             </div>
-            <h3 className="text-base font-medium mb-5 mt-2">Content Creation</h3>
+            <h3 className="text-base font-medium mb-5 mt-2">
+              Content Creation
+            </h3>
             <div className="flex flex-col w-full space-y-2">
               <div
                 className="

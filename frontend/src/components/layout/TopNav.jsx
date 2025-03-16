@@ -29,7 +29,7 @@ export default function TopNav({
   const navigate = useNavigate();
   const [currentTab, setCurrentTab] = useState(activeTab);
   const workspaceSlug =
-    sessionStorage.getItem("workspaceSlug") || "defaultSlug"; // Fallback if not set
+    sessionStorage.getItem("workspaceSlug") || "defaultSlug";
 
   useEffect(() => {
     const path = window.location.pathname;
@@ -98,15 +98,15 @@ export default function TopNav({
         <div className="bg-noble-black-800 px-6 py-4 w-full rounded-t-2xl">
           <div className="flex items-center justify-between">
             <div>
-              <h2 className="text-xl font-medium text-white">
+              <h2 className=" text-xs sm:text-xm md:text-base lg:text-xl font-medium text-white">
                 {activeProject || "Orbital Odyssey"}
               </h2>
-              <p className="text-sm text-noble-black-300 font-medium mt-2">
+              <p className="text-[8px] sm:text-[10px] md:text-sm lg:text-base md:max-w-50 lg:max-w-full text-noble-black-300 font-medium mt-2 break-words">
                 Marketing Campaign for a new TV series Launch
               </p>
             </div>
-            <div className="flex items-center gap-6">
-              <div className="flex -space-x-2">
+            <div className="hidden sm:flex  items-center gap-1 sm:gap-3  md:gap-4 lg:gap-6">
+              <div className="flex -space-x-3 lg:-space-x-2">
                 <img
                   src={Adam_Green}
                   alt="user1"
@@ -136,8 +136,12 @@ export default function TopNav({
                 onClick={onShareClick}
                 className="flex items-center gap-2 text-gray-300 hover:text-white cursor-pointer"
               >
-                <img src={shareIcon} alt="Share" className="w-4 h-4" />
-                <span className="text-noble-black-300 text-sm font-semibold">
+                <img
+                  src={shareIcon}
+                  alt="Share"
+                  className="w-3 h-3 sm:w-4 sm:h-4 lg:w-5 lg:h-5"
+                />
+                <span className="text-noble-black-300 text-[8px] md:text-[10px] lg:text-sm font-semibold">
                   Share
                 </span>
               </button>
@@ -145,14 +149,18 @@ export default function TopNav({
                 type="button"
                 className="flex items-center gap-2 text-gray-300 hover:text-white cursor-pointer"
               >
-                <div className="w-9 h-9 bg-noble-black-600 rounded-xl flex items-center justify-center">
-                  <img src={editIcon} alt="Edit" className="w-4 h-4" />
+                <div className=" sm:w-5 sm:h-5 md:w-7 md:h-7 lg:w-9 lg:h-9 bg-noble-black-600 rounded-xl flex items-center justify-center">
+                  <img
+                    src={editIcon}
+                    alt="Edit"
+                    className="w-3 h-3 sm:w-4 sm:h-4 lg:w-5 lg:h-5"
+                  />
                 </div>
               </button>
             </div>
           </div>
         </div>
-        <div className="mt-[2px] flex items-center gap-8 bg-noble-black-800 px-6 py-6 rounded-b-2xl">
+        <div className="mt-[2px] flex items-center gap-4 sm:gap-5 md:gap-7 lg:gap-8 bg-noble-black-800 px-6 py-6 rounded-b-2xl">
           <div
             onClick={() => handleTabClick("artificium")}
             className={`tab-item artificium ${
@@ -160,15 +168,21 @@ export default function TopNav({
             } flex items-center justify-center gap-3 pb-2 text-sm font-semibold cursor-pointer text-gray-300 hover:text-white`}
           >
             {currentTab === "artificium" ? (
-              <img src={Artificium} alt="Artificium Icon" className="w-4 h-4" />
+              <img
+                src={Artificium}
+                alt="Artificium Icon"
+                className="w-3 h-3 sm:w-4 sm:h-4 lg:w-5 lg:h-5"
+              />
             ) : (
               <img
                 src={Artificium_Inactive}
                 alt="Artificium Inactive Icon"
-                className="w-4 h-4"
+                className="w-3 h-3 sm:w-4 sm:h-4 lg:w-5 lg:h-5"
               />
             )}
-            <button>Artificium</button>
+            <button className="text-[10px] sm:text-xs  md:text-sm lg:text-base">
+              Artificium
+            </button>
           </div>
           <div
             onClick={() => handleTabClick("chat")}
@@ -180,12 +194,18 @@ export default function TopNav({
               <img
                 src={Chat_Active}
                 alt="Chat Active Icon"
-                className="w-4 h-4"
+                className="w-3 h-3 sm:w-4 sm:h-4 lg:w-5 lg:h-5"
               />
             ) : (
-              <img src={Chat} alt="Chat Icon" className="w-4 h-4" />
+              <img
+                src={Chat}
+                alt="Chat Icon"
+                className="w-3 h-3 sm:w-4 sm:h-4 lg:w-5 lg:h-5"
+              />
             )}
-            <button>Chat</button>
+            <button className="text-[10px] sm:text-xs  md:text-sm lg:text-base">
+              Chat
+            </button>
           </div>
           <div
             onClick={() => handleTabClick("library")}
@@ -197,12 +217,18 @@ export default function TopNav({
               <img
                 src={Folder_Active}
                 alt="Library Active Icon"
-                className="w-4 h-4"
+                className="w-3 h-3 sm:w-4 sm:h-4 lg:w-5 lg:h-5"
               />
             ) : (
-              <img src={Folder} alt="Library Icon" className="w-4 h-4" />
+              <img
+                src={Folder}
+                alt="Library Icon"
+                className="w-3 h-3 sm:w-4 sm:h-4 lg:w-5 lg:h-5"
+              />
             )}
-            <button>Library</button>
+            <button className="text-[10px] sm:text-xs  md:text-sm lg:text-base">
+              Library
+            </button>
           </div>
         </div>
       </div>

@@ -12,7 +12,7 @@ import micIcon from "../../assets/icons/microphone.svg";
 import loadingIcon from "../../assets/icons/bouncing-circles.svg";
 
 export default function ChatInput({
-  width,
+  className,
   chatId,
   onMessageSent,
   replyingTo,
@@ -33,25 +33,23 @@ export default function ChatInput({
       return;
     }
 
-    setImageFile(file); // Store the file for later upload
+    setImageFile(file);
     toast.success("Image selected! Send your message to upload it.");
   };
 
   const handleSend = async () => {
-    // Allow sending if there's either a message or an image
     if (!message && !imageFile) {
       toast.error("Please enter a message or select an image to send.");
       return;
     }
 
     setIsLoading(true);
-    const tempId = nanoid(10); // Generate tempId here
+    const tempId = nanoid(10);
 
     try {
-      // Step 1: Send the message with tempId as JSON
       const messageData = {
         chatId,
-        text: message || "", // Send empty string if no text, backend will handle
+        text: message || "",
         temporaryId: tempId,
       };
       if (replyingTo && !isArtificiumTab) {
@@ -66,13 +64,12 @@ export default function ChatInput({
 
       const response = await axios.post(endpoint, messageData, {
         headers: {
-          "Content-Type": "application/json", // Explicitly set JSON content type
+          "Content-Type": "application/json",
         },
       });
 
-      console.log("Send response:", response.data); // Debug the response
+      console.log("Send response:", response.data);
 
-      // Step 2: If there's an image, upload it and update the message
       if (imageFile) {
         const imageUrl = await uploadImage(imageFile);
         const findEndpoint = isArtificiumTab
@@ -91,9 +88,9 @@ export default function ChatInput({
         let messageId;
 
         if (isArtificiumTab) {
-          messageId = findResponse.data.message._id; // Artificium message ID
+          messageId = findResponse.data.message._id;
         } else {
-          messageId = findResponse.data.message._id; // Message ID
+          messageId = findResponse.data.message._id;
         }
         if (!messageId) {
           throw new Error("Message ID not found");
@@ -123,7 +120,7 @@ export default function ChatInput({
       toast.success("Message sent!");
       setMessage("");
       setImageFile(null);
-      if (onMessageSent) onMessageSent(); // Trigger refetch
+      if (onMessageSent) onMessageSent();
     } catch (error) {
       console.error(
         "Error sending message:",
@@ -143,37 +140,45 @@ export default function ChatInput({
     <>
       <Toaster />
       <div
-        className={`p-2 fixed bottom-1 w-full overflow-x-hidden pb-5 ${width}`}
+        className={`bg-noble-black-800 w-full flex items-center rounded-2xl ${className}`}
       >
-        <div className="bg-noble-black-800 w-full flex items-center p-6 rounded-2xl">
-          <button
-            type="button"
-            className="mr-5 cursor-pointer hover:scale-105"
-            disabled={isLoading}
-          >
-            <img src={micIcon} alt="Mic" className="w-5 h-5" />
-          </button>
-
-          <input
-            type="text"
-            placeholder={
-              replyingTo
-                ? "Type your reply..."
-                : "You can ask me anything! I am here to help."
-            }
-            className="flex-1 bg-noble-black-800 px-4 py-2 rounded-l focus:outline-none mr-2 text-white placeholder:text-noble-black-400 text-base font-semibold"
-            value={message}
-            onChange={(e) => setMessage(e.target.value)}
-            disabled={isLoading}
+        <button
+          type="button"
+          className="mr-5 ml-2 cursor-pointer hover:scale-105"
+          disabled={isLoading}
+        >
+          <img
+            src={micIcon}
+            alt="Mic"
+            className="w-3 h-3 sm:w-4 sm:h-4 lg:w-5 lg:h-5"
           />
+        </button>
 
+        <input
+          type="text"
+          placeholder={
+            replyingTo
+              ? "Type your reply..."
+              : "You can ask me anything! I am here to help."
+          }
+          className="flex-1 bg-noble-black-800 py-2 rounded-l focus:outline-none text-white placeholder:text-noble-black-400 text-[8px] sm:text-sm lg:text-base  font-semibold"
+          value={message}
+          onChange={(e) => setMessage(e.target.value)}
+          disabled={isLoading}
+        />
+
+        <div className="flex gap-1 sm:gap-2 md:gap-3  lg:gap-5 mr-2">
           <button
             type="button"
-            className="mr-3 cursor-pointer hover:scale-105"
+            className=" cursor-pointer hover:scale-105"
             onClick={() => fileInputRef.current.click()}
             disabled={isLoading}
           >
-            <img src={attachIcon} alt="Attach" className="w-5 h-5" />
+            <img
+              src={attachIcon}
+              alt="Attach"
+              className="w-3 h-3 sm:w-4 sm:h-4 lg:w-5 lg:h-5"
+            />
           </button>
 
           <input
@@ -188,17 +193,21 @@ export default function ChatInput({
           <button
             type="button"
             onClick={handleSend}
-            className="ml-3 bg-noble-black-700 p-3 rounded-xl hover:bg-noble-black-600 cursor-pointer hover:scale-105"
+            className=" bg-noble-black-700 p-1 lg:p-3 rounded-xl hover:bg-noble-black-600 cursor-pointer hover:scale-105"
             disabled={isLoading}
           >
             {isLoading ? (
               <img
                 src={loadingIcon}
                 alt="Loading"
-                className="w-5 h-5 animate-spin"
+                className="w-3 h-3 sm:w-4 sm:h-4 lg:w-5 lg:h-5 animate-spin"
               />
             ) : (
-              <img src={sendIcon} alt="Send" className="w-5 h-5" />
+              <img
+                src={sendIcon}
+                alt="Send"
+                className="w-3 h-3 sm:w-4 sm:h-4 lg:w-5 lg:h-5"
+              />
             )}
           </button>
         </div>
@@ -208,7 +217,7 @@ export default function ChatInput({
 }
 
 ChatInput.propTypes = {
-  width: PropTypes.string,
+  className: PropTypes.string,
   chatId: PropTypes.string.isRequired,
   onMessageSent: PropTypes.func,
   replyingTo: PropTypes.string,
@@ -216,7 +225,7 @@ ChatInput.propTypes = {
 };
 
 ChatInput.defaultProps = {
-  width: "max-w-[calc(100vw-320px)]",
+  className: "",
   onMessageSent: null,
   replyingTo: null,
   isArtificiumTab: false,

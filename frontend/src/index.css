@@ -821,3 +821,12 @@ body {
   background-color: #b6f09c; /* Hover border color */
   transform: scaleX(1);
 }
+
+@media (min-width: 300px) {
+  .imgwh_400 {
+    @apply w-30 h-30;
+  }
+  .replayimgwh_400 {
+    @apply w-30 h-30;
+  }
+}

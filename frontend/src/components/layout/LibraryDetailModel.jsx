@@ -167,7 +167,7 @@ export default function LibraryDetailModal({ onClose }) {
                       <img
                         src={image1}
                         alt="April 12 image 1"
-                        className="w-36 h-36 object-cover rounded"
+                        className="w-24 h-24 sm:w-32 sm:h-32 md:w-36 md:h-36 object-cover rounded"
                       />
                       <button
                         onClick={() => alert("More clicked")}
@@ -180,7 +180,7 @@ export default function LibraryDetailModal({ onClose }) {
                       <img
                         src={image2}
                         alt="April 12 image 2"
-                        className="w-36 h-36 object-cover rounded"
+                        className="w-24 h-24 sm:w-32 sm:h-32 md:w-36 md:h-36 object-cover rounded"
                       />
                       <button
                         onClick={() => alert("More clicked")}
@@ -193,7 +193,7 @@ export default function LibraryDetailModal({ onClose }) {
                       <img
                         src={image3}
                         alt="April 12 image 3"
-                        className="w-36 h-36 object-cover rounded"
+                        className="w-24 h-24 sm:w-32 sm:h-32 md:w-36 md:h-36 object-cover rounded"
                       />
                       <button
                         onClick={() => alert("More clicked")}
@@ -208,12 +208,11 @@ export default function LibraryDetailModal({ onClose }) {
                 <div className="mb-6">
                   <h3 className="text-sm text-gray-400 mb-2">3 April</h3>
                   <div className="flex flex-wrap gap-4">
-                    {/* Repeat same pattern */}
                     <div className="relative">
                       <img
                         src={image2}
                         alt="April 3 image 1"
-                        className="w-36 h-36 object-cover rounded"
+                        className="w-24 h-24 sm:w-32 sm:h-32 md:w-36 md:h-36 object-cover rounded"
                       />
                       <button
                         onClick={() => alert("More clicked")}
@@ -226,7 +225,7 @@ export default function LibraryDetailModal({ onClose }) {
                       <img
                         src={image3}
                         alt="April 3 image 2"
-                        className="w-36 h-36 object-cover rounded"
+                        className="w-24 h-24 sm:w-32 sm:h-32 md:w-36 md:h-36 object-cover rounded"
                       />
                       <button
                         onClick={() => alert("More clicked")}
@@ -241,12 +240,11 @@ export default function LibraryDetailModal({ onClose }) {
                 <div className="mb-6">
                   <h3 className="text-sm text-gray-400 mb-2">2 April</h3>
                   <div className="flex flex-wrap gap-4">
-                    {/* More images... */}
                     <div className="relative">
                       <img
                         src={image1}
                         alt="April 2 image 1"
-                        className="w-36 h-36 object-cover rounded"
+                        className="w-24 h-24 sm:w-32 sm:h-32 md:w-36 md:h-36 object-cover rounded"
                       />
                       <button
                         onClick={() => alert("More clicked")}

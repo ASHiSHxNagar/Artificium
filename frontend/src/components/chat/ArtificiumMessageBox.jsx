@@ -10,6 +10,7 @@ import link from "../../assets/icons/link.svg";
 import download from "../../assets/icons/download.svg";
 import { useState } from "react";
 import moreIcon from "../../assets/icons/dots_icon.svg";
+import chevron_down from "../../assets/icons/chevron-down.svg";
 
 export default function ArtificiumMessageBox({
   message,
@@ -32,55 +33,63 @@ export default function ArtificiumMessageBox({
   ];
 
   return (
-    <div className="relative w-full pr-10">
-      <div className="rounded-lg p-4 relative bg-noble-black-700 shadow-md border-1 border-gray-500">
+    <div className="relative w-full pr-2 sm:pr-4 md:pr-6 lg:pr-10">
+      <div className="rounded-lg p-2 sm:p-3 lg:p-4 relative bg-noble-black-700 shadow-md border-1 border-gray-500">
         <div className="flex items-center justify-between mb-2">
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-1 md:gap-2 lg:gap-3">
             <div className="relative cursor-pointer">
               <img
                 src={isBot ? Artificium : Ryan_Lee}
                 alt={isBot ? "Artificium" : "You"}
-                className="w-10 h-10 rounded-sm"
+                className="w-5 h-5 sm:w-6 sm:h-6 md:w-8 md:h-8 lg:w-10 lg:h-10 rounded-sm"
               />
               <span
                 className="
-                  absolute top-0 right-0 w-2 h-2 bg-green-500
+                  absolute top-0 right-0 w-1 h-1 sm:w-2 sm:h-2  bg-green-500
                   rounded-full border-2 border-noble-black-800
                 "
               />
             </div>
-            <div className="flex gap-4 justify-center items-center ml-2 mt-2">
-              <p className="font-medium text-white cursor-pointer">
+            <div className="flex gap-2 lg:gap-4 justify-center items-center ml-2 mt-2">
+              <p className="font-medium text-white cursor-pointer text-xs sm:text-sm md:text-base lg:text-lg">
                 {isBot ? "Artificium" : "You"}
               </p>
-              <p className="text-xs text-gray-400">
+              <p className="text-[8px] sm:text-xs md:text-sm text-base text-gray-400">
                 {new Date(message.createdAt).toLocaleTimeString()}
               </p>
             </div>
           </div>
           <button className="text-gray-400 hover:text-white cursor-pointer">
-            <img src={copy_icon} alt="Copy" />
+            <img
+              src={copy_icon}
+              alt="Copy"
+              className="w-3 h-3 sm:w-4 sm:h-4 lg:w-5 lg:h-5"
+            />
           </button>
         </div>
 
-        <p className="text-noble-black-300 mb-3 mt-3 pl-15 break-words font-medium">
+        <p className="text-noble-black-300 mb-3 mt-3 pl-7 sm:pl-8 md:pl-12  lg:pl-15 break-words font-medium text-xs sm:text-sm md:text-base  ">
           {message.text}
         </p>
 
         {message.image && (
-          <div className="mt-3 flex gap-2 pl-15">
+          <div className="mt-3 flex gap-2 pl-5 sm:pl-8 md:pl-12  lg:pl-15">
             {[...Array(3)].map((_, index) => (
               <div key={index} className="relative">
                 <img
                   src={message.image}
                   alt="Attached"
-                  className="w-36 h-36 object-cover rounded"
+                  className=" imgwh_400 w-20 h-20 sm:w-32 sm:h-32 md:w-35 md:h-35 lg:w-42 lg:h-42 object-cover rounded"
                 />
                 <button
                   onClick={() => alert("More clicked")}
-                  className="absolute top-2 right-2 bg-noble-black-600 hover:bg-noble-black-500 text-gray-300 rounded-sm p-2 cursor-pointer"
+                  className="absolute top-1 right-1 md:top-2 md:right-2 bg-noble-black-600 hover:bg-noble-black-500 text-gray-300 rounded-sm p-1 cursor-pointer"
                 >
-                  <img src={moreIcon} alt="More" className="w-2 h-2" />
+                  <img
+                    src={moreIcon}
+                    alt="More"
+                    className="w-1 h-1 md:w-2 md:h-2"
+                  />
                 </button>
               </div>
             ))}
@@ -88,37 +97,28 @@ export default function ArtificiumMessageBox({
         )}
 
         {isBot && !isRegenerating && (
-          <div className="flex items-center gap-4 mb-3 mt-5 pl-15">
+          <div className="flex items-center gap-1 sm:gap-2 md:gap-3  lg:gap-4 mb-3 mt-5 pl-5 sm:pl-8 md:pl-12  lg:pl-15">
             <button
               onClick={() => onRegenerate(message._id)}
-              className="text-noble-black-300 cursor-pointer text-sm font-semibold bg-noble-black-600 px-3 py-2 rounded-lg hover:bg-noble-black-500"
+              className="text-noble-black-300 cursor-pointer text-[8px] sm:text-xs md:text-sm lg:text-base  font-semibold bg-noble-black-600 px-3 py-2 rounded-lg hover:bg-noble-black-500"
             >
               Regenerate response
             </button>
             <div className="relative">
               <button
-                className="text-noble-black-300 cursor-pointer text-sm font-semibold bg-noble-black-600 px-3 py-2 rounded-lg hover:bg-noble-black-500 flex items-center gap-2"
+                className="text-noble-black-300 cursor-pointer text-[8px] sm:text-xs md:text-sm lg:text-base font-semibold bg-noble-black-600 px-3 py-2 rounded-lg hover:bg-noble-black-500 flex items-center gap-2"
                 onClick={handleModifyClick}
               >
                 Modify
-                <svg
-                  className="w-4 h-4"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M19 9l-7 7-7-7"
-                  />
-                </svg>
+                <img
+                  src={chevron_down}
+                  alt="arrow down "
+                  className="w-1 h-1 sm:w-2 sm:h-2 lg:w-3 lg:h-3"
+                />
               </button>
               <div
-                className={`absolute bottom-full p-4 left-0 mb-2 w-50 bg-noble-black-800 rounded shadow-lg z-10 ${
-                  modifyVisable ? "bloack" : "hidden"
+                className={`hidden absolute bottom-full p-4 left-0 mb-2 w-50 bg-noble-black-800 rounded shadow-lg z-10  ${
+                  modifyVisable ? "md:block" : "hidden"
                 }`}
               >
                 {modifyOptions.map((option, index) => (
