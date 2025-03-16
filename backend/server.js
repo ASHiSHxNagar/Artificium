@@ -15,7 +15,13 @@ import messageRoutes from "./routes/messageRoutes.js"
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-app.use(cors());
+// Allow your frontend domain
+app.use(cors({
+    origin: "https://artificium-clone.netlify.app",
+    methods: "GET,POST,PUT,DELETE",
+    credentials: true,
+}));
+
 app.use(express.json());
 
 //routes handlers
