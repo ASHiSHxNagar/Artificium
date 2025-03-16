@@ -5,7 +5,8 @@ import bcrypt from 'bcrypt';
 import { nanoid } from 'nanoid';
 import jwt from 'jsonwebtoken';
 import admin from 'firebase-admin';
-import serviceAccountKey from '../artificium-fd812-firebase-adminsdk-fbsvc-1297311006.json' assert { type: "json" };
+import fs from 'fs';
+import path from 'path';
 
 import { getAuth } from 'firebase-admin/auth';
 
@@ -15,6 +16,7 @@ import User from '../Schema/User.js';
 
 const userRouter = express.Router();
 
+const serviceAccountKey = JSON.parse(fs.readFileSync(new URL('../artificium-fd812-firebase-adminsdk-fbsvc-1297311006.json', import.meta.url)));
 // Initialize Firebase Admin
 admin.initializeApp({
     credential: admin.credential.cert(serviceAccountKey),

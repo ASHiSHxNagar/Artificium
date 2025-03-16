@@ -70,7 +70,6 @@ const API_BASE = import.meta.env.VITE_SERVER_DOMAIN;
         },
       });
 
-      console.log("Send response:", response.data);
 
       if (imageFile) {
         const imageUrl = await uploadImage(imageFile);
