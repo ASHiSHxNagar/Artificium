@@ -1,5 +1,10 @@
 import { useState } from "react";
-import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+} from "react-router-dom";
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
 import Workspace from "./pages/Workspace";
@@ -26,6 +31,7 @@ function App() {
     <Router>
       <div className="flex h-screen w-full bg-noble-black-700 text-gray-200">
         <Routes>
+          <Route path="/" element={<LoginPage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/workspace" element={<Workspace />}>
@@ -33,6 +39,10 @@ function App() {
             <Route path="joinworkspace" element={<JoinWorkspace />} />
           </Route>
           {/* Updated route with optional chatId */}
+          <Route
+            path="/artificium"
+            element={<ArtificiumPage onShareClick={handleOpenShare} />}
+          />
           <Route
             path="/artificium/:workspaceSlug/:chatId?"
             element={<ArtificiumPage onShareClick={handleOpenShare} />}
@@ -50,7 +60,7 @@ function App() {
             element={<LibraryPage onShareClick={handleOpenShare} />}
           />
           <Route path="*" element={<NotFoundPage />} />
-          <Route path="/" element={<Navigate to="/artificium/defaultSlug" replace />} />
+          <Route path="/" element={<Navigate to="/login" replace />} />
         </Routes>
         {showShareModal && <ShareModal onClose={handleCloseShare} />}
       </div>

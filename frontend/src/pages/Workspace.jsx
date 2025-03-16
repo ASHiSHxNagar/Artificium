@@ -164,16 +164,16 @@ const WorkspacePage = () => {
                   onSubmit={(e) => e.preventDefault()} // prevent page refresh
                 >
                   {/* Workspace URL Input */}
-                  <div className="flex items-center space-x-4">
-                    <div className="relative flex-1">
+                  <div className="grid grid-cols-1 gap-7 md:gap-0 md:grid-cols-[70%_30%]  items-center space-x-4">
+                    <div className="relative grid grid-cols-[80%_20%] bg-noble-black-600">
                       <input
                         type="text"
                         value={workspace}
                         onChange={handleChange}
                         placeholder="Your workspace URL"
-                        className="w-full bg-noble-black-600 text-white px-4 py-2 rounded-md pr-32 focus:outline-none placeholder:text-noble-black-400 font-medium"
+                        className="w-full bg-noble-black-600 text-white px-4 py-2 rounded-md  focus:outline-none placeholder:text-noble-black-400 font-medium text-[8px] sm:text-sm md:text-base"
                       />
-                      <span className="absolute right-3 top-1/2 transform -translate-y-1/2 text-noble-black-300 text-sm">
+                      <span className="absolute right-3 top-1/2 transform -translate-y-1/2 text-noble-black-300 text-[8px] sm:text-sm md:text-base">
                         .artificium.app
                       </span>
                     </div>
@@ -196,7 +196,7 @@ const WorkspacePage = () => {
 
                   <Button
                     variant="outline"
-                    className="w-full bg-noble-black-600 text-white hover:bg-noble-black-500 cursor-pointer border-none"
+                    className="w-full bg-noble-black-600 text-white hover:bg-noble-black-500 cursor-pointer border-none text-xs sm:text-sm md:text-base"
                     onClick={handleCreateWorkspace}
                   >
                     Create new Workspace
@@ -212,7 +212,7 @@ const WorkspacePage = () => {
             </div>
 
             {/* Right Column */}
-            <div className="flex flex-col justify-center w-full h-full overflow-hidden">
+            <div className="hidden md:flex flex-col justify-center w-full h-full overflow-hidden">
               <img
                 src={register_illustration_1}
                 alt=""

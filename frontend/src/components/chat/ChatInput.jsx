@@ -22,6 +22,8 @@ export default function ChatInput({
   const [imageFile, setImageFile] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const fileInputRef = useRef(null);
+const API_BASE = import.meta.env.VITE_SERVER_DOMAIN;
+
 
   const handleImageUpload = (e) => {
     const file = e.target.files?.[0];
@@ -57,10 +59,10 @@ export default function ChatInput({
       }
 
       const endpoint = isArtificiumTab
-        ? `${import.meta.env.VITE_SERVER_DOMAIN}/artificium/send`
+        ? `${API_BASE}/artificium/send`
         : replyingTo
-        ? `${import.meta.env.VITE_SERVER_DOMAIN}/messages/reply`
-        : `${import.meta.env.VITE_SERVER_DOMAIN}/messages/send`;
+        ? `${API_BASE}/messages/reply`
+        : `${API_BASE}/messages/send`;
 
       const response = await axios.post(endpoint, messageData, {
         headers: {
@@ -73,16 +75,10 @@ export default function ChatInput({
       if (imageFile) {
         const imageUrl = await uploadImage(imageFile);
         const findEndpoint = isArtificiumTab
-          ? `${
-              import.meta.env.VITE_SERVER_DOMAIN
-            }/artificium/findmessage/${tempId}`
+          ? `${API_BASE}/artificium/findmessage/${tempId}`
           : replyingTo
-          ? `${
-              import.meta.env.VITE_SERVER_DOMAIN
-            }/messages/findmessage/reply/${tempId}`
-          : `${
-              import.meta.env.VITE_SERVER_DOMAIN
-            }/messages/findmessage/send/${tempId}`;
+          ? `${API_BASE}/messages/findmessage/reply/${tempId}`
+          : `${API_BASE}/messages/findmessage/send/${tempId}`;
 
         const findResponse = await axios.get(findEndpoint);
         let messageId;
@@ -97,16 +93,10 @@ export default function ChatInput({
         }
 
         const updateEndpoint = isArtificiumTab
-          ? `${
-              import.meta.env.VITE_SERVER_DOMAIN
-            }/artificium/addimage/${messageId}`
+          ? `${API_BASE}/artificium/addimage/${messageId}`
           : replyingTo
-          ? `${
-              import.meta.env.VITE_SERVER_DOMAIN
-            }/messages/addimage/reply/${messageId}`
-          : `${
-              import.meta.env.VITE_SERVER_DOMAIN
-            }/messages/addimage/send/${messageId}`;
+          ? `${API_BASE}/messages/addimage/reply/${messageId}`
+          : `${API_BASE}/messages/addimage/send/${messageId}`;
 
         await axios.put(
           updateEndpoint,

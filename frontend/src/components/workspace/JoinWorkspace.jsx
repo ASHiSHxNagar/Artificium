@@ -29,13 +29,14 @@ const JoinWorkspace = () => {
     const wsId = sessionStorage.getItem("workspaceId");
     const wsSlug = sessionStorage.getItem("workspaceSlug");
     if (!wsId || !wsSlug) {
-      toast.error("No workspace found in session. Please pick a workspace again.");
+      toast.error(
+        "No workspace found in session. Please pick a workspace again."
+      );
       navigate("/workspace");
       return;
     }
     fetchWorkspace(wsId, wsSlug);
   }, []);
-
 
   const fetchWorkspace = async (wsId, wsSlug) => {
     try {
@@ -81,7 +82,7 @@ const JoinWorkspace = () => {
   return (
     <>
       <Toaster />
-      <div className="grid grid-cols-[60%_40%] bg-bg-noble-black-700 rounded-2xl w-full min-h-[600px] h-[100vh] overflow-hidden">
+      <div className="grid grid-cols-1 md:grid-cols-[60%_40%] bg-bg-noble-black-700 rounded-2xl w-full min-h-[600px] h-[100vh] overflow-hidden">
         {/* Left Column */}
         <div className="flex flex-col justify-center items-center max-w-full relative">
           {/* Logo */}
@@ -97,7 +98,7 @@ const JoinWorkspace = () => {
                 alt="avatar 7"
                 className="w-20 h-20 rounded-full"
               />
-              <h1 className="font-bold text-4xl text-white mt-4">
+              <h1 className="font-bold text-xl sm:text-2xl md:text-3xl lg:text-4xl text-white mt-4">
                 {workspaceName}
               </h1>
               <p className="text-base text-stem-green-500 font-light mb-4">
@@ -108,14 +109,14 @@ const JoinWorkspace = () => {
             {/* Workspace Input + Button */}
             <div className="flex items-center justify-center w-full space-x-4 mb-4">
               <h1
-                className="text-base text-noble-black-400 font-semibold cursor-pointer"
+                className="text-xs sm:text-sm md:text-base  text-noble-black-400 font-semibold cursor-pointer"
                 onClick={handleChangeWorkspace}
               >
                 Change workspace
               </h1>
               <Button
                 variant="primary"
-                className="text-black hover:opacity-90 rounded-md bg-[#B6F09C] cursor-pointer text-sm font-semibold"
+                className="text-black hover:opacity-90 rounded-md bg-[#B6F09C] cursor-pointer text-xs sm:text-sm md:text-base font-semibold"
                 onClick={handleJoinNow}
               >
                 Join Now
@@ -123,7 +124,7 @@ const JoinWorkspace = () => {
             </div>
 
             {/* Avatar Stack + Text */}
-            <div className="flex items-center">
+            <div className="grid grid-col-1 gap-4 sm:ga-0  sm:grid-cols-[50%_50%] items-center">
               {/* Overlapping Avatars */}
               <div className="flex -space-x-3">
                 <img
@@ -178,7 +179,7 @@ const JoinWorkspace = () => {
         </div>
 
         {/* Right Column (Illustration) */}
-        <div className="flex flex-col justify-center w-full h-full overflow-hidden">
+        <div className="hidden md:flex flex-col justify-center w-full h-full overflow-hidden">
           <img
             src={register_illustration_2}
             alt=""

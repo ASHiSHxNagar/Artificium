@@ -13,6 +13,8 @@ import RightPanelModal from "../components/shared/RightPanelModal";
 
 // Placeholder icon for toggle (replace with your local one)
 import users_icon from "../assets/icons/users_icon.svg";
+import { lookInSession } from "../components/shared/Session";
+import { useNavigate } from "react-router-dom";
 
 export default function ArtificiumPage({ onShareClick }) {
   const [chats, setChats] = useState([]);
@@ -23,12 +25,25 @@ export default function ArtificiumPage({ onShareClick }) {
   const [channelName, setChannelName] = useState("Spaceship Crew");
   const [channelCount, setChannelCount] = useState(4);
   const [isRightPanelOpen, setIsRightPanelOpen] = useState(false);
+  const navigate = useNavigate();
+
+const API_BASE = import.meta.env.VITE_SERVER_DOMAIN;
+
+
+  useEffect(() => {
+    // Assume token is stored in sessionStorage; adjust if stored elsewhere
+    const token = lookInSession("token");
+    if (!token) {
+      navigate("/login");
+      alert("Please login to access this page.");
+    }
+  }, [navigate]);
 
   useEffect(() => {
     const fetchChats = async () => {
       try {
         const response = await axios.get(
-          `${import.meta.env.VITE_SERVER_DOMAIN}/chat/getall`
+          `${API_BASE}/chat/getall`
         );
         setChats(response.data.chats);
         if (response.data.chats.length > 0 && !selectedChat) {
@@ -42,7 +57,7 @@ export default function ArtificiumPage({ onShareClick }) {
     const fetchWorkspace = async () => {
       try {
         const response = await axios.get(
-          `${import.meta.env.VITE_SERVER_DOMAIN}/workspace/getall`
+          `${API_BASE}/workspace/getall`
         );
         if (response.data.workspaces.length > 0) {
           setWorkspace(response.data.workspaces[0]);

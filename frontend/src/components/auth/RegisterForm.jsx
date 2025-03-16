@@ -18,6 +18,8 @@ const RegisterForm = () => {
   });
   // let success;
   const navigate = useNavigate();
+const API_BASE = import.meta.env.VITE_SERVER_DOMAIN;
+
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -35,13 +37,16 @@ const RegisterForm = () => {
     }
 
     try {
-      const response = await axios.post(`${import.meta.env.VITE_SERVER_DOMAIN}/users/register`, {
-        fullname: formData.fullname,
-        email: formData.email,
-        password: formData.password,
-    });
-    storeInSession("token", response.data.token);
-    
+      const response = await axios.post(
+        `${API_BASE}/users/register`,
+        {
+          fullname: formData.fullname,
+          email: formData.email,
+          password: formData.password,
+        }
+      );
+      storeInSession("token", response.data.token);
+
       toast.success("Registration successful!");
       window.location.href = "/workspace"; // Redirect to /workspace after successful registration
     } catch (error) {
@@ -50,13 +55,13 @@ const RegisterForm = () => {
   };
 
   return (
-    <div className="grid grid-cols-[60%_40%] bg-bg-noble-black-700 rounded-2xl w-full min-h-[600px] h-[100vh] overflow-hidden">
+    <div className="grid grid-cols-1 md:grid-cols-[60%_40%] bg-bg-noble-black-700 rounded-2xl w-full min-h-[600px] h-[100vh] overflow-hidden">
       <Toaster />
       {/* Left Column */}
       <div className="flex flex-col justify-center max-w-full relative">
         {/* Logo */}
         <div
-          className="absolute top-10 left-20 -translate-x-1/2 -translate-y-1/2 w-7 h-7 cursor-pointer"
+          className="absolutetop-10 left-10 lg:left-20 -translate-x-1/2 -translate-y-1/2 w-7 h-7 cursor-pointer"
           onClick={() => navigate("/")}
         >
           <img src={logo_gradient} alt="Logo" />
@@ -75,8 +80,8 @@ const RegisterForm = () => {
         </div>
 
         {/* Form Content */}
-        <div className="max-w-[500px] max-h-[600px] ml-40 -mt-10">
-          <h1 className="text-2xl font-light text-white mb-6">
+        <div className="max-w-[500px] max-h-[600px] mt-10  ml-10 lg:ml-40 mr-10 lg:mr-10">
+          <h1 className="text-base md:text-xl lg:text-2xl font-light text-white mb-6">
             Connect with your team and bring your creative ideas to life.
           </h1>
 
@@ -128,7 +133,7 @@ const RegisterForm = () => {
             </div>
 
             {/* Password + Repeat Password in one row */}
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {/* Password */}
               <div>
                 <label
@@ -186,10 +191,10 @@ const RegisterForm = () => {
                   onChange={handleChange}
                   className="w-4 h-4 accent-[#82DBF7] bg-transparent border border-[#82DBF7] rounded appearance-none checked:bg-[#000000] checked:before:content-['✔'] checked:before:text-[#82DBF7] checked:before:block checked:before:text-center checked:before:w-full checked:before:h-full checked:before:leading-[0.8rem]"
                 />
-                <span className="text-noble-black-200 text-sm ml-2 mr-1 font-light">
+                <span className="text-noble-black-200 text-xs md:text-sm ml-2 mr-1 font-light">
                   I agree with
                 </span>
-                <span className="font-light text-sm bg-gradient-to-r from-[#82DBF7] via-[#82DBF7] to-[#B6F09C] bg-clip-text text-transparent">
+                <span className="font-light text-xs md:-text-sm bg-gradient-to-r from-[#82DBF7] via-[#82DBF7] to-[#B6F09C] bg-clip-text text-transparent">
                   Terms and Conditions
                 </span>
               </label>
@@ -206,12 +211,12 @@ const RegisterForm = () => {
         </div>
 
         {/* Footer Links */}
-        <div className="absolute bottom-10 left-25 -translate-x-1/2 -translate-y-1/2">
+        <div className="absolute bottom-0 md:bottom-7 lg:bottom-5 left-25 -translate-x-1/2 -translate-y-1/2">
           <span className="text-[12px] font-semibold text-noble-black-300">
             Artificium.app © 2023
           </span>
         </div>
-        <div className="absolute bottom-10 right-0 -translate-x-1/2 -translate-y-1/2">
+        <div className="absolute bottom-0 md:bottom-7 lg:bottom-5 right-0 -translate-x-1/2 -translate-y-1/2">
           <span className="text-[12px] font-semibold text-noble-black-300">
             Privacy Policy
           </span>
@@ -219,7 +224,7 @@ const RegisterForm = () => {
       </div>
 
       {/* Right Column (Illustration) */}
-      <div className="flex flex-col justify-center w-full h-full overflow-hidden">
+      <div className="hidden md:flex flex-col justify-center w-full h-full overflow-hidden">
         <img
           src={register_illustration_1}
           alt=""

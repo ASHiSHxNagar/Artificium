@@ -13,7 +13,6 @@ import { authWithGoogle } from "../shared/Firebase";
 import { useNavigate } from "react-router-dom";
 import { storeInSession } from "../shared/Session";
 
-
 const LoginForm = () => {
   const [formData, setFormData] = useState({
     email: "",
@@ -23,6 +22,8 @@ const LoginForm = () => {
 
   let success;
   const navigate = useNavigate();
+const API_BASE = import.meta.env.VITE_SERVER_DOMAIN;
+
 
   const handleGoogleAuth = (e) => {
     e.preventDefault();
@@ -31,7 +32,7 @@ const LoginForm = () => {
       .then(async (user) => {
         try {
           const response = await axios.post(
-            `${import.meta.env.VITE_SERVER_DOMAIN}/users/google-auth`,
+            `${API_BASE}/users/google-auth`,
             {
               access_token: user.accessToken,
             }
@@ -87,27 +88,27 @@ const LoginForm = () => {
 
   return (
     <>
-      <div className="grid grid-cols-[50%_50%] bg-bg-noble-black-700 rounded-2xl w-full  min-h-[600px] h-[100vh]  overflow-hidden">
+      <div className="grid grid-cols-1 md:grid-cols-[50%_50%] bg-bg-noble-black-700 rounded-2xl w-full  min-h-[600px] h-[100vh]  overflow-hidden">
         <Toaster />
         {/* Left Column */}
-        <div className="flex flex-col justify-center max-w-[700px] ">
+        <div className="flex flex-col justify-center max-w-[700px] -mb-15 lg:-mb-0 ">
           <div
-            className="absolute top-10 left-20 -translate-x-1/2 -translate-y-1/2 w-7 h-7 cursor-pointer"
+            className="absolute top-10 left-10 lg:left-20 -translate-x-1/2 -translate-y-1/2 w-7 h-7 cursor-pointer"
             onClick={() => navigate("/")}
           >
             <img src={logo_gradient} alt="Logo" />
           </div>
-          <div className=" max-w-[400px] max-h-[600px] ml-40 ">
+          <div className=" max-w-[400px] max-h-[600px] ml-10 lg:ml-40 mr-10 lg:mr-10 ">
             <div className="flex items-center">
-              <h1 className="text-2xl font-light text-white">
+              <h1 className=" text-base md:text-xl lg:text-2xl font-light text-white">
                 {/* eslint-disable-next-line */}
                 Let's get
               </h1>
-              <h1 className="text-2xl font-bold ml-2 bg-gradient-to-r from-[#4D62E5] via-[#87DDEE] to-[#B6F09C] bg-clip-text text-transparent">
+              <h1 className="text-base md:text-xl lg:text-2xl font-bold ml-2 bg-gradient-to-r from-[#4D62E5] via-[#87DDEE] to-[#B6F09C] bg-clip-text text-transparent">
                 creative!
               </h1>
             </div>
-            <p className="text-sm text-noble-black-300 font-extralight mt-3 mb-12">
+            <p className="text-xs md:text-sm text-noble-black-300 font-extralight mt-3 mb-12">
               Log in to Artificium to start creating magic.
             </p>
 
@@ -155,15 +156,15 @@ const LoginForm = () => {
                     name="remember"
                     checked={formData.remember}
                     onChange={handleChange}
-                    className="w-4 h-4 accent-[#82DBF7] bg-transparent border border-[#82DBF7] rounded appearance-none checked:bg-[#000000] checked:before:content-['✔'] checked:before:text-[#82DBF7] checked:before:block checked:before:text-center checked:before:w-full checked:before:h-full checked:before:leading-[0.8rem]"
+                    className=" w-3 h-3 lg:w-4 lg:h-4 accent-[#82DBF7] bg-transparent border border-[#82DBF7] rounded appearance-none checked:bg-[#000000] checked:before:content-['✔'] checked:before:text-[#82DBF7] checked:before:block checked:before:text-center checked:before:w-full checked:before:h-full checked:before:leading-[0.8rem]"
                   />
-                  <span className="text-noble-black-200 text-sm">
+                  <span className="text-noble-black-200 text-xs lg:text-sm">
                     Remember me
                   </span>
                 </label>
                 <a
                   href="#"
-                  className=" font-bold text-sm bg-gradient-to-r from-[#4D62E5] via-[#87DDEE] to-[#B6F09C] bg-clip-text text-transparent"
+                  className=" font-bold text-xs lg:text-sm bg-gradient-to-r from-[#4D62E5] via-[#87DDEE] to-[#B6F09C] bg-clip-text text-transparent"
                 >
                   Forgot Password?
                 </a>
@@ -189,7 +190,7 @@ const LoginForm = () => {
                 </div>
               </div>
 
-              <div className="mt-6 grid grid-cols-2 gap-4">
+              <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-4">
                 <Button
                   variant="outline"
                   className="w-full bg-noble-black-600  text-noble-black-400 text-xs outline-none border-0 cursor-pointer"
@@ -227,7 +228,7 @@ const LoginForm = () => {
             </div>
           </div>
         </div>
-        <div className="flex flex-col justify-center w-full  h-full overflow-hidden ">
+        <div className="hidden md:flex flex-col justify-center w-full  h-full overflow-hidden ">
           <img
             src={login_illustrator_1}
             alt=""

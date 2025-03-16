@@ -66,7 +66,7 @@ export default function Content({ chatId, onMessageSent }) {
           Kickstart your innovation process with our comprehensive selection of
           predefined prompts.
         </p>
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2 2xl:grid-cols-4 gap-8">
           <div className="flex flex-col items-center">
             <div
               className="
@@ -91,7 +91,7 @@ export default function Content({ chatId, onMessageSent }) {
                   cursor-pointer
                 "
               >
-                <span className="text-[14px] text-noble-black-200">
+                <span className="text-[14px]  btext-noble-black-200">
                   UI wireframe
                 </span>
                 <img src={arrowIcon} alt="Arrow" className="w-4 h-4" />
