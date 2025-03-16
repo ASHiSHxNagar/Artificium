@@ -16,7 +16,7 @@ import User from '../Schema/User.js';
 
 const userRouter = express.Router();
 
-// let serviceAccountKey;
+let serviceAccountKey;
 if (process.env.FIREBASE_SERVICE_ACCOUNT) {
     // Use the environment variable if available (for production)
     serviceAccountKey = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT);
