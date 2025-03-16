@@ -24,7 +24,7 @@ export default function LibraryDetailModal({ onClose }) {
 
   return (
     <>
-      <div className="absolute top-0 right-0  z-50 bg-noble-black-700 o ">
+      <div className="hidden md:block absolute top-0 right-0 z-50 bg-noble-black-700">
         {/* Modal container */}
         <div
           className=" w-[620px] h-screen text-white overflow-hidden  bg-[linear-gradient(117.58deg,rgba(215,237,237,0.16)_-47.79%,rgba(204,235,235,0)_100%)]

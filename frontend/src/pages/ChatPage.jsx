@@ -205,7 +205,7 @@ export default function ChatPage({ onShareClick }) {
       </button>
 
       {/* Main Content */}
-      <div className="flex-1 flex flex-col mt-16 md:mt-0 lg:pl-15">
+      <div className="flex-1 flex flex-col mt-16 xl:mt-0 md:pl-15 lg:pl-15">
         <TopNav
           activeTab="chat"
           onShareClick={onShareClick}

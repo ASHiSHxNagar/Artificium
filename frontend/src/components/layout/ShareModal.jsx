@@ -151,7 +151,7 @@ export default function ShareModal({ onClose }) {
   };
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center z-50 backdrop-blur-sm">
+    <div className="hidden md:flex fixed inset-0 ] items-center justify-center z-50 backdrop-blur-sm">
       {/* Modal Container */}
       <div
         className="

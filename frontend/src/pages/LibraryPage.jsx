@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Sidebar from "../components/layout/Sidebar";
 import TopNav from "../components/layout/TopNav";
 import LibraryDetailModal from "../components/layout/LibraryDetailModel";
@@ -22,16 +22,53 @@ import Emily_Liu from "../assets/avatar/Emily_Liu.png";
 import Lily_Patel from "../assets/avatar/Lily_Patel.png";
 import Lucas_Ortiz from "../assets/avatar/Lucas_Ortiz.png";
 
+// Custom hook for media queries
+const useMediaQuery = (query) => {
+  const [matches, setMatches] = useState(false);
+
+  useEffect(() => {
+    const media = window.matchMedia(query);
+    if (media.matches !== matches) {
+      setMatches(media.matches);
+    }
+    const listener = () => setMatches(media.matches);
+    media.addListener(listener);
+    return () => media.removeListener(listener);
+  }, [matches, query]);
+
+  return matches;
+};
+
 export default function LibraryPage() {
   const [showDetailModal, setShowDetailModal] = useState(false);
   const [showShareModal, setShowShareModal] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
+  // Check if screen is md (768px) or above
+  const isMdOrAbove = useMediaQuery("(min-width: 768px)");
+
   // Modal handlers
-  const openDetailModal = () => setShowDetailModal(true);
+  const openDetailModal = () => {
+    if (isMdOrAbove) {
+      setShowDetailModal(true);
+    }
+  };
   const closeDetailModal = () => setShowDetailModal(false);
-  const openShareModal = () => setShowShareModal(true);
+
+  const openShareModal = () => {
+    if (isMdOrAbove) {
+      setShowShareModal(true);
+    }
+  };
   const closeShareModal = () => setShowShareModal(false);
+
+  // Close modals if screen size drops below md
+  useEffect(() => {
+    if (!isMdOrAbove) {
+      setShowDetailModal(false);
+      setShowShareModal(false);
+    }
+  }, [isMdOrAbove]);
 
   return (
     <div className="flex h-screen w-full bg-noble-black-700 text-gray-200">
@@ -73,12 +110,12 @@ export default function LibraryPage() {
       </button>
 
       {/* Main Content */}
-      <div className="flex-1 flex flex-col mt-12 md:mt-0 lg:pl-15">
+      <div className="flex-1 flex flex-col mt-12 md:mt-0 md:pl-15 lg:pl-15">
         <TopNav activeTab="library" onShareClick={openShareModal} />
 
         {/* Desktop Layout */}
         <div
-          className={`hidden md:grid grid-cols-[31%_31%_31%_7%] gap-4 px-10 py-5 max-h-screen overflow-y-scroll transition-all ${
+          className={`hidden xl:grid grid-cols-[31%_31%_31%_7%] gap-4 px-10 py-5 max-h-screen overflow-y-scroll transition-all ${
             showDetailModal || showShareModal ? "blur-sm" : ""
           }`}
         >
@@ -110,17 +147,17 @@ export default function LibraryPage() {
                 <img
                   src={image_1}
                   alt="Captain Drake 1"
-                  className="w-18 h-18 object-cover rounded-md"
+                  className="w-[72px] h-[72px] object-cover rounded-md"
                 />
                 <img
                   src={image_2}
                   alt="Captain Drake 2"
-                  className="w-18 h-18 object-cover rounded-md"
+                  className="w-[72px] h-[72px] object-cover rounded-md"
                 />
                 <img
                   src={image_3}
                   alt="Captain Drake 3"
-                  className="w-18 h-18 object-cover rounded-md"
+                  className="w-[72px] h-[72px] object-cover rounded-md"
                 />
               </div>
               <hr className="border-gray-700 mb-5 mt-5" />
@@ -177,17 +214,17 @@ export default function LibraryPage() {
                 <img
                   src={image_4}
                   alt="Cosmic Voyager 1"
-                  className="w-18 h-18 object-cover rounded-md"
+                  className="w-[72px] h-[72px] object-cover rounded-md"
                 />
                 <img
                   src={image_5}
                   alt="Cosmic Voyager 2"
-                  className="w-18 h-18 object-cover rounded-md"
+                  className="w-[72px] h-[72px] object-cover rounded-md"
                 />
                 <img
                   src={image_6}
                   alt="Cosmic Voyager 3"
-                  className="w-18 h-18 object-cover rounded-md"
+                  className="w-[72px] h-[72px] object-cover rounded-md"
                 />
               </div>
               <hr className="border-gray-700 mb-5 mt-5" />
@@ -464,7 +501,7 @@ export default function LibraryPage() {
 
         {/* Mobile Layout */}
         <div
-          className={`md:hidden flex flex-col px-4 py-5 max-h-screen overflow-y-scroll transition-all ${
+          className={`xl:hidden flex flex-col px-4 py-5 max-h-screen overflow-y-scroll transition-all ${
             showDetailModal || showShareModal ? "blur-sm" : ""
           }`}
         >
@@ -495,17 +532,17 @@ export default function LibraryPage() {
                 <img
                   src={image_1}
                   alt="Captain Drake 1"
-                  className="w-18 h-18 object-cover rounded-md"
+                  className="w-[72px] h-[72px] object-cover rounded-md"
                 />
                 <img
                   src={image_2}
                   alt="Captain Drake 2"
-                  className="w-18 h-18 object-cover rounded-md"
+                  className="w-[72px] h-[72px] object-cover rounded-md"
                 />
                 <img
                   src={image_3}
                   alt="Captain Drake 3"
-                  className="w-18 h-18 object-cover rounded-md"
+                  className="w-[72px] h-[72px] object-cover rounded-md"
                 />
               </div>
               <hr className="border-gray-700 mb-5 mt-5" />
@@ -561,17 +598,17 @@ export default function LibraryPage() {
                 <img
                   src={image_4}
                   alt="Cosmic Voyager 1"
-                  className="w-18 h-18 object-cover rounded-md"
+                  className="w-[72px] h-[72px] object-cover rounded-md"
                 />
                 <img
                   src={image_5}
                   alt="Cosmic Voyager 2"
-                  className="w-18 h-18 object-cover rounded-md"
+                  className="w-[72px] h-[72px] object-cover rounded-md"
                 />
                 <img
                   src={image_6}
                   alt="Cosmic Voyager 3"
-                  className="w-18 h-18 object-cover rounded-md"
+                  className="w-[72px] h-[72px] object-cover rounded-md"
                 />
               </div>
               <hr className="border-gray-700 mb-5 mt-5" />
