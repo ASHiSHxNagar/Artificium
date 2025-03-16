@@ -5,40 +5,33 @@ import bcrypt from 'bcrypt';
 import { nanoid } from 'nanoid';
 import jwt from 'jsonwebtoken';
 import admin from 'firebase-admin';
-import fs from 'fs';
-import path from 'path';
+
 
 import { getAuth } from 'firebase-admin/auth';
 
 //models
 import User from '../Schema/User.js';
 
+let serviceAccountKey = {
+    "type": process.env.TYPE,
+    "project_id": process.env.PROJECT_ID,
+    "private_key_id": process.env.PRIVATE_KEY_ID,
+    "private_key": process.env.PRIVATE_KEY,
+    "client_email": process.env.CLIENT_EMAIL,
+    "client_id": process.env.CLIENT_ID,
+    "auth_uri": process.env.AUTH_URI,
+    "token_uri": process.env.TOKEN_URI,
+    "auth_provider_x509_cert_url": process.env.AUTH_PROVIDER_X509_CERT_URL,
+    "client_x509_cert_url": process.env.CLIENT_X509_CERT_URL,
+    "universe_domain": process.env.UNIVERSE_DOMAIN,
+
+
+}
+
 
 const userRouter = express.Router();
 // Function to load service account credentials
-const getServiceAccountKey = () => {
-    let key;
-    if (process.env.FIREBASE_SERVICE_ACCOUNT) {
-      try {
-        key = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT);
-      } catch (err) {
-        console.error('Error parsing FIREBASE_SERVICE_ACCOUNT environment variable:', err);
-        process.exit(1);
-      }
-    } else {
-      // Local development: load the JSON file from the backend directory
-      const filePath = path.join(process.cwd(), 'artificium-fd812-firebase-adminsdk-fbsvc-1297311006.json');
-      try {
-        key = JSON.parse(fs.readFileSync(filePath, 'utf-8'));
-      } catch (err) {
-        console.error('Error reading the local service account file:', err);
-        process.exit(1);
-      }
-    }
-    return key;
-  };
-  
-  const serviceAccountKey = getServiceAccountKey();
+
 admin.initializeApp({
     credential: admin.credential.cert(serviceAccountKey),
 });
