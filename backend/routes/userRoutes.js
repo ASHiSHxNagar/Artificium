@@ -16,8 +16,18 @@ import User from '../Schema/User.js';
 
 const userRouter = express.Router();
 
-const serviceAccountKey = JSON.parse(fs.readFileSync(new URL('../artificium-fd812-firebase-adminsdk-fbsvc-1297311006.json', import.meta.url)));
+let serviceAccountKey;
+if (process.env.FIREBASE_SERVICE_ACCOUNT) {
+    // Use the environment variable if available (for production)
+    serviceAccountKey = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT);
+} else {
+    // Fallback to local file for development
+    serviceAccountKey = JSON.parse(
+        fs.readFileSync(path.join(process.cwd(), 'artificium-fd812-firebase-adminsdk-fbsvc-1297311006.json'), 'utf-8')
+    );
+}
 // Initialize Firebase Admin
+
 admin.initializeApp({
     credential: admin.credential.cert(serviceAccountKey),
 });
