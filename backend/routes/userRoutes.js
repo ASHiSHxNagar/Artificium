@@ -15,19 +15,30 @@ import User from '../Schema/User.js';
 
 
 const userRouter = express.Router();
-
-let serviceAccountKey;
-if (process.env.FIREBASE_SERVICE_ACCOUNT) {
-    // Use the environment variable if available (for production)
-    serviceAccountKey = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT);
-}
-//  else {
-//     serviceAccountKey = JSON.parse(
-//         fs.readFileSync(path.join(process.cwd(), 'artificium-fd812-firebase-adminsdk-fbsvc-1297311006.json'), 'utf-8')
-//     );
-// }
-// Initialize Firebase Admin
-
+// Function to load service account credentials
+const getServiceAccountKey = () => {
+    let key;
+    if (process.env.FIREBASE_SERVICE_ACCOUNT) {
+      try {
+        key = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT);
+      } catch (err) {
+        console.error('Error parsing FIREBASE_SERVICE_ACCOUNT environment variable:', err);
+        process.exit(1);
+      }
+    } else {
+      // Local development: load the JSON file from the backend directory
+      const filePath = path.join(process.cwd(), 'artificium-fd812-firebase-adminsdk-fbsvc-1297311006.json');
+      try {
+        key = JSON.parse(fs.readFileSync(filePath, 'utf-8'));
+      } catch (err) {
+        console.error('Error reading the local service account file:', err);
+        process.exit(1);
+      }
+    }
+    return key;
+  };
+  
+  const serviceAccountKey = getServiceAccountKey();
 admin.initializeApp({
     credential: admin.credential.cert(serviceAccountKey),
 });
