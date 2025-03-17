@@ -31,7 +31,7 @@ Explore the frontend to experience the login, registration, and workspace featur
 Backend URL
 The backend is hosted on Render. You can activate it if inactive by sending a request to:
 
-[\[your-render-backend-url\]](https://artificium-clone.onrender.com)
+[(https://artificium-clone.onrender.com)]
 
 (Note: The free tier on Render may spin down after 15 minutes of inactivity. A simple GET request to the root URL or any endpoint will wake it up. Check the Render dashboard logs for status.)
 
