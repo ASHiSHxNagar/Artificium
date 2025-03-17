@@ -54,21 +54,21 @@
     Installation
     To run this project locally, follow these steps:
 
-    ```git clone https://github.com/ASHiSHxNagar/Artificium.git```
-    ```cd artificium-clone```
 
+    Copy
+    git clone https://github.com/ASHiSHxNagar/Artificium.git
+    cd artificium-clone
     Backend Setup
     Navigate to the backend folder:
 
-    ```cd backend```
-
+    cd backend
     Install dependencies:
-    ```npm install```
 
+    npm install
     Create a .env file in the backend folder and add the following:
     text
 
-    ```PORT=3000
+    PORT=3000
 
     MONGO_URI=your_MONGO_URI
     JWT_SECRET = your_JWT_SECRET
@@ -85,27 +85,26 @@
     TOKEN_URI: ""
     AUTH_PROVIDER_X509_CERT_URL: ""
     CLIENT_X509_CERT_URL: ""
-    UNIVERSE_DOMAIN: "" ```
+    UNIVERSE_DOMAIN: ""
 
     #This supresesses the aws JS v2 warning
 
     # AWS_SDK_JS_SUPPRESS_MAINTENANCE_NODE_MESSAGE='1'
 
     (Get Firebase credentials from Firebase Console > Create New Project > Project Settings > Service Accounts.)
-
     Start the backend:
-    ```npm start```
+    bash
 
+    npm start
     Frontend Setup
     Navigate to the fe folder:
-    ```cd ../frontend```
 
+    cd ../frontend
     Install dependencies:
-    ```npm install```
 
+    npm install
     Create a .env file in the frontend  folder and add:
 
-````
     # chnage its url value with your backend url
 
     VITE_SERVER_DOMAIN= http://localhost:3000
@@ -118,10 +117,10 @@
     VITE_FIREBASE_STORAGE_BUCKET=""
     VITE_FIREBASE_MESSAGING_SENDER_ID= ""
     VITE_FIREBASE_APP_ID=""
-    VITE_FIREBASE_MEASUREMENT_ID="G-"  ```
+    VITE_FIREBASE_MEASUREMENT_ID="G-"
 
     Start the frontend:
-    ```npm start```
+    npm start
 
     Run the App
     Ensure both backend and frontend are running. Open http://localhost:3000 in your browser.
@@ -177,4 +176,3 @@
     Inspired by the Artificium platform.
     Thanks to the open-source community for tools like React, Tailwind CSS, and Firebase.
     Big thanks to Grok 3 by xAI for helping out with some dev and deployment tips along the way!🫡
-````
