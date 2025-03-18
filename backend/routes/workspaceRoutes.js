@@ -34,26 +34,29 @@ router.get("/checkByName/:name", async (req, res) => {
 });
 
 // GET /api/workspaces/name/:name - Fetch workspace by name for joining
-router.get("/name/:name", async (req, res) => {
-    try {
-      const { name } = req.params;
-      const workspace = await Workspace.findOne({ name });
-      if (!workspace) {
-        return res
-          .status(404)
-          .json({ success: false, message: "No workspace with that name" });
-      }
-      return res.json({
-        success: true,
-        workspaceId: workspace._id,
-        slug: workspace.slug,
-      });
-    } catch (err) {
-      console.error("Error fetching workspace by name:", err);
-      return res.status(500).json({ success: false, error: err.message });
-    }
-  });
 
+router.get("/name/:name", requireAuth, async (req, res) => {
+  try {
+    const { name } = req.params;
+    console.log(`Checking workspace with name: ${name}`); // Debug log
+    const workspace = await Workspace.findOne({ name });
+    if (!workspace) {
+      return res
+        .status(404)
+        .json({ success: false, message: "No workspace with that name" });
+    }
+    return res.json({
+      success: true,
+      workspaceId: workspace._id,
+      slug: workspace.slug,
+    });
+  } catch (err) {
+    console.error("Error fetching workspace by name:", err); // Enhanced logging
+    return res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+// ... (rest of the routes remain the same)
 /* 
   1) CREATE WORKSPACE
      POST /api/workspaces

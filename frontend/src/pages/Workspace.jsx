@@ -53,39 +53,57 @@ const WorkspacePage = () => {
   };
 
   // 1) Join Workspace
-  // 1) Join Workspace
-  const handleJoinWorkspace = async () => {
-    if (!validateWorkspaceName(workspace)) {
+// frontend/src/pages/WorkspacePage.jsx
+const handleJoinWorkspace = async () => {
+  if (!validateWorkspaceName(workspace)) {
+    return;
+  }
+
+  try {
+    // Get the token from sessionStorage
+    const token = sessionStorage.getItem("token");
+    if (!token) {
+      toast.error("Please log in to join a workspace.");
+      navigate("/login");
       return;
     }
 
-    try {
-      // First check if the name is valid (exists for joining)
-      const { data: checkData } = await axios.get(
-        `${API_BASE}/workspaces/name/${workspace}`
-      );
+    // Check if the name is valid (exists for joining)
+    const { data: checkData } = await axios.get(`${API_BASE}/workspaces/name/${workspace}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    });
 
-      if (checkData.success) {
-        setWorkspaceId(checkData.workspaceId);
-        setWorkspaceSlug(checkData.slug);
+    if (checkData.success) {
+      setWorkspaceId(checkData.workspaceId);
+      setWorkspaceSlug(checkData.slug);
 
-        storeInSession("workspaceId", checkData.workspaceId);
-        storeInSession("workspaceSlug", checkData.slug);
+      storeInSession("workspaceId", checkData.workspaceId);
+      storeInSession("workspaceSlug", checkData.slug);
 
-        navigate("/workspace/requestworkspace");
-      }
-    } catch (err) {
-      console.error(err);
-      if (err.response?.status === 404) {
-        toast.error(
-          err.response.data.message ||
-            "No workspace with that name. Please check spelling."
-        );
-      } else if (err.response?.status === 500) {
-        toast.error("Failed to check workspace. Please try again.");
-      }
+      navigate("/workspace/requestworkspace");
+    } else {
+      toast.error(checkData.message || "Failed to join workspace.");
     }
-  };
+  } catch (err) {
+    console.error("Join workspace error:", err);
+    if (err.response?.status === 404) {
+      toast.error(
+        err.response.data.message || "No workspace with that name. Please check spelling."
+      );
+    } else if (err.response?.status === 401) {
+      toast.error("Unauthorized. Please log in again.");
+    } else if (err.response?.status === 500) {
+      toast.error("Failed to check workspace. Please try again.");
+    } else {
+      toast.error("An unexpected error occurred. Please try again.");
+    }
+  }
+};
+
+// ... (rest of the file remains the same)
 
   // 2) Create New Workspace
 // frontend/src/pages/WorkspacePage.jsx
