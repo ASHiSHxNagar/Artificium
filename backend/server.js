@@ -14,13 +14,25 @@ import messageRoutes from "./routes/messageRoutes.js"
 
 const app = express();
 const PORT = process.env.PORT || 3000;
-
-// Allow your frontend domain
-app.use(cors({
+// CORS Configuration
+let corsOptions;
+if (process.env.NODE_ENV === "production") {
+  // Uncomment for production (Netlify deployed app)
+  corsOptions = {
     origin: "https://artificium-clone.netlify.app",
-    methods: "GET,POST,PUT,DELETE",
+    methods: "GET,POST,PUT,DELETE,OPTIONS", // Added OPTIONS for preflight
     credentials: true,
-}));
+  };
+} else {
+  // Uncomment for development (local environment)
+  corsOptions = {
+    origin: ["http://localhost:5173", "http://localhost:3000"], // Allow Vite port and backend port
+    methods: "GET,POST,PUT,DELETE,OPTIONS", // Added OPTIONS for preflight
+    credentials: true,
+  };
+}
+
+app.use(cors(corsOptions));
 
 app.use(express.json());
 
@@ -34,7 +46,7 @@ app.use("/messages", messageRoutes);
 
 app.get('/', (req, res) => {
     res.send('Server is alive !');
-  });
+});
 
 // upload image url route
 app.get('/get-upload-url', async (req, res) => {
@@ -46,18 +58,18 @@ app.get('/get-upload-url', async (req, res) => {
 });
 // Set COOP header
 app.use((req, res, next) => {
-    res.setHeader('Cross-Origin-Opener-Policy', 'same-origin');
+    res.setHeader("Cross-Origin-Opener-Policy", "same-origin-allow-popups"); // Allows popups to close
     next();
-});
+  });
 
 
 // MongoDB connection
-mongoose.connect(process.env.MONGO_URI, {
-    useNewUrlParser: true,
-    autoIndex: true,
-});
+// MongoDB connection
+mongoose.connect(process.env.MONGO_URI)
+    .then(() => console.log("MongoDB connected successfully"))
+    .catch((err) => console.error("MongoDB connection error:", err));
 
-/// setting up s3 bucket
+/// setting up s3 bucket    
 const s3 = new aws.S3({
     region: 'eu-north-1',
     accessKeyId: process.env.AWS_ACCESS_KEY,

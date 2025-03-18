@@ -53,75 +53,87 @@ const WorkspacePage = () => {
   };
 
   // 1) Join Workspace
+  // 1) Join Workspace
   const handleJoinWorkspace = async () => {
     if (!validateWorkspaceName(workspace)) {
       return;
     }
 
     try {
-      // Check if workspace with that exact name exists in DB
-      const { data } = await axios.get(
-        `${API_BASE}/workspaces/checkByName/${workspace}`
+      // First check if the name is valid (exists for joining)
+      const { data: checkData } = await axios.get(
+        `${API_BASE}/workspaces/name/${workspace}`
       );
 
-      if (data.success) {
-        setWorkspaceId(data.workspaceId);
-        setWorkspaceSlug(data.slug);
+      if (checkData.success) {
+        setWorkspaceId(checkData.workspaceId);
+        setWorkspaceSlug(checkData.slug);
 
-        storeInSession("workspaceId", data.workspaceId);
-        storeInSession("workspaceSlug", data.slug);
+        storeInSession("workspaceId", checkData.workspaceId);
+        storeInSession("workspaceSlug", checkData.slug);
 
         navigate("/workspace/requestworkspace");
-      } else {
-        toast.error(
-          "No workspace with that name. Please create one or check spelling."
-        );
       }
     } catch (err) {
       console.error(err);
-      toast.error("Failed to check workspace. Please try again.");
+      if (err.response?.status === 404) {
+        toast.error(
+          err.response.data.message ||
+            "No workspace with that name. Please check spelling."
+        );
+      } else if (err.response?.status === 500) {
+        toast.error("Failed to check workspace. Please try again.");
+      }
     }
   };
 
   // 2) Create New Workspace
-  const handleCreateWorkspace = async () => {
-    if (!validateWorkspaceName(workspace)) {
-      return;
-    }
+// frontend/src/pages/WorkspacePage.jsx
+const handleCreateWorkspace = async () => {
+  if (!validateWorkspaceName(workspace)) {
+    return;
+  }
 
-    try {
-      // Create new workspace in DB
-      const token = sessionStorage.getItem("token");
+  try {
+    // Create new workspace in DB
+    const token = sessionStorage.getItem("token");
 
-      const { data } = await axios.post(
-        `${API_BASE}/workspaces`,
-        { workspaceName: workspace }, // body
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-          },
-        }
-      );
-
-      if (data.success) {
-        setWorkspaceId(data.workspace._id);
-        setWorkspaceSlug(data.workspace.slug);
-
-        storeInSession("workspaceId", data.workspace._id);
-        storeInSession("workspaceSlug", data.workspace.slug);
-
-        toast.success("Workspace created successfully!");
-
-        navigate(`/workspace/joinworkspace`);
-      } else {
-        toast.error("Could not create workspace. Try again.");
+    const { data } = await axios.post(
+      `${API_BASE}/workspaces`,
+      { workspaceName: workspace },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
       }
-    } catch (err) {
-      console.error(err);
-      toast.error("Error creating workspace. Maybe name is taken?");
+    );
+
+    if (data.success) {
+      setWorkspaceId(data.workspace._id);
+      setWorkspaceSlug(data.workspace.slug);
+
+      storeInSession("workspaceId", data.workspace._id);
+      storeInSession("workspaceSlug", data.workspace.slug);
+
+      toast.success("Workspace created successfully!");
+
+      navigate(`/workspace/joinworkspace`);
+    } else {
+      toast.error(data.message || "Could not create workspace. Try again.");
     }
-  };
+  } catch (err) {
+    console.error(err);
+    if (
+      err.response?.data?.message ===
+      "A workspace with this name already exists. Try joining it."
+    ) {
+      toast.error("A workspace with this name already exists. Try joining it.");
+    } else {
+      toast.error("Error creating workspace. Please try again.");
+    }
+  }
+};
 
   return (
     <>
@@ -164,14 +176,14 @@ const WorkspacePage = () => {
                   onSubmit={(e) => e.preventDefault()} // prevent page refresh
                 >
                   {/* Workspace URL Input */}
-                  <div className="grid grid-cols-1 gap-7 md:gap-0 md:grid-cols-[70%_30%]  items-center space-x-4">
+                  <div className="grid grid-cols-1 gap-7 md:gap-0 md:grid-cols-[70%_30%] items-center space-x-4">
                     <div className="relative grid grid-cols-[80%_20%] bg-noble-black-600">
                       <input
                         type="text"
                         value={workspace}
                         onChange={handleChange}
                         placeholder="Your workspace URL"
-                        className="w-full bg-noble-black-600 text-white px-4 py-2 rounded-md  focus:outline-none placeholder:text-noble-black-400 font-medium text-[8px] sm:text-sm md:text-base"
+                        className="w-full bg-noble-black-600 text-white px-4 py-2 rounded-md focus:outline-none placeholder:text-noble-black-400 font-medium text-[8px] sm:text-sm md:text-base"
                       />
                       <span className="absolute right-3 top-1/2 transform -translate-y-1/2 text-noble-black-300 text-[8px] sm:text-sm md:text-base">
                         .artificium.app
