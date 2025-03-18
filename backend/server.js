@@ -14,25 +14,15 @@ import messageRoutes from "./routes/messageRoutes.js"
 
 const app = express();
 const PORT = process.env.PORT || 3000;
-// CORS Configuration
-let corsOptions;
-if (process.env.NODE_ENV === "production") {
-  // Uncomment for production (Netlify deployed app)
-  corsOptions = {
-    origin: "https://artificium-clone.netlify.app",
-    methods: "GET,POST,PUT,DELETE,OPTIONS", // Added OPTIONS for preflight
-    credentials: true,
-  };
-} else {
-  // Uncomment for development (local environment)
-  corsOptions = {
-    origin: ["http://localhost:5173", "http://localhost:3000"], // Allow Vite port and backend port
-    methods: "GET,POST,PUT,DELETE,OPTIONS", // Added OPTIONS for preflight
-    credentials: true,
-  };
-}
 
-app.use(cors(corsOptions));
+// CORS Configuration - Allow all origins
+app.use(cors({
+  origin: "*", // Allow all origins
+  methods: "GET,POST,PUT,DELETE,OPTIONS", // Allow all common methods
+  allowedHeaders: "Content-Type,Authorization", // Allow common headers
+  credentials: true, // Still allow credentials (e.g., for auth tokens)
+}));
+
 
 app.use(express.json());
 

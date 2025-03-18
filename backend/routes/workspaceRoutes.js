@@ -64,51 +64,51 @@ router.get("/name/:name", requireAuth, async (req, res) => {
 */
 // backend/routes/workspaceRoutes.js
 router.post("/", requireAuth, async (req, res) => {
-    try {
-      const { workspaceName } = req.body;
-      if (!workspaceName) {
-        return res
-          .status(400)
-          .json({ success: false, message: "Workspace name is required" });
-      }
-  
-      // Check if a workspace with this name already exists
-      const existingWorkspace = await Workspace.findOne({ name: workspaceName });
-      if (existingWorkspace) {
-        return res
-          .status(400)
-          .json({ success: false, message: "A workspace with this name already exists. Try joining it." });
-      }
-  
-      // Generate slug
-      let slug = slugify(workspaceName, { lower: true, strict: true });
-  
-      // Check if slug is taken
-      const existingSlug = await Workspace.findOne({ slug });
-      if (existingSlug) {
-        slug += "-" + nanoid(5);
-      }
-  
-      // Create the workspace
-      const newWorkspace = await Workspace.create({
-        name: workspaceName,
-        slug,
-        createdBy: req.user._id,
-        members: [req.user._id],
-      });
-  
-      return res.json({ success: true, workspace: newWorkspace });
-    } catch (err) {
-      console.error("Error creating workspace:", err);
-      if (err.code === 11000) {
-        // This should no longer trigger due to the pre-check, but kept as a fallback
-        return res
-          .status(400)
-          .json({ success: false, message: "A workspace with this name already exists. Try joining it." });
-      }
-      return res.status(500).json({ success: false, error: err.message });
+  try {
+    const { workspaceName } = req.body;
+    if (!workspaceName) {
+      return res
+        .status(400)
+        .json({ success: false, message: "Workspace name is required" });
     }
-  });
+
+    // Check if a workspace with this name already exists
+    const existingWorkspace = await Workspace.findOne({ name: workspaceName });
+    if (existingWorkspace) {
+      return res
+        .status(400)
+        .json({ success: false, message: "A workspace with this name already exists. Try joining it." });
+    }
+
+    // Generate slug
+    let slug = slugify(workspaceName, { lower: true, strict: true });
+
+    // Check if slug is taken
+    const existingSlug = await Workspace.findOne({ slug });
+    if (existingSlug) {
+      slug += "-" + nanoid(5);
+    }
+
+    // Create the workspace
+    const newWorkspace = await Workspace.create({
+      name: workspaceName,
+      slug,
+      createdBy: req.user._id,
+      members: [req.user._id],
+    });
+
+    return res.json({ success: true, workspace: newWorkspace });
+  } catch (err) {
+    console.error("Error creating workspace:", err);
+    if (err.code === 11000) {
+      // This should no longer trigger due to the pre-check, but kept as a fallback
+      return res
+        .status(400)
+        .json({ success: false, message: "A workspace with this name already exists. Try joining it." });
+    }
+    return res.status(500).json({ success: false, error: err.message });
+  }
+});
 /*
   2) CREATE CHAT (CHANNEL) FOR A WORKSPACE
      POST /api/workspaces/:workspaceId/chats
