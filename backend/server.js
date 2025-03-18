@@ -32,6 +32,10 @@ app.use("/artificiumconversation", chatRoutes);
 app.use("/messages", messageRoutes);
 
 
+app.get('/', (req, res) => {
+    res.send('Server is alive !');
+  });
+
 // upload image url route
 app.get('/get-upload-url', async (req, res) => {
     generateUploadURL().then((url) => {
