@@ -211,9 +211,3 @@ Email: [ashishnagar043@gmail.com](mailto:ashishnagar043@gmail.com)
 GitHub: [https://github.com/ASHiSHxNagar/Artificium](https://github.com/ASHiSHxNagar/Artificium)
 
 Feel free to reach out with questions or feedback!
-
-## Acknowledgments
-
-- Inspired by the Artificium platform.
-- Thanks to the open-source community for tools like React, Tailwind CSS, and Firebase.
-- Big thanks to Grok 3 by xAI for helping out with some dev and deployment tips along the way! 🫡
