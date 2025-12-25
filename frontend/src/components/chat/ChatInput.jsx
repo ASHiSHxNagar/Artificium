@@ -4,6 +4,7 @@ import { toast, Toaster } from "react-hot-toast";
 import PropTypes from "prop-types";
 import { uploadImage } from "../shared/Aws";
 import { nanoid } from "nanoid";
+import { useNavigate } from "react-router-dom";
 
 // Icons
 import attachIcon from "../../assets/icons/attatchment.svg";
@@ -22,6 +23,7 @@ export default function ChatInput({
   const [imageFile, setImageFile] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const fileInputRef = useRef(null);
+  const navigate = useNavigate();
 const API_BASE = import.meta.env.VITE_SERVER_DOMAIN;
 
 
@@ -40,6 +42,13 @@ const API_BASE = import.meta.env.VITE_SERVER_DOMAIN;
   };
 
   const handleSend = async () => {
+
+  const token = sessionStorage.getItem("token");
+   if (!token ) {
+      toast.error("You must be logged in to send messages.");
+      navigate("/login");
+      return;
+   }
     if (!message && !imageFile) {
       toast.error("Please enter a message or select an image to send.");
       return;

@@ -83,6 +83,7 @@ const WorkspacePage = () => {
     setWorkspace(value);
   };
 
+
   // 1) Join Workspace
 // frontend/src/pages/WorkspacePage.jsx
 const handleJoinWorkspace = async () => {
@@ -100,7 +101,7 @@ const handleJoinWorkspace = async () => {
     }
 
     // Check if the name is valid (exists for joining)
-    const { data: checkData } = await axios.get(`${API_BASE}/workspaces/name/${workspace}`, {
+    const { data: checkData } = await axios.get(`${API_BASE}/workspaces/name/${encodeURIComponent(workspace)}`, {
       headers: {
         Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
@@ -246,7 +247,7 @@ const handleCreateWorkspace = async () => {
                     <div className="relative grid grid-cols-[80%_20%] bg-noble-black-600">
                       <input
                         type="text"
-                        value={workspace}
+                        value={workspace}   
                         onChange={handleChange}
                         placeholder="Your workspace URL"
                         className="w-full bg-noble-black-600 text-white px-4 py-2 rounded-md focus:outline-none placeholder:text-noble-black-400 font-medium text-[8px] sm:text-sm md:text-base"

@@ -28,6 +28,13 @@ const JoinWorkspace = () => {
     // 1) Retrieve workspaceId from sessionStorage
     const wsId = sessionStorage.getItem("workspaceId");
     const wsSlug = sessionStorage.getItem("workspaceSlug");
+    const token = sessionStorage.getItem("token");
+
+    if (!token){
+      toast.error("You must be logged in to join a workspace.");
+      navigate("/login");
+      return;
+    }
     if (!wsId || !wsSlug) {
       toast.error(
         "No workspace found in session. Please pick a workspace again."

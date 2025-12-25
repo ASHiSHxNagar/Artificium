@@ -38,6 +38,7 @@ router.get("/checkByName/:name", async (req, res) => {
 router.get("/name/:name", requireAuth, async (req, res) => {
   try {
     const { name } = req.params;
+
     console.log(`Checking workspace with name: ${name}`); // Debug log
     const workspace = await Workspace.findOne({ name });
     if (!workspace) {
