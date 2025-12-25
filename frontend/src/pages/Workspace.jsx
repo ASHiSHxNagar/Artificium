@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState , useEffect} from "react";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { toast, Toaster } from "react-hot-toast";
@@ -6,7 +6,7 @@ import { toast, Toaster } from "react-hot-toast";
 import Button from "../components/shared/Button";
 import logo_gradient from "../assets/icons/logo_gradient.svg";
 import register_illustration_1 from "../assets/images/register_illustration_1.png";
-import { storeInSession } from "../components/shared/Session";
+import { lookInSession,storeInSession } from "../components/shared/Session";
 
 const API_BASE = import.meta.env.VITE_SERVER_DOMAIN;
 // e.g. "http://localhost:3000"
@@ -14,11 +14,42 @@ const API_BASE = import.meta.env.VITE_SERVER_DOMAIN;
 const WorkspacePage = () => {
   const navigate = useNavigate();
   const location = useLocation();
-
+  const token = lookInSession("token");
+  const [user,setUser]=useState(null);
   const [workspace, setWorkspace] = useState("");
   const [workspaceId, setWorkspaceId] = useState(null);
   const [workspaceSlug, setWorkspaceSlug] = useState("");
+  const [loading, setLoading] = useState(true);
 
+  useEffect(() => {
+    const getUserInfo = async () => {
+      if (!token) {
+        setLoading(false);
+        return;
+      }
+
+      try { 
+        const userInfo = await axios.get(`${API_BASE}/users/getme`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json"
+          },
+        });
+        console.log("User info:", userInfo.data);
+        setUser(userInfo.data);
+      } catch (err) {
+        console.error("Error fetching user info:", err);
+        // Don't show error toast on initial load, just clear the token if invalid
+        if (err.response?.status === 401) {
+          sessionStorage.removeItem("token");
+        }
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    getUserInfo();
+  }, [token]);
   // Detect if we are in nested route
   const isNestedRoute =
     location.pathname.includes("/workspace/requestworkspace") ||
@@ -170,13 +201,30 @@ const handleCreateWorkspace = async () => {
                   className="w-7 h-7 cursor-pointer"
                   onClick={() => navigate("/")}
                 />
-                <Button
-                  variant="primary"
-                  className="cursor-pointer text-sm bg-gradient-to-r from-[#B6F09C] to-[#58E0F2] bg-clip-text text-transparent"
-                  onClick={() => navigate("/login")}
-                >
-                  LogIn
-                </Button>
+                {loading ? (
+                  <div className="text-sm text-noble-black-300">Loading...</div>
+                ) : user && user.username ? (
+                  <div className="flex items-center gap-3">
+                    <span className="text-sm bg-gradient-to-r from-[#B6F09C] to-[#58E0F2] bg-clip-text text-transparent">
+                      {user.username}
+                    </span>
+                    {user.profile_img && (
+                      <img
+                        src={user.profile_img}
+                        alt="Profile"
+                        className="w-8 h-8 rounded-full"
+                      />
+                    )}
+                  </div>
+                ) : (
+                  <Button
+                    variant="primary"
+                    className="cursor-pointer text-sm bg-gradient-to-r from-[#B6F09C] to-[#58E0F2] bg-clip-text text-transparent"
+                    onClick={() => navigate("/login")}
+                  >
+                    Log In 
+                  </Button>
+                )}
               </div>
 
               {/* Main Content */}

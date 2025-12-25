@@ -8,6 +8,7 @@ import admin from 'firebase-admin';
 
 
 import { getAuth } from 'firebase-admin/auth';
+import { requireAuth } from '../middleware/requireAuth.js';
 
 //models
 import User from '../Schema/User.js';
@@ -77,8 +78,6 @@ const generateUsername = async (email) => {
 
     return username;
 };
-
-
 
 // Register route
 userRouter.post('/register', async (req, res) => {
@@ -177,7 +176,7 @@ userRouter.post('/google-auth', async (req, res) => {
                 }
             } else {
                 // signup
-                let username = await generateUsername(email);
+                 let username = await generateUsername(email);
 
                 user = new User({
                     personal_info: { fullname: name, email, username, profile_img: picture },
@@ -200,6 +199,22 @@ userRouter.post('/google-auth', async (req, res) => {
             console.log(err)
             return res.status(500).json({ "error": "Failed to authenticate you with Google. Try with some other Google account" });
         });
+});
+
+userRouter.get('/getme',requireAuth,async(req,res)=>{
+    try {
+        const user = req.user;
+        
+        return res.status(200).json({
+            success: true,
+            username: user.personal_info.username,
+            fullname: user.personal_info.fullname,
+            profile_img: user.personal_info.profile_img,
+            email: user.personal_info.email,
+        });
+    } catch (err) {
+        return res.status(500).json({ success: false, error: err.message });
+    }
 });
 
 export default userRouter;
