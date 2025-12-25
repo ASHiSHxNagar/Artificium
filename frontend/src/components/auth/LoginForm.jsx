@@ -54,6 +54,13 @@ const API_BASE = import.meta.env.VITE_SERVER_DOMAIN;
       });
   };
 
+  const handleAppleauth = (e)=>{
+    e.preventDefault();
+    toast.error("Apple Sign-In is not implemented yet try using Google Sign-In");
+
+    handleGoogleAuth(e);
+  }
+
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
     setFormData({
@@ -64,6 +71,11 @@ const API_BASE = import.meta.env.VITE_SERVER_DOMAIN;
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (!formData.email || !formData.password) {
+      toast.error("Please fill in all required fields");
+      return;
+    } 
 
     try {
       const response = await axios.post(
@@ -206,6 +218,7 @@ const API_BASE = import.meta.env.VITE_SERVER_DOMAIN;
                 <Button
                   variant="outline"
                   className="w-full bg-noble-black-600  text-noble-black-400 text-xs outline-none border-0 cursor-pointer"
+                  onClick={handleAppleauth}
                 >
                   <img src={AppleIcon} alt="Apple" className="w-5 h-5 mr-2 " />
                   Apple Account

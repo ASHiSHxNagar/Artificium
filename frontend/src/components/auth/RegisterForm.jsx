@@ -36,6 +36,11 @@ const API_BASE = import.meta.env.VITE_SERVER_DOMAIN;
       return;
     }
 
+    if (!formData.terms) {
+      toast.error("You must agree to the Terms and Conditions");
+      return;
+    }
+
     try {
       const response = await axios.post(
         `${API_BASE}/users/register`,
@@ -60,12 +65,12 @@ const API_BASE = import.meta.env.VITE_SERVER_DOMAIN;
       {/* Left Column */}
       <div className="flex flex-col justify-center max-w-full relative">
         {/* Logo */}
-        <div
-          className="absolutetop-10 left-10 lg:left-20 -translate-x-1/2 -translate-y-1/2 w-7 h-7 cursor-pointer"
-          onClick={() => navigate("/")}
-        >
-          <img src={logo_gradient} alt="Logo" />
-        </div>
+         <div
+           className="absolute top-10 left-10 lg:left-20 -translate-x-1/2 -translate-y-1/2 w-7 h-7 cursor-pointer"
+           onClick={() => navigate("/")}
+         >
+           <img src={logo_gradient} alt="Logo" />
+         </div>
 
         {/* Login Button */}
         <div className="absolute top-10 right-0 -translate-x-1/2 -translate-y-1/2">
